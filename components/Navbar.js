@@ -11,13 +11,13 @@ const Navbar = () => {
                         <Link href="/">Eventure</Link>
                         </li>
                         <li className='text-slate-300 hover:cursor-pointer ml-5'>
-                            <Link href="/aboutUs">About us</Link>
+                            <Link href="/aboutus">About us</Link>
                         </li>
                         <li className='text-slate-300 hover:cursor-pointer'>
-                            <Link href="/ContactUs">Contact us</Link>
+                            <Link href="/contactus">Contact us</Link>
                         </li>
                         <li className='text-slate-300 hover:cursor-pointer'>
-                            <Link href="/enents">Events</Link>
+                            <Link href="/events">Events</Link>
                         </li>
                         <li className='text-slate-300 hover:cursor-pointer'>
                             <Link href="/services">Services</Link>

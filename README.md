@@ -4,7 +4,7 @@
 </h1>
 
 <div align="center">
-    <a href="https://www.mindsdb.com/"><img src="https://img.shields.io/website?url=https://eventure-ten.vercel.app/" alt="Eventure Website"></a>
+    <a href="https://eventure-ten.vercel.app/"><img src="https://img.shields.io/website?url=https://eventure-ten.vercel.app/" alt="Eventure Website"></a>
 </div>
 
 ## Installation <a name="Installation"></a>

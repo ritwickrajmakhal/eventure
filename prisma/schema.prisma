@@ -1,0 +1,18 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Contact {
+  id      Int    @id @default(autoincrement())
+  email   String @db.VarChar(255)
+  subject String @db.VarChar(255)
+  message String @db.VarChar(2048)
+}

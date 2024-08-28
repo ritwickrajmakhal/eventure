@@ -1,10 +1,11 @@
 import React from 'react'
+import "./style.css"
 
 const page = () => {
   return (
-    <div className='text-white'>
-      About us content here
+    <div className='text-white'> 
     </div>
+
   )
 }
 

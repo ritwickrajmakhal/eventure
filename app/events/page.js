@@ -33,11 +33,11 @@ const page = () => {
         "Allow yourself to organize a conference succfully",
     },
     {
-      className: "birthday",
-      img: "birthday",
-      heading: "Birthday",
+      className: "custom",
+      img: "custom",
+      heading: "Custom",
       paragraph:
-        "Allow yourself to organize a conference succfully",
+        "Create your own event...",
     },
   ]
   return (

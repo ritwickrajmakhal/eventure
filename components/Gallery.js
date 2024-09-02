@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Gallery = () => {
+const Gallery = ({img}) => {
     return (
         <div>
-
+            <p>{img[0].url}</p>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="grid gap-4">

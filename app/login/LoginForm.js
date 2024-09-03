@@ -1,13 +1,38 @@
-"use client";
-
 import Provider from "./Provider";
 import Image from "next/image";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 const LoginForm = ({ providers, setActiveComponent }) => {
+  const [serverError, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    // Sign in with email and password
+    try {
+      const response = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      if(response.error) {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      setServerError("Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <form className="space-y-6" action="#">
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <Image
         className="mx-auto"
         src="/rectangular_logo.png"
@@ -15,9 +40,14 @@ const LoginForm = ({ providers, setActiveComponent }) => {
         width={150}
         alt="Website logo"
       />
+      {serverError && (
+        <div className="text-red-500 text-sm font-medium text-center">
+          {serverError}
+        </div>
+      )}
       <div>
         <label
-          htmlFor="website-admin"
+          htmlFor="email"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
           Your Email
@@ -31,13 +61,15 @@ const LoginForm = ({ providers, setActiveComponent }) => {
               fill="currentColor"
               viewBox="0 0 20 16"
             >
-              <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
+              <path d="M10.036 8.278l9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
               <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
             </svg>
           </span>
           <input
+            id="email"
+            name="email"
             type="email"
-            className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="example@gmail.com"
             required
           />
@@ -48,9 +80,11 @@ const LoginForm = ({ providers, setActiveComponent }) => {
           htmlFor="password"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Your password
+          Your Password
         </label>
         <input
+          id="password"
+          name="password"
           type="password"
           placeholder="••••••••"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
@@ -60,13 +94,14 @@ const LoginForm = ({ providers, setActiveComponent }) => {
       </div>
       <button
         type="submit"
+        disabled={loading}
         className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
-        Sign In
+        {loading ? "Signing in..." : "Sign In"}
       </button>
       <div className="text-white flex justify-between w-full mb-2">
         <Link href="#" onClick={() => setActiveComponent("forgot")}>
-          Forget Password?
+          Forgot Password?
         </Link>
         <Link href="#" onClick={() => setActiveComponent("signup")}>
           Sign Up
@@ -75,9 +110,9 @@ const LoginForm = ({ providers, setActiveComponent }) => {
       <div className="text-white">
         <p className="text-center text-sm mb-4">or you can sign in with</p>
         <div className="flex justify-center gap-2">
-          {providers.map((provider) => (
+          {providers.map((provider, index) => (
             <Provider
-              key={provider}
+              key={index}
               provider={provider}
               handleClick={() => signIn(provider)}
             />

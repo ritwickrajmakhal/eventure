@@ -6,7 +6,12 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon, BellIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  BellIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
@@ -20,7 +25,8 @@ function classNames(...classes) {
 export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/", current: true },
     { name: "Events", href: "/events", current: false },
@@ -97,7 +103,8 @@ export default function Navbar() {
             </div>
           </div>
           {/* login button */}
-          {session ? (
+          {/* Show profile picture and options if session.status is authenticated */}
+          {status === "authenticated" ? (
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <button
                 type="button"
@@ -114,13 +121,22 @@ export default function Navbar() {
                   <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
-                    <Image
-                      alt="Profile Picture"
-                      src={session.user.image}
-                      width={32}
-                      height={32}
-                      className="h-8 w-8 rounded-full"
-                    />
+                    {/* Show profile if it is available in the session */}
+                    {session.user?.image ? (
+                      <Image
+                        alt="Profile Picture"
+                        src={session.user.image}
+                        width={32}
+                        height={32}
+                        className="h-8 w-8 rounded-full"
+                      />
+                    ) : (
+                      // Show default profile icon if no profile picture is available
+                      <UserCircleIcon
+                        aria-hidden="true"
+                        className="h-6 w-6 text-white"
+                      />
+                    )}
                   </MenuButton>
                 </div>
                 <MenuItems
@@ -136,12 +152,12 @@ export default function Navbar() {
                     </a>
                   </MenuItem>
                   <MenuItem>
-                    <a
-                      href="#"
+                    <Link
+                      href="/dashboard"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                     >
-                      Settings
-                    </a>
+                      Dashboard
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <a

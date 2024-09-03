@@ -45,7 +45,7 @@ export const ForgotPasswordForm = ({setActiveComponent}) => {
       >
         Reset My Password
       </button>
-      <button className="w-full text-blue-700 hover:text-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium text-sm text-center">
+      <button className="w-full text-white hover:underline focus:outline-none font-medium text-sm text-center">
         <span onClick={() => setActiveComponent("login")}>Back to login</span>
       </button>
     </form>

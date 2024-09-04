@@ -1,31 +1,41 @@
 "use client";
 import { useState } from "react";
-import submit_contact_form from "./submit_contact_form";
+import request from "@/lib/request";
 
 const ContactPage = () => {
   const [pending, setPending] = useState(false);
-  const [feedbackMessage, setFeedbackMessage] = useState(null);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setPending(true);
-    setFeedbackMessage(null);
+    setFeedbackMessage("");
 
     const formData = new FormData(event.target);
 
-    try {
-      const result = await submit_contact_form(formData);
+    const jsonData = {
+      email: formData.get("email"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+    };
 
-      if (result.success) {
-        setFeedbackMessage("Your message has been sent successfully!");
+    try {
+      const response = await request("/api/contact-uses", {
+        method: "POST",
+        body: { data: jsonData },
+      });
+
+      setPending(false);
+
+      if (response.error) {
+        setFeedbackMessage(`Error: ${response.error.message}`);
       } else {
-        setFeedbackMessage(`Error: ${result.error}`);
+        setFeedbackMessage("Your message has been sent successfully.");
+        event.target.reset();
       }
     } catch (error) {
-      setFeedbackMessage(`Error: ${error.message}`);
-    } finally {
       setPending(false);
-      event.target.reset(); // Optionally reset the form after submission
+      setFeedbackMessage(`Unexpected error: ${error.message}`);
     }
   };
 
@@ -90,13 +100,16 @@ const ContactPage = () => {
           </div>
           <button
             type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="flex m-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             disabled={pending}
           >
             {pending ? "Sending..." : "Send message"}
           </button>
           {feedbackMessage && (
-            <p className="mt-4 text-center text-sm text-gray-700 dark:text-gray-300">
+            <p
+              className="mt-4 text-center text-sm text-gray-700 dark:text-gray-300"
+              aria-live="polite"
+            >
               {feedbackMessage}
             </p>
           )}

@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import Card2 from '@/components/Card2'
+import Card3 from '@/components/Card3'
 
 const page = () => {
   const cardData = [
@@ -8,6 +8,13 @@ const page = () => {
       className: "conference",
       img: "conference",
       heading: "Conference",
+      paragraph:
+        "Allow yourself to organize a conference succfully",
+    },
+    {
+      className: "tradeShow",
+      img: "tradeshow1",
+      heading: "Trade Show",
       paragraph:
         "Allow yourself to organize a conference succfully",
     },
@@ -35,9 +42,9 @@ const page = () => {
     {
       className: "custom",
       img: "custom",
-      heading: "Custom",
+      heading: "Create Custom",
       paragraph:
-        "Create your own event...",
+        "Create your own event and colobarate with us and organize a grate event with us...",
     },
   ]
   return (
@@ -46,7 +53,7 @@ const page = () => {
       {/* 1st row */}
       <div className="fearures flex mt-5 md:flex-row flex-col items-center gap-5 md:gap-5">
         {cardData.slice(0, 3).map((data, index) => (
-          <Card2
+          <Card3
             key={index}
             className={data.className}
             img={data.img + ".jpg"}
@@ -56,8 +63,8 @@ const page = () => {
         ))}
       </div>
       <div className="fearures flex m-5 md:flex-row flex-col items-center gap-5 md:gap-5">
-        {cardData.slice(3, 5).map((data, index) => (
-          <Card2
+        {cardData.slice(3, 6).map((data, index) => (
+          <Card3
             key={index}
             className={data.className}
             img={data.img + ".jpg"}

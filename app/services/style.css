@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+:root {
+  --main-color: #c026fc;
+}
+
+.services {
+  font-family: "Nunito", sans-serif;
+  padding: 2rem 9%;
+}
+
+.services .heading {
+  text-align: center;
+  padding-bottom: 2rem;
+  color: #fff;
+  font-size: 3rem;
+}
+
+.services .heading span {
+  color: var(--main-color);
+}
+
+.services .box-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+  gap: 1.5rem;
+}
+
+.services .box-container .box {
+  border-radius: 2rem;
+  background: #333;
+  text-align: center;
+  padding: 2rem;
+}
+
+.services .box-container .box i {
+  height: 6rem;
+  width: 6rem;
+  line-height: 6rem;
+  border-radius: 40%;
+  font-size: 2.5rem;
+  background: var(--main-color);
+  color: #fff;
+}
+
+.services .box-container .box h3 {
+  font-size: 2rem;
+  color: #fff;
+  padding: 1rem 0;
+  text-transform: capitalize;
+}
+
+.services .box-container .box p {
+  font-size: 1.4rem;
+  color: #eee;
+  line-height: 1.8;
+}
+
+.services .box-container .box:hover {
+  background: var(--main-color);
+}
+
+@media screen and (max-width: 768px) {
+  .services {
+    padding: 2rem 5%;
+  }
+
+  .services .heading {
+    font-size: 2.5rem;
+  }
+
+  .services .box-container {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+
+  .services .box-container .box {
+    padding: 1.5rem;
+  }
+
+  .services .box-container .box i {
+    height: 5rem;
+    width: 5rem;
+    line-height: 5rem;
+    font-size: 2rem;
+  }
+
+  .services .box-container .box h3 {
+    font-size: 1.8rem;
+  }
+
+  .services .box-container .box p {
+    font-size: 1.2rem;
+  }
+    
+}

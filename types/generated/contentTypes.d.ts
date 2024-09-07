@@ -756,7 +756,29 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    image: Attribute.Media<'images'>;
+    avatar: Attribute.Media<'images'>;
+    zipCode: Attribute.Integer &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+          max: 999999;
+        },
+        number
+      >;
+    firstName: Attribute.String &
+      Attribute.SetMinMaxLength<{
+        maxLength: 30;
+      }>;
+    lastName: Attribute.String &
+      Attribute.SetMinMaxLength<{
+        maxLength: 30;
+      }>;
+    phoneNumber: Attribute.BigInteger;
+    country: Attribute.String;
+    state: Attribute.String;
+    city: Attribute.String;
+    address: Attribute.String;
+    organization: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

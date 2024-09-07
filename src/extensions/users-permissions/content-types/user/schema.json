@@ -65,12 +65,44 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "image": {
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
+    },
+    "zipCode": {
+      "type": "integer",
+      "max": 999999,
+      "min": 0
+    },
+    "firstName": {
+      "type": "string",
+      "maxLength": 30
+    },
+    "lastName": {
+      "type": "string",
+      "maxLength": 30
+    },
+    "phoneNumber": {
+      "type": "biginteger"
+    },
+    "country": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "organization": {
+      "type": "string"
     }
   }
 }

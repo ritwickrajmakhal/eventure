@@ -38,12 +38,13 @@ const handler = NextAuth({
           });
 
           if (response.result) {
-            const user = response.result.user;
+            const user = response.result.user;            
             return {
               id: user.id,
               name: user.username,
               email: user.email,
               provider: user.provider,
+              jwt: response.result.jwt,
             };
           } else {
             return null;
@@ -62,6 +63,7 @@ const handler = NextAuth({
         token.email = user.email;
         token.name = user.name;
         token.provider = user.provider;
+        token.jwt = user.jwt;
       }
       return token;
     },
@@ -71,6 +73,7 @@ const handler = NextAuth({
         session.user.email = token.email;
         session.user.name = token.name;
         session.user.provider = token.provider;
+        session.user.jwt = token.jwt;
       }
       return session;
     },

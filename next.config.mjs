@@ -12,6 +12,16 @@ const nextConfig = {
         hostname: "lh3.googleusercontent.com",
         port: "",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "1337",
+      },
+      {
+        protocol: "https",
+        hostname: "sharedstorageritwick.blob.core.windows.net",
+        port: "",
+      },
     ],
   },
 };

@@ -6,7 +6,10 @@ import Image from "next/image";
 import request from "@/lib/request";
 
 const Profile = ({ user, setUser, session }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({
+    password: false,
+    image: false
+  });
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -32,7 +35,7 @@ const Profile = ({ user, setUser, session }) => {
         return;
       }
       try {
-        setLoading(true);
+        setLoading({ ...loading, password: true });
         const res = await request("/api/auth/change-password", {
           method: "POST",
           body: {
@@ -61,7 +64,7 @@ const Profile = ({ user, setUser, session }) => {
           error: error.message,
         });
       } finally {
-        setLoading(false);
+        setLoading({ ...loading, password: false });
       }
     }
   };
@@ -78,6 +81,7 @@ const Profile = ({ user, setUser, session }) => {
 
         try {
           // Upload image
+          setLoading({ ...loading, image: true });
           let response = await request("/api/upload", {
             method: "POST",
             body: formData, // Send as FormData
@@ -107,6 +111,9 @@ const Profile = ({ user, setUser, session }) => {
           });
         } catch (error) {
           console.error("Error uploading image:", error.message);
+        }
+        finally {
+          setLoading({ ...loading, image: false });
         }
       }
     }
@@ -164,7 +171,7 @@ const Profile = ({ user, setUser, session }) => {
                   <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
                   <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
                 </svg>
-                Upload picture
+                {loading.image ? "Uploading..." : "Upload image"}
               </Button>
             </div>
           </div>
@@ -247,7 +254,7 @@ const Profile = ({ user, setUser, session }) => {
             </div>
             <div className="col-span-6 sm:col-full flex items-center">
               <Button color="blue" type="submit">
-                {loading ? "Updating..." : "Update password"}
+                {loading.password ? "Updating..." : "Update password"}
               </Button>
               {serverMsg.error && (
                 <div className="text-red-600 ml-3">{serverMsg.error}</div>

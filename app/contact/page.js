@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import request from "@/lib/request";
+import { Button, FileInput, Label, Textarea, TextInput } from "flowbite-react";
 
 const ContactPage = () => {
   const [pending, setPending] = useState(false);
@@ -12,6 +13,7 @@ const ContactPage = () => {
     setFeedbackMessage("");
 
     const formData = new FormData(event.target);
+    const files = formData.getAll("file");
 
     const jsonData = {
       email: formData.get("email"),
@@ -20,22 +22,40 @@ const ContactPage = () => {
     };
 
     try {
+      // Send message data
       const response = await request("/api/contact-uses", {
         method: "POST",
         body: { data: jsonData },
       });
 
-      setPending(false);
-
       if (response.error) {
-        setFeedbackMessage(`Error: ${response.error.message}`);
-      } else {
-        setFeedbackMessage("Your message has been sent successfully.");
-        event.target.reset();
+        throw new Error(response.error.message);
       }
+
+      // If files exist, handle file uploads
+      if (files.length > 0 && files[0].size > 0) {
+        const fileData = new FormData();
+        files.forEach((file) => fileData.append("files", file, file.name));
+        fileData.append("ref", "api::contact-us.contact-us");
+        fileData.append("refId", response.data.id);
+        fileData.append("field", "attachments");
+
+        const uploadResponse = await request("/api/upload", {
+          method: "POST",
+          body: fileData,
+        });
+
+        if (uploadResponse.error) {
+          throw new Error(uploadResponse.error.message);
+        }
+      }
+
+      setFeedbackMessage("Your message has been sent successfully.");
+      event.target.reset();
     } catch (error) {
+      setFeedbackMessage(`Error: ${error.message}`);
+    } finally {
       setPending(false);
-      setFeedbackMessage(`Unexpected error: ${error.message}`);
     }
   };
 
@@ -49,62 +69,70 @@ const ContactPage = () => {
           Got a technical issue? Want to send feedback about a beta feature?
           Need details about our Business plan? Let us know.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(e);
+          }}
+          className="space-y-8"
+        >
           <div>
-            <label
+            <Label
               htmlFor="email"
+              value="Your email"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Your email
-            </label>
-            <input
-              type="email"
+            />
+            <TextInput
               id="email"
               name="email"
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
+              type="email"
               placeholder="example@gmail.com"
               required
             />
           </div>
           <div>
-            <label
+            <Label
               htmlFor="subject"
+              value="Subject"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Subject
-            </label>
-            <input
-              type="text"
+            />
+            <TextInput
               id="subject"
               name="subject"
-              className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
+              type="text"
               placeholder="Let us know how we can help you"
               required
             />
           </div>
           <div className="sm:col-span-2">
-            <label
+            <Label
               htmlFor="message"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
-            >
-              Your message
-            </label>
-            <textarea
+              value="Your message"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            />
+            <Textarea
               id="message"
-              rows={6}
               name="message"
-              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Leave a comment..."
               required
+              rows={6}
             />
           </div>
-          <button
-            type="submit"
-            className="flex m-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            disabled={pending}
-          >
+          <div>
+            <Label
+              htmlFor="message"
+              value="Attach a file"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            />
+            <FileInput
+              name="file"
+              id="file-upload-helper-text"
+              multiple={true}
+            />
+          </div>
+          <Button color="blue" type="submit" className="flex m-auto">
             {pending ? "Sending..." : "Send message"}
-          </button>
+          </Button>
           {feedbackMessage && (
             <p
               className="mt-4 text-center text-sm text-gray-700 dark:text-gray-300"

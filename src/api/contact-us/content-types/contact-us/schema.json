@@ -23,6 +23,17 @@
     "message": {
       "type": "text",
       "required": true
+    },
+    "attachments": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }

@@ -377,6 +377,11 @@ export interface ApiContactUsContactUs extends Schema.CollectionType {
     email: Attribute.Email & Attribute.Required;
     subject: Attribute.String & Attribute.Required;
     message: Attribute.Text & Attribute.Required;
+    attachments: Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    > &
+      Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

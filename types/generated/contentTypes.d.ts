@@ -362,6 +362,45 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiAudienceAudience extends Schema.CollectionType {
+  collectionName: 'audiences';
+  info: {
+    singularName: 'audience';
+    pluralName: 'audiences';
+    displayName: 'Audience';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    slug: Attribute.UID & Attribute.Required;
+    name: Attribute.String & Attribute.Required;
+    desc: Attribute.Text;
+    details: Attribute.JSON;
+    user: Attribute.Relation<
+      'api::audience.audience',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::audience.audience',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::audience.audience',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiContactUsContactUs extends Schema.CollectionType {
   collectionName: 'contact_uses';
   info: {
@@ -784,6 +823,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     city: Attribute.String;
     address: Attribute.String;
     organization: Attribute.String;
+    audiences: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToMany',
+      'api::audience.audience'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -858,6 +902,7 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::audience.audience': ApiAudienceAudience;
       'api::contact-us.contact-us': ApiContactUsContactUs;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;

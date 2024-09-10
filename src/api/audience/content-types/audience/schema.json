@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "audiences",
+  "info": {
+    "singularName": "audience",
+    "pluralName": "audiences",
+    "displayName": "Audience",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "slug": {
+      "type": "uid",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "desc": {
+      "type": "text"
+    },
+    "details": {
+      "type": "json",
+      "required": false
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "audiences"
+    }
+  }
+}

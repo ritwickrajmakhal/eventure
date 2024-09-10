@@ -103,6 +103,12 @@
     },
     "organization": {
       "type": "string"
+    },
+    "audiences": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::audience.audience",
+      "inversedBy": "user"
     }
   }
 }

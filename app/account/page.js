@@ -1,37 +1,42 @@
 "use client";
-import { useSession } from "next-auth/react";
+
 import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import Information from "./Information";
 import Profile from "./Profile";
 import request from "@/lib/request";
+import Cookies from "js-cookie";
+
 
 const Account = () => {
-  const { data: session, status } = useSession();
-  if (status === "unauthenticated") {
-    redirect("/login");
-  }
+  const userCookie = Cookies.get("session");
+  const [session, setSession] = useState(null);
+  useEffect(() => {
+    if (userCookie) {
+      setSession(JSON.parse(userCookie));
+    } else {
+      redirect("/login");
+    }
+  }, [userCookie]);
+
+  const [user, setUser] = useState({});
 
   // Fetch user information from the server and set it to the state
-  const [user, setUser] = useState({});
   useEffect(() => {
-    const fetchInformation = async () => {
-      if (!session?.user) return;
-      try {
+    if (session) {
+      const fetchInformation = async () => {
         const res = await request(`/api/users/me?populate=*`, {
           headers: {
-            Authorization: "Bearer " + session.user.jwt,
+            Authorization: "Bearer " + session.jwt,
           },
         });
-        if (!res.error) {
-          setUser(res.result);
+        if (res.result) {
+          setUser({ ...user, ...res.result });
         }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchInformation();
-  }, [session?.user]);
+      };
+      fetchInformation();
+    }
+  }, [session]);
 
   return (
     <>
@@ -43,7 +48,7 @@ const Account = () => {
         </div>
         {/* Right Content */}
         <div className="col-span-full xl:col-auto">
-          <Profile user={user} session={session} setUser={setUser}/>
+          <Profile user={user} setUser={setUser} session={session} />
         </div>
         <Information user={user} setUser={setUser} session={session} />
       </div>

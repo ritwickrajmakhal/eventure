@@ -20,6 +20,18 @@ git clone https://github.com/ritwickrajmakhal/eventure.git
 ```bash
 npm install
 ```
+4. Create a `.env.local` file and paste the bellow contents
+
+```
+NEXT_PUBLIC_CHATBOT_SECRET_KEY=your_chatbot_api_key_from_azure_bot_service
+GITHUB_ID=your_github_oauth_app_id
+GITHUB_SECRET=your_github_oauth_app_secrate
+GOOGLE_ID=your_google_oauth_app_id
+GOOGLE_SECRET=your_google_oauth_app_secrate
+NEXTAUTH_URL=http://localhost:3000/
+NEXTAUTH_SECRET=any_random_string
+NEXT_PUBLIC_API_URL=strapi_api_url
+```
 
 3. Start the development server
 

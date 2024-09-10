@@ -1,9 +1,10 @@
-<center>
-<h1>EVENTURE</h1>
+<div align="center">
+  
+# EVENTURE
 
 [![Eventure Website](https://img.shields.io/website?url=https://eventure-ten.vercel.app/)](https://eventure-ten.vercel.app/)
 
-</center>
+</div>
 
 ## Table of Contents
 

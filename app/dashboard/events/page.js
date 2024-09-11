@@ -11,7 +11,7 @@ const page = () => {
         </h1>
         <Button pill color="blue">
           <PlusCircleIcon className="mr-2 h-5 w-5" />
-          Create event
+          Create
         </Button>
       </div>
       <Tabs aria-label="Tabs with icons" variant="underline">

@@ -3,8 +3,9 @@ import Link from "next/link";
 
 
 function Provider({ provider, handleClick }) {
+  
   return (
-    <Link href={`${process.env.NEXT_PUBLIC_API_URL}/api/connect/${provider}`}>
+    <Link href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/connect/${provider}`}>
       <Image
         onClick={handleClick}
         src={`/icons/${provider}.svg`}

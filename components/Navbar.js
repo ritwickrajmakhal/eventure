@@ -1,19 +1,21 @@
 "use client";
-
 import {
   Disclosure,
   Menu,
   MenuButton,
-  MenuItems,
   MenuItem,
+  MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon, BellIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  BellIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Avatar } from "flowbite-react";
-import Cookies from "js-cookie";
-import request from "@/lib/request";
-
+import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -22,6 +24,7 @@ function classNames(...classes) {
 export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const { data: session, status } = useSession();
 
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/", current: true },
@@ -30,30 +33,6 @@ export default function Navbar() {
     { name: "About", href: "/about", current: false },
     { name: "Contact", href: "/contact", current: false },
   ]);
-  const [avatar, setAvatar] = useState("");
-  const userCookie = Cookies.get("session");
-  const [session, setSession] = useState(null);
-  useEffect(() => {
-    if (userCookie) {
-      setSession(JSON.parse(userCookie));
-    }
-  }, [userCookie]);
-
-  useEffect(() => {
-    if (session) {
-      const fetchUser = async () => {
-        const res = await request("/api/users/me?populate=*", {
-          headers: {
-            Authorization: "Bearer " + session.jwt,
-          },
-        });
-        if (res.result) {
-          setAvatar(res.result.avatar?.url);
-        }
-      };
-      fetchUser();
-    }
-  }, [session]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -124,7 +103,7 @@ export default function Navbar() {
           </div>
           {/* login button */}
           {/* Show profile picture and options if session.status is authenticated */}
-          {session ? (
+          {status === "authenticated" ? (
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <button
                 type="button"
@@ -141,15 +120,21 @@ export default function Navbar() {
                   <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
-                    {avatar ? (
-                      <Avatar
-                        img={`${
-                          process.env.NEXT_PUBLIC_API_URL || ""
-                        }${avatar}`}
-                        rounded
+                    {/* Show profile if it is available in the session */}
+                    {session.user?.image ? (
+                      <Image
+                        alt="Profile Picture"
+                        src={session.user.image}
+                        width={32}
+                        height={32}
+                        className="h-8 w-8 rounded-full"
                       />
                     ) : (
-                      <Avatar rounded />
+                      // Show default profile icon if no profile picture is available
+                      <UserCircleIcon
+                        aria-hidden="true"
+                        className="h-6 w-6 text-white"
+                      />
                     )}
                   </MenuButton>
                 </div>
@@ -176,10 +161,7 @@ export default function Navbar() {
                   <MenuItem>
                     <a
                       href="#"
-                      onClick={() => {
-                        Cookies.remove("session");
-                        window.location.reload();
-                      }}
+                      onClick={() => signOut()}
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                     >
                       Sign out

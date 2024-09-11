@@ -4,6 +4,7 @@ import request from "@/lib/request";
 
 
 const Information = ({ user, setUser, session }) => {
+
   const [serverMsg, setServerMsg] = useState({
     error: "",
     success: "",
@@ -18,22 +19,26 @@ const Information = ({ user, setUser, session }) => {
   }, [serverMsg]);
 
   const updateInformation = async () => {
-    if (session) {      
+    if (!session?.user) return;
+    try {
       setLoading(true);
-      const res = await request(`/api/users/${session.id}`, {
+      const res = await request(`/api/users/${session?.user.id}`, {
         method: "PUT",
         body: Object.fromEntries(
-          Object.entries(user).filter(([key, value]) => value)
+          Object.entries(user).filter(([key, value]) => value !== "")
         ),
         headers: {
-          Authorization: "Bearer " + session.jwt,
-        },
+          Authorization: "Bearer " + session.user.jwt,
+        }
       });
       if (res.error) {
         setServerMsg({ ...serverMsg, error: res.error.message });
       } else {
         setServerMsg({ ...serverMsg, success: "Saved!" });
       }
+    } catch (error) {
+      serverMsg({ ...serverMsg, error: error.message });
+    } finally {
       setLoading(false);
     }
   };
@@ -159,6 +164,29 @@ const Information = ({ user, setUser, session }) => {
                   })
                 }
                 name="organization"
+              />
+            </div>
+            <div className="col-span-6 sm:col-span-3">
+              <Label htmlFor="role" value="Role" />
+              <TextInput
+                id="role"
+                type="text"
+                name="role"
+                placeholder="React Developer"
+                disabled
+              />
+            </div>
+            <div className="col-span-6 sm:col-span-3">
+              <Label htmlFor="department" value="Department" />
+              <TextInput
+                id="department"
+                type="text"
+                name="department"
+                placeholder="Development"
+                value={user.department || ""}
+                onChange={(e) =>
+                  setUser({ ...user, department: e.target.value })
+                }
               />
             </div>
             <div className="col-span-6 sm:col-span-3">

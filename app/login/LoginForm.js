@@ -1,10 +1,8 @@
 import Provider from "./Provider";
 import Image from "next/image";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
-import request from "@/lib/request";
-import Cookies from "js-cookie";
-
 
 const LoginForm = ({ providers, setActiveComponent }) => {
   const [serverError, setServerError] = useState("");
@@ -17,27 +15,20 @@ const LoginForm = ({ providers, setActiveComponent }) => {
     const password = e.target.password.value;
 
     // Sign in with email and password
-    const res = await request("/api/auth/local", {
-      method: "POST",
-      body: {
-        identifier: email,
-        password: password,
-      },
-    });
-
-    if (res.result) {
-      const session = {
-        jwt: res.result.jwt.toString(),
-        id: res.result.user.id,
-      };
-      // Set the user cookie
-      Cookies.set("session", JSON.stringify(session), { expires: 7 });
-      // Redirect to a different page after successful login
-      window.location.href = "/";
-    } else {
-      setServerError(res.error.message);
+    try {
+      const response = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      if(response.error) {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      setServerError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -120,7 +111,11 @@ const LoginForm = ({ providers, setActiveComponent }) => {
         <p className="text-center text-sm mb-4">or you can sign in with</p>
         <div className="flex justify-center gap-2">
           {providers.map((provider, index) => (
-            <Provider key={index} provider={provider} />
+            <Provider
+              key={index}
+              provider={provider}
+              handleClick={() => signIn(provider)}
+            />
           ))}
         </div>
       </div>

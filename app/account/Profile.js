@@ -5,11 +5,10 @@ import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import request from "@/lib/request";
 
-
 const Profile = ({ user, setUser, session }) => {
   const [loading, setLoading] = useState({
     password: false,
-    image: false,
+    image: false
   });
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +26,7 @@ const Profile = ({ user, setUser, session }) => {
   }, [serverMsg]);
 
   const updatePassword = async () => {
-    if (session) {
+    if (session?.user) {
       if (password !== confirmPassword) {
         setServerMsg({
           ...serverMsg,
@@ -45,7 +44,7 @@ const Profile = ({ user, setUser, session }) => {
             passwordConfirmation: confirmPassword,
           },
           headers: {
-            Authorization: "Bearer " + session.jwt,
+            Authorization: "Bearer " + session.user.jwt,
           },
         });
         if (res.error) {
@@ -71,13 +70,13 @@ const Profile = ({ user, setUser, session }) => {
   };
 
   const uploadImage = async (e) => {
-    if (session) {
+    if (session?.user) {
       const file = e.target.files[0]; // Select file from input
       if (file) {
         const formData = new FormData();
         formData.append("files", file, file.name);
         formData.append("ref", "plugin::users-permissions.user");
-        formData.append("refId", session.id);
+        formData.append("refId", session.user.id);
         formData.append("field", "avatar");
 
         try {
@@ -87,7 +86,7 @@ const Profile = ({ user, setUser, session }) => {
             method: "POST",
             body: formData, // Send as FormData
             headers: {
-              Authorization: `Bearer ${session.jwt}`,
+              Authorization: `Bearer ${session.user.jwt}`,
             },
           });
 
@@ -101,20 +100,19 @@ const Profile = ({ user, setUser, session }) => {
           setUser({ ...user, avatar: { url: uploadedImageUrl } });
 
           // Save the avatar URL to user profile
-          await request(`/api/users/${session.id}`, {
+          await request(`/api/users/${session.user.id}`, {
             method: "PUT",
             body: {
-              avatar: `${
-                process.env.NEXT_PUBLIC_API_URL || ""
-              }${uploadedImageUrl}`,
+              avatar: `${process.env.NEXT_PUBLIC_API_URL || ""}${uploadedImageUrl}`,
             },
             headers: {
-              Authorization: `Bearer ${session.jwt}`,
+              Authorization: `Bearer ${session.user.jwt}`,
             },
           });
         } catch (error) {
           console.error("Error uploading image:", error.message);
-        } finally {
+        }
+        finally {
           setLoading({ ...loading, image: false });
         }
       }
@@ -128,9 +126,7 @@ const Profile = ({ user, setUser, session }) => {
           {user?.avatar ? (
             <Image
               className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0 object-cover"
-              src={`${process.env.NEXT_PUBLIC_API_URL || ""}${
-                user.avatar?.url
-              }`}
+              src={`${process.env.NEXT_PUBLIC_API_URL || ""}${user.avatar?.url}`}
               alt="Profile picture"
               width={112}
               height={112}

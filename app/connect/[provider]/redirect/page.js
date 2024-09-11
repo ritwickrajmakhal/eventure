@@ -25,7 +25,12 @@ const LoginRedirect = () => {
             id: res.result.user.id,
           };
           // Set the user cookie
-          Cookies.set("session", JSON.stringify(session), { expires: 7 });
+          Cookies.set("session", JSON.stringify(session), {
+            expires: 7, // Cookie will expire in 7 days
+            secure: true, // Ensures the cookie is sent over HTTPS
+            sameSite: "Strict", // Prevents the cookie from being sent in cross-site requests
+            path: "/", // Cookie is available across the whole website
+          });
           // Redirect to a different page after successful login
           window.location.href = "/";
         } else {

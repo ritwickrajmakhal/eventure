@@ -7,19 +7,15 @@ import { Sidebar } from "flowbite-react";
 import { HiChartPie, HiCalendar, HiUser, HiMenu } from "react-icons/hi";
 import Link from "next/link";
 
-
 const Dashboard = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sideBarRef = useRef(null);
   const toggleButtonRef = useRef(null); // Ref for the toggle button
 
   // Redirect to login if not authenticated
-  const userCookie = Cookies.get("user");
-  const [user, setUser] = useState(null);
+  const userCookie = Cookies.get("session");
   useEffect(() => {
-    if (userCookie) {
-      setUser(JSON.parse(userCookie));
-    } else {
+    if (!userCookie) {
       redirect("/login");
     }
   }, [userCookie]);

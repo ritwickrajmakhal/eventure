@@ -29,9 +29,9 @@
     },
     "user": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "mappedBy": "audiences"
+      "inversedBy": "audiences"
     }
   }
 }

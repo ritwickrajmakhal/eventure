@@ -106,9 +106,9 @@
     },
     "audiences": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "oneToMany",
       "target": "api::audience.audience",
-      "inversedBy": "user"
+      "mappedBy": "user"
     }
   }
 }

@@ -380,7 +380,7 @@ export interface ApiAudienceAudience extends Schema.CollectionType {
     details: Attribute.JSON;
     user: Attribute.Relation<
       'api::audience.audience',
-      'manyToMany',
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
@@ -825,7 +825,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     organization: Attribute.String;
     audiences: Attribute.Relation<
       'plugin::users-permissions.user',
-      'manyToMany',
+      'oneToMany',
       'api::audience.audience'
     >;
     createdAt: Attribute.DateTime;

@@ -23,7 +23,7 @@ const Account = () => {
 
   // Fetch user information from the server and set it to the state
   useEffect(() => {
-    if (session) {
+    if (session && !user.id) {
       const fetchInformation = async () => {
         const res = await request(`/api/users/me?populate=*`, {
           headers: {
@@ -36,7 +36,7 @@ const Account = () => {
       };
       fetchInformation();
     }
-  }, [session]);
+  }, [session, user]);
 
   return (
     <>

@@ -63,7 +63,7 @@ const Dashboard = ({ children }) => {
       {/* Sidebar: hidden on small screens, visible on medium and larger */}
       <div
         ref={sideBarRef} // Ref for the sidebar wrapper div
-        className={`absolute z-40 w-64 transition-transform transform h-full ${
+        className={`fixed z-40 w-64 transition-transform transform h-full ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >

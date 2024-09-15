@@ -22,11 +22,13 @@ const Page = ({ params: { slug } }) => {
   const [error, setError] = useState(null);
   const router = useRouter();
 
+  // Get user session from cookie
   useEffect(() => {
     const userCookie = Cookies.get("session");
     if (userCookie) setSession(JSON.parse(userCookie));
   }, []);
 
+  // Fetch audience data on page load if user is logged in
   useEffect(() => {
     if (!session) return;
 
@@ -48,6 +50,7 @@ const Page = ({ params: { slug } }) => {
     fetchAudience();
   }, [session, slug, router]);
 
+  // Handle audience edit form submission
   const handleEditAudience = async (e) => {
     e.preventDefault();
     if (!session) return;
@@ -64,6 +67,7 @@ const Page = ({ params: { slug } }) => {
     setLoading((prev) => ({ ...prev, edit: false }));
   };
 
+  // Remove selected rows from the grid
   const removeSelectedRows = useCallback(async () => {
     setLoading((prev) => ({ ...prev, remove: true }));
     const selectedRows = gridRef.current.api.getSelectedNodes().map((node) => node.data);
@@ -79,18 +83,23 @@ const Page = ({ params: { slug } }) => {
     setLoading((prev) => ({ ...prev, remove: false }));
   }, [rowData, session, audience]);
 
+  // Remove audience and redirect to audiences page
   const removeAudience = async () => {
     if (!session) return;
+    setLoading((prev) => ({ ...prev, remove: true }));
     const res = await request(`/api/audiences/${audience.id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${session.jwt}` },
     });
 
     if (!res.error) router.push("/dashboard/audiences");
+    setLoading((prev) => ({ ...prev, remove: false }));
   };
 
+  // Export grid data as CSV
   const exportData = useCallback(() => gridRef.current.api.exportDataAsCsv(), []);
 
+  // Update row data on cell value change
   const onCellValueChanged = useCallback(async (event) => {
     const updatedRowData = event.data;
     const rowIndex = event.rowIndex;

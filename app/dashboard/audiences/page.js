@@ -1,6 +1,6 @@
 "use client";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button, Card } from "flowbite-react";
 import request from "@/lib/request";
 import Cookies from "js-cookie";
@@ -32,7 +32,6 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [audiences, setAudiences] = useState([]);
-  const toggleButtonRef = useRef(null);
 
   // Get user session from cookie on page load
   useEffect(() => {
@@ -63,17 +62,6 @@ const Page = () => {
     setLoading(false);
   };
 
-  // Close modal when user clicks outside the modal
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (toggleButtonRef.current && !toggleButtonRef.current.contains(event.target) && openModal) {
-        closeModal();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openModal]);
-
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
@@ -91,7 +79,7 @@ const Page = () => {
         validDetails = validateAndFilterJsonData(jsonDetails);
       }
       else{
-        validDetails = [];
+        validDetails = [{"name": "", "email": ""}];
       }
       const requestBody = {
         data: {
@@ -129,7 +117,7 @@ const Page = () => {
           Create
         </Button>
         <ImportModal
-          toggleButtonRef={toggleButtonRef}
+          headerLabel={"Create your audience"}
           openModal={openModal}
           closeModal={closeModal}
           handleSubmit={createAudience}

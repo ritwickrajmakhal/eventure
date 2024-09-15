@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useState, useRef, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { Sidebar } from "flowbite-react";
-import { HiChartPie, HiCalendar, HiUser, HiMenu } from "react-icons/hi";
+import { HiChartPie, HiCalendar, HiOutlineUserGroup, HiMenu } from "react-icons/hi";
 import Link from "next/link";
 
 const Dashboard = ({ children }) => {
@@ -78,7 +78,7 @@ const Dashboard = ({ children }) => {
                   My Events
                 </Sidebar.Item>
               </Sidebar.Collapse>
-              <Sidebar.Item as={Link} href="/dashboard/audiences" icon={HiUser}>
+              <Sidebar.Item as={Link} href="/dashboard/audiences" icon={HiOutlineUserGroup}>
                 My Audiences
               </Sidebar.Item>
             </Sidebar.ItemGroup>

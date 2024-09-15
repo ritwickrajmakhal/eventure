@@ -13,7 +13,7 @@ import Link from "next/link";
 import { Avatar } from "flowbite-react";
 import Cookies from "js-cookie";
 import request from "@/lib/request";
-
+import { HiOutlineViewGridAdd, HiOutlineUserCircle, HiOutlineLogout } from "react-icons/hi";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -160,16 +160,18 @@ export default function Navbar() {
                   <MenuItem>
                     <Link
                       href="/account"
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                      className="flex gap-1 px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                     >
+                      <HiOutlineUserCircle className="w-5 h-5" />
                       Account
                     </Link>
                   </MenuItem>
                   <MenuItem>
                     <Link
                       href="/dashboard"
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                      className="flex gap-1 px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                     >
+                      <HiOutlineViewGridAdd className="w-5 h-5" />
                       Dashboard
                     </Link>
                   </MenuItem>
@@ -180,8 +182,9 @@ export default function Navbar() {
                         Cookies.remove("session");
                         window.location.reload();
                       }}
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                      className="flex gap-1 px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                     >
+                      <HiOutlineLogout className="w-5 h-5" />
                       Sign out
                     </a>
                   </MenuItem>

@@ -3,159 +3,147 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
-import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
-import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import request from "@/lib/request";
-import { Button, Card, Dropdown, Icon } from "flowbite-react";
-import {
-  HiCloudDownload,
-  HiOutlineTrash,
-  HiOutlinePencilAlt,
-} from "react-icons/hi";
+import { Button, Dropdown } from "flowbite-react";
+import { HiCloudDownload, HiOutlinePencilAlt, HiOutlinePlusCircle } from "react-icons/hi";
+import ImportModal from "../ImportModal";
 
-const Page = ({ params }) => {
+const Page = ({ params: { slug } }) => {
   const gridRef = useRef(null);
   const [session, setSession] = useState(null);
-  const { slug } = params;
   const [audience, setAudience] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
-  const pagination = true;
-  const paginationPageSize = 500;
-  const paginationPageSizeSelector = [200, 500, 1000];
+  const [loading, setLoading] = useState({ remove: false, edit: false });
+  const [openModal, setOpenModal] = useState(false);
+  const [error, setError] = useState(null);
+  const router = useRouter();
 
-  // Load the user session from the cookie
   useEffect(() => {
     const userCookie = Cookies.get("session");
-    if (userCookie) {
-      setSession(JSON.parse(userCookie));
-    }
+    if (userCookie) setSession(JSON.parse(userCookie));
   }, []);
 
-  // Fetch the audience details from the API when the session is loaded
   useEffect(() => {
-    if (session) {
-      const fetchAudience = async () => {
-        const res = await request(
-          `/api/audiences?filters[slug][$eq]=${slug}&filters[user][$eq]=${session.id}`,
-          {
-            headers: { Authorization: `Bearer ${session.jwt}` },
-          }
-        );
+    if (!session) return;
 
-        if (res.data && res.data.length > 0) {
-          const audienceDetails = res.data[0].attributes.details;
-
-          // Extracting column definitions from the first item in the details array
-          if (audienceDetails.length > 0) {
-            const columns = Object.keys(audienceDetails[0]).map((key) => ({
-              field: key,
-              filter: true,
-              editable: true,
-            }));
-            setColDefs(columns);
-
-            // Setting the row data from the details array
-            setRowData(audienceDetails);
-          }
-          setAudience(res.data[0]);
-        } else {
-          router.push("/404"); // Redirect to a 404 page
+    const fetchAudience = async () => {
+      const res = await request(
+        `/api/audiences?filters[slug][$eq]=${slug}&filters[user][$eq]=${session.id}`,
+        { headers: { Authorization: `Bearer ${session.jwt}` } }
+      );
+      if (res.data?.length) {
+        const { details } = res.data[0].attributes;
+        if (details?.length) {
+          setColDefs(Object.keys(details[0]).map((key) => ({ field: key, filter: true, editable: true })));
+          setRowData(details);
         }
-      };
-      fetchAudience();
-    }
-  }, [slug, session, router]);
+        setAudience(res.data[0]);
+      } else router.push("/404");
+    };
 
-  const removeSelected = useCallback(async () => {
-    if (session) {
-      setLoading(true);
-      const selectedRowNodes = gridRef.current.api.getSelectedNodes();
-      const selectedRows = selectedRowNodes.map((node) => node.data);
-      const updatedData = rowData.filter((row) => !selectedRows.includes(row));
-      const updatedAudience = { ...audience };
-      updatedAudience.attributes.details = updatedData;
-      const res = await request(`/api/audiences/${audience.id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${session.jwt}`,
-        },
-        body: { data: updatedAudience.attributes },
-      });
-      if (!res.error) {
-        setRowData(updatedData);
-        setLoading(false);
-      }
-    }
-  }, [gridRef, rowData, session, audience]);
+    fetchAudience();
+  }, [session, slug, router]);
 
-  const removeAudience = async () => {
-    if (session) {
-      const res = await request(`/api/audiences/${audience.id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${session.jwt}` },
-      });
-      if (!res.error) {
-        router.push("/dashboard/audiences");
-      }
-    }
+  const handleEditAudience = async (e) => {
+    e.preventDefault();
+    if (!session) return;
+    setLoading((prev) => ({ ...prev, edit: true }));
+
+    const res = await request(`/api/audiences/${audience.id}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${session.jwt}` },
+      body: { data: audience.attributes },
+    });
+
+    if (!res.error) setOpenModal(false);
+    else setError(res.error);
+    setLoading((prev) => ({ ...prev, edit: false }));
   };
 
-  const exportData = useCallback(() => {
-    gridRef.current.api.exportDataAsCsv();
-  }, [gridRef]);
+  const removeSelectedRows = useCallback(async () => {
+    setLoading((prev) => ({ ...prev, remove: true }));
+    const selectedRows = gridRef.current.api.getSelectedNodes().map((node) => node.data);
+    const updatedData = rowData.filter((row) => !selectedRows.includes(row));
 
+    const res = await request(`/api/audiences/${audience.id}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${session.jwt}` },
+      body: { data: { details: updatedData } },
+    });
+
+    if (!res.error) setRowData(updatedData);
+    setLoading((prev) => ({ ...prev, remove: false }));
+  }, [rowData, session, audience]);
+
+  const removeAudience = async () => {
+    if (!session) return;
+    const res = await request(`/api/audiences/${audience.id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${session.jwt}` },
+    });
+
+    if (!res.error) router.push("/dashboard/audiences");
+  };
+
+  const exportData = useCallback(() => gridRef.current.api.exportDataAsCsv(), []);
+
+  const onCellValueChanged = useCallback(async (event) => {
+    const updatedRowData = event.data;
+    const rowIndex = event.rowIndex;
+
+    const newData = [...rowData];
+    newData[rowIndex] = updatedRowData;
+
+    const res = await request(`/api/audiences/${audience.id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${session.jwt}`,
+      },
+      body: {data: {details : newData}}
+    });
+
+    if (!res.error) {
+      setRowData(newData);
+    }
+  }, [rowData, session, audience]);
+  
   return (
     <div>
-      <Card className="mb-4">
-        {/* Audience Information Section */}
-        <div className="flex justify-between items-center flex-wrap">
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold mb-2 flex justify-between align-middle">
-              {audience?.attributes.name || "Unnamed Audience"}
-              <HiOutlinePencilAlt role="button" />
-            </h2>
-            <p className="mb-1">
-              <strong>Description:</strong>{" "}
-              {audience?.attributes.desc || "No description available."}
-            </p>
-            <p>
-              <strong>Participants:</strong>{" "}
-              {audience?.attributes.details?.length || 0}
-            </p>
-          </div>
-        </div>
-
-        {/* Action Buttons Section */}
+      <div className="mb-4 bg-gray-800 rounded-lg lg:p-4 p-2">
+          <h2 className="text-2xl font-bold flex items-center justify-between mb-2">
+            {audience?.attributes.name || "Unnamed Audience"}
+            <HiOutlinePencilAlt onClick={() => setOpenModal(true)} role="button" />
+          </h2>
+          <ImportModal
+            headerLabel={"Edit audience"}
+            edit={true}
+            openModal={openModal}
+            closeModal={() => setOpenModal(false)}
+            handleSubmit={handleEditAudience}
+            handleInputChange={(e) => setAudience((prev) => ({ ...prev, attributes: { ...prev.attributes, [e.target.name]: e.target.value } }))}
+            formData={audience?.attributes}
+            loading={loading.edit}
+            error={error}
+          />
+        <p className="mb-2"><strong>Description:</strong> {audience?.attributes.desc || "No description available."}</p>
+        <p className="mb-2"><strong>Participants:</strong> {rowData.length || 0}</p>
         <div className="flex space-x-1">
-          <Dropdown size={"sm"} label="Add" dismissOnClick={false}>
-            <Dropdown.Item>Manual entry</Dropdown.Item>
-            <Dropdown.Item>From file</Dropdown.Item>
+          <Button size="sm" onClick={()=>gridRef.current.api.applyTransaction({add: [{}]})}>
+            <HiOutlinePlusCircle className="mr-2 h-5 w-5" /> Insert
+          </Button>
+          <Dropdown size="sm" color="red" label={loading.remove ? "Removing..." : "Remove"}>
+            <Dropdown.Item onClick={removeSelectedRows}>Selected rows</Dropdown.Item>
+            <Dropdown.Item onClick={removeAudience}>Audience</Dropdown.Item>
           </Dropdown>
-
-          <Dropdown
-            size={"sm"}
-            color={"red"}
-            label={loading ? "Removing..." : "Remove"}
-            dismissOnClick={false}
-          >
-            <Dropdown.Item onClick={removeSelected}>
-              Remove selected
-            </Dropdown.Item>
-            <Dropdown.Item onClick={removeAudience}>
-              Remove audience
-            </Dropdown.Item>
-          </Dropdown>
-
-          <Button size={"sm"} color={"green"} onClick={exportData}>
-            <HiCloudDownload className="mr-2 h-5 w-5" />
-            Export
+          <Button size="sm" color="green" onClick={exportData}>
+            <HiCloudDownload className="mr-2 h-5 w-5" /> Export
           </Button>
         </div>
-      </Card>
+      </div>
       <div className="ag-theme-quartz-dark" style={{ height: 800 }}>
         {audience ? (
           <AgGridReact
@@ -163,13 +151,12 @@ const Page = ({ params }) => {
             rowSelection="multiple"
             rowData={rowData}
             columnDefs={colDefs}
-            pagination={pagination}
-            paginationPageSize={paginationPageSize}
-            paginationPageSizeSelector={paginationPageSizeSelector}
+            pagination
+            paginationPageSize={500}
+            paginationPageSizeSelector={[200, 500, 1000]}
+            onCellValueChanged={onCellValueChanged}
           />
-        ) : (
-          "Loading..."
-        )}
+        ) : "Loading..."}
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ const ImportModal = ({
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openModal]);
+  }, [openModal, closeModal]);
 
   return (
     <Modal ref={toggleButtonRef} show={openModal} size="lg" onClose={closeModal} popup>

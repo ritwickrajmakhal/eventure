@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useState, useRef, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { Sidebar } from "flowbite-react";
-import { HiChartPie, HiCalendar, HiUser, HiMenu } from "react-icons/hi";
+import { HiChartPie, HiCalendar, HiOutlineUserGroup, HiMenu } from "react-icons/hi";
 import Link from "next/link";
 
 const Dashboard = ({ children }) => {
@@ -63,7 +63,7 @@ const Dashboard = ({ children }) => {
       {/* Sidebar: hidden on small screens, visible on medium and larger */}
       <div
         ref={sideBarRef} // Ref for the sidebar wrapper div
-        className={`absolute z-40 w-64 transition-transform transform h-full ${
+        className={`fixed z-40 w-64 transition-transform transform h-full ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
@@ -78,7 +78,7 @@ const Dashboard = ({ children }) => {
                   My Events
                 </Sidebar.Item>
               </Sidebar.Collapse>
-              <Sidebar.Item as={Link} href="/dashboard/audiences" icon={HiUser}>
+              <Sidebar.Item as={Link} href="/dashboard/audiences" icon={HiOutlineUserGroup}>
                 My Audiences
               </Sidebar.Item>
             </Sidebar.ItemGroup>

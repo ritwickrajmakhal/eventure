@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_components_plans",
+  "info": {
+    "displayName": "Plan",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Basic",
+        "Standard",
+        "Premium"
+      ],
+      "required": true
+    },
+    "price": {
+      "type": "integer",
+      "required": true
+    },
+    "services": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::service.service"
+    }
+  }
+}

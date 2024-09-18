@@ -362,83 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiAudienceAudience extends Schema.CollectionType {
-  collectionName: 'audiences';
-  info: {
-    singularName: 'audience';
-    pluralName: 'audiences';
-    displayName: 'Audience';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    slug: Attribute.UID & Attribute.Required;
-    name: Attribute.String & Attribute.Required;
-    desc: Attribute.Text;
-    details: Attribute.JSON;
-    user: Attribute.Relation<
-      'api::audience.audience',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::audience.audience',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::audience.audience',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiContactUsContactUs extends Schema.CollectionType {
-  collectionName: 'contact_uses';
-  info: {
-    singularName: 'contact-us';
-    pluralName: 'contact-uses';
-    displayName: 'contact-us';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    email: Attribute.Email & Attribute.Required;
-    subject: Attribute.String & Attribute.Required;
-    message: Attribute.Text & Attribute.Required;
-    attachments: Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
-    > &
-      Attribute.Required;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::contact-us.contact-us',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::contact-us.contact-us',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -892,6 +815,190 @@ export interface PluginI18NLocale extends Schema.CollectionType {
   };
 }
 
+export interface ApiAudienceAudience extends Schema.CollectionType {
+  collectionName: 'audiences';
+  info: {
+    singularName: 'audience';
+    pluralName: 'audiences';
+    displayName: 'Audience';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    slug: Attribute.UID & Attribute.Required;
+    name: Attribute.String & Attribute.Required;
+    desc: Attribute.Text;
+    details: Attribute.JSON;
+    user: Attribute.Relation<
+      'api::audience.audience',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::audience.audience',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::audience.audience',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiContactUsContactUs extends Schema.CollectionType {
+  collectionName: 'contact_uses';
+  info: {
+    singularName: 'contact-us';
+    pluralName: 'contact-uses';
+    displayName: 'contact-us';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    email: Attribute.Email & Attribute.Required;
+    subject: Attribute.String & Attribute.Required;
+    message: Attribute.Text & Attribute.Required;
+    attachments: Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    > &
+      Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::contact-us.contact-us',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::contact-us.contact-us',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiEventTemplateEventTemplate extends Schema.CollectionType {
+  collectionName: 'event_templates';
+  info: {
+    singularName: 'event-template';
+    pluralName: 'event-templates';
+    displayName: 'Event Template';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    description: Attribute.Text & Attribute.Required;
+    image: Attribute.Media<'images', true> & Attribute.Required;
+    slug: Attribute.UID & Attribute.Required;
+    our_helps: Attribute.Relation<
+      'api::event-template.event-template',
+      'oneToMany',
+      'api::our-help.our-help'
+    >;
+    plans: Attribute.DynamicZone<['components.plan']>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::event-template.event-template',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::event-template.event-template',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiOurHelpOurHelp extends Schema.CollectionType {
+  collectionName: 'our_helps';
+  info: {
+    singularName: 'our-help';
+    pluralName: 'our-helps';
+    displayName: 'our-help';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    description: Attribute.Text & Attribute.Required;
+    image: Attribute.Media<'images'> & Attribute.Required;
+    event_template: Attribute.Relation<
+      'api::our-help.our-help',
+      'manyToOne',
+      'api::event-template.event-template'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::our-help.our-help',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::our-help.our-help',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiServiceService extends Schema.CollectionType {
+  collectionName: 'services';
+  info: {
+    singularName: 'service';
+    pluralName: 'services';
+    displayName: 'Service';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::service.service',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::service.service',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -902,8 +1009,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::audience.audience': ApiAudienceAudience;
-      'api::contact-us.contact-us': ApiContactUsContactUs;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
@@ -912,6 +1017,11 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'plugin::i18n.locale': PluginI18NLocale;
+      'api::audience.audience': ApiAudienceAudience;
+      'api::contact-us.contact-us': ApiContactUsContactUs;
+      'api::event-template.event-template': ApiEventTemplateEventTemplate;
+      'api::our-help.our-help': ApiOurHelpOurHelp;
+      'api::service.service': ApiServiceService;
     }
   }
 }

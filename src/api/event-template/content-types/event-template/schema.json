@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "event_templates",
+  "info": {
+    "singularName": "event-template",
+    "pluralName": "event-templates",
+    "displayName": "Event Template",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "slug": {
+      "type": "uid",
+      "required": true
+    },
+    "our_helps": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::our-help.our-help",
+      "mappedBy": "event_template"
+    },
+    "plans": {
+      "type": "dynamiczone",
+      "components": [
+        "components.plan"
+      ]
+    }
+  }
+}

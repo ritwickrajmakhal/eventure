@@ -4,7 +4,8 @@
   "info": {
     "singularName": "our-help",
     "pluralName": "our-helps",
-    "displayName": "our-help"
+    "displayName": "our-help",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -20,16 +21,16 @@
       "required": true
     },
     "image": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": false,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
-    "event_template": {
+    "event_templates": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::event-template.event-template",
       "inversedBy": "our_helps"
     }

@@ -32,17 +32,17 @@
       "type": "uid",
       "required": true
     },
-    "our_helps": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::our-help.our-help",
-      "mappedBy": "event_template"
-    },
     "plans": {
       "type": "dynamiczone",
       "components": [
         "components.plan"
       ]
+    },
+    "our_helps": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::our-help.our-help",
+      "mappedBy": "event_templates"
     }
   }
 }

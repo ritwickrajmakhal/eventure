@@ -5,50 +5,6 @@ import request from "@/lib/request";
 import Image from "next/image";
 
 const Page = () => {
-  // const cardData = [
-  //   {
-  //     className: "conference",
-  //     img: "conference",
-  //     heading: "Conference",
-  //     paragraph:
-  //       "Allow yourself to organize a conference succfully",
-  //   },
-  //   {
-  //     className: "tradeShow",
-  //     img: "tradeshow1",
-  //     heading: "Trade Show",
-  //     paragraph:
-  //       "Allow yourself to organize a conference succfully",
-  //   },
-  //   {
-  //     className: "engagement",
-  //     img: "engagement",
-  //     heading: "Engagement",
-  //     paragraph:
-  //       "Allow yourself to organize a conference succfully",
-  //   },
-  //   {
-  //     className: "birthday",
-  //     img: "birthday",
-  //     heading: "Birthday",
-  //     paragraph:
-  //       "Allow yourself to organize a conference succfully",
-  //   },
-  //   {
-  //     className: "cerimonial",
-  //     img: "cerimonial",
-  //     heading: "Cerimoni",
-  //     paragraph:
-  //       "Allow yourself to organize a conference succfully",
-  //   },
-  //   {
-  //     className: "custom",
-  //     img: "custom",
-  //     heading: "Create Custom",
-  //     paragraph:
-  //       "Create your own event and colobarate with us and organize a grate event with us...",
-  //   },
-  // ]
   const [cardData, setCardData] = useState([]);
 
   useEffect(() => {
@@ -106,25 +62,6 @@ const Page = () => {
           }
         />
       </div>
-      {/* <div className="fearures flex m-5 md:flex-row flex-col items-center gap-5 md:gap-5">
-        {cardData.slice(3, 5).map((data, index) => (
-          <Card
-            key={index}
-            className={data.slug}
-            img={data.img}
-            heading={data.heading}
-            paragraph={data.paragraph}
-          />
-        ))}
-        <Card
-          className={"custom"}
-          img={"/custom.jpg"}
-          heading={"Create Custom "}
-          paragraph={
-            "Create your own event and collaborate with us and organize a grate event. Click Continue to procide..."
-          }
-        />
-      </div> */}
     </div>
   );
 };

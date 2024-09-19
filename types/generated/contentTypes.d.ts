@@ -908,12 +908,12 @@ export interface ApiEventTemplateEventTemplate extends Schema.CollectionType {
     description: Attribute.Text & Attribute.Required;
     image: Attribute.Media<'images', true> & Attribute.Required;
     slug: Attribute.UID & Attribute.Required;
+    plans: Attribute.DynamicZone<['components.plan']>;
     our_helps: Attribute.Relation<
       'api::event-template.event-template',
-      'oneToMany',
+      'manyToMany',
       'api::our-help.our-help'
     >;
-    plans: Attribute.DynamicZone<['components.plan']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -938,6 +938,7 @@ export interface ApiOurHelpOurHelp extends Schema.CollectionType {
     singularName: 'our-help';
     pluralName: 'our-helps';
     displayName: 'our-help';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -946,9 +947,9 @@ export interface ApiOurHelpOurHelp extends Schema.CollectionType {
     title: Attribute.String & Attribute.Required;
     description: Attribute.Text & Attribute.Required;
     image: Attribute.Media<'images'> & Attribute.Required;
-    event_template: Attribute.Relation<
+    event_templates: Attribute.Relation<
       'api::our-help.our-help',
-      'manyToOne',
+      'manyToMany',
       'api::event-template.event-template'
     >;
     createdAt: Attribute.DateTime;

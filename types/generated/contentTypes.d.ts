@@ -872,8 +872,8 @@ export interface ApiContactUsContactUs extends Schema.CollectionType {
     attachments: Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
-    > &
-      Attribute.Required;
+    >;
+    resolved: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

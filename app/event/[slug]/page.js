@@ -9,13 +9,13 @@ import { React, useEffect, useState } from "react";
 import request from "@/lib/request";
 
 export default function Page({ params }) {
- const [eventData, setEventData] = useState();
+  const [eventData, setEventData] = useState();
 
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await request(
-          `/api/event-templates?populate=plans.services&filters[slug][$eq]=${params.slug}&populate=our_helps.image&populate=image`
+          `/api/event-templates?populate=plans.services&filters[slug][$eq]=${params.slug}&populate=our_helps.image&populate=image&populate=customer_reviews.profilePic&populate=profilePic`
         );
 
         if (response.error) {
@@ -34,13 +34,29 @@ export default function Page({ params }) {
     <div className="text-white w-4/5 m-auto">
       <div className="gallery my-5 flex flex-wrap mt-5 md:flex-row flex-col items-center gap-5 md:gap-5">
         {eventData?.attributes.image.data.slice(1).map((img, index) => (
-          <Gallery key={index} img={(process.env.NEXT_PUBLIC_API_URL || "")+img.attributes.url} />
+          <Gallery
+            key={index}
+            img={(process.env.NEXT_PUBLIC_API_URL || "") + img.attributes.url}
+          />
         ))}
       </div>
 
       <div className="customerReview  my-5">
-        <CustomerReview />
-        {/* <Reviews/> */}
+      <div className="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2 bg-white dark:bg-gray-800">
+
+        {eventData?.attributes.customer_reviews.data.slice(0,4).map((data, index) => (
+          <CustomerReview
+          key={index}
+            subject={data.attributes.Subject}
+            description={data.attributes.Description}
+            profilePic={
+              (process.env.NEXT_PUBLIC_API_URL || "") +
+              data.attributes.profilePic.data.attributes.url
+            }
+            userName={data.attributes.userName}
+          />
+        ))}
+        </div>
       </div>
 
       <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
@@ -57,14 +73,18 @@ export default function Page({ params }) {
               key={index}
               title={data.attributes.title}
               description={data.attributes.description}
-              img={`${process.env.NEXT_PUBLIC_API_URL || ""}${data.attributes.image.data.attributes.url}`}
+              img={`${process.env.NEXT_PUBLIC_API_URL || ""}${
+                data.attributes.image.data.attributes.url
+              }`}
             />
           ) : (
             <Help2
-            key={index}
-            title={data.attributes.title}
-            description={data.attributes.description}
-            img={`${process.env.NEXT_PUBLIC_API_URL || ""}${data.attributes.image.data.attributes.url}`}
+              key={index}
+              title={data.attributes.title}
+              description={data.attributes.description}
+              img={`${process.env.NEXT_PUBLIC_API_URL || ""}${
+                data.attributes.image.data.attributes.url
+              }`}
             />
           )
         )}
@@ -82,9 +102,19 @@ export default function Page({ params }) {
         </div>
 
         <div className="flex justify-between w-5/6 m-auto">
-        {eventData?.attributes.plans.map((plan, index)=>(
-          <Plan key={index} price={plan.price} allServices={eventData?.attributes.plans[eventData?.attributes.plans.length - 1].services.data}  services={plan.services.data} type={plan.type}/>
-        ))}
+          {eventData?.attributes.plans.map((plan, index) => (
+            <Plan
+              key={index}
+              price={plan.price}
+              allServices={
+                eventData?.attributes.plans[
+                  eventData?.attributes.plans.length - 1
+                ].services.data
+              }
+              services={plan.services.data}
+              type={plan.type}
+            />
+          ))}
         </div>
       </div>
 

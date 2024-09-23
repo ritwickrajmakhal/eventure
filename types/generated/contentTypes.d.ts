@@ -979,6 +979,7 @@ export interface ApiHomeHome extends Schema.SingleType {
     heading: Attribute.String;
     description: Attribute.Text;
     features: Attribute.DynamicZone<['components.card']>;
+    website_name: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

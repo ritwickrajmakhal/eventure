@@ -23,6 +23,9 @@
       "components": [
         "components.card"
       ]
+    },
+    "website_name": {
+      "type": "string"
     }
   }
 }

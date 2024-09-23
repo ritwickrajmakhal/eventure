@@ -122,7 +122,7 @@ const Page = ({ params: { slug } }) => {
   
   return (
     <div>
-      <div className="mb-4 bg-gray-800 rounded-lg lg:p-4 p-2">
+      <div className="mb-4 dark:bg-gray-800 bg-white rounded-lg lg:p-4 p-2">
           <h2 className="text-2xl font-bold flex items-center justify-between mb-2">
             {audience?.attributes.name || "Unnamed Audience"}
             <HiOutlinePencilAlt onClick={() => setOpenModal(true)} role="button" />
@@ -153,7 +153,7 @@ const Page = ({ params: { slug } }) => {
           </Button>
         </div>
       </div>
-      <div className="ag-theme-quartz-dark" style={{ height: 800 }}>
+      <div className="dark:ag-theme-quartz-dark ag-theme-quartz" style={{ height: 800 }}>
         {audience ? (
           <AgGridReact
             ref={gridRef}

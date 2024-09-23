@@ -57,7 +57,7 @@ const Dashboard = ({ children }) => {
         aria-label="Toggle Sidebar"
         ref={toggleButtonRef} // Assign ref to toggle button
       >
-        <HiMenu className="h-6 w-6 ml-auto text-white hover:ring-2 hover:ring-white hover:rounded-md hover:bg-gray-800" />
+        <HiMenu className="h-6 w-6 ml-auto dark:text-white hover:ring-2 hover:ring-white hover:rounded-md hover:bg-gray-800" />
       </div>
 
       {/* Sidebar: hidden on small screens, visible on medium and larger */}
@@ -87,7 +87,7 @@ const Dashboard = ({ children }) => {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 p-4 lg:ml-64 text-white">{children}</div>
+      <div className="flex-1 p-4 lg:ml-64 dark:text-white">{children}</div>
     </div>
   );
 };

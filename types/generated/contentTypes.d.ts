@@ -1095,13 +1095,13 @@ export interface ApiServicesPageServicesPage extends Schema.SingleType {
     singularName: 'services-page';
     pluralName: 'services-pages';
     displayName: 'Services Page';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    heading: Attribute.String;
-    service: Attribute.DynamicZone<['components.card']>;
+    services: Attribute.DynamicZone<['components.card']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

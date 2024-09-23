@@ -2,7 +2,8 @@
   "collectionName": "components_components_cards",
   "info": {
     "displayName": "Card",
-    "icon": "cube"
+    "icon": "cube",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -14,11 +15,15 @@
       "type": "text"
     },
     "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
+    },
+    "icon": {
+      "type": "string"
     }
   }
 }

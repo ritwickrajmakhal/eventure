@@ -39,11 +39,13 @@ export interface ComponentsCard extends Schema.Component {
   info: {
     displayName: 'Card';
     icon: 'cube';
+    description: '';
   };
   attributes: {
     heading: Attribute.String;
     description: Attribute.Text;
     thumbnail: Attribute.Media<'images'>;
+    icon: Attribute.String;
   };
 }
 

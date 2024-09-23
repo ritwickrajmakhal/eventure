@@ -4,17 +4,15 @@
   "info": {
     "singularName": "services-page",
     "pluralName": "services-pages",
-    "displayName": "Services Page"
+    "displayName": "Services Page",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "heading": {
-      "type": "string"
-    },
-    "service": {
+    "services": {
       "type": "dynamiczone",
       "components": [
         "components.card"

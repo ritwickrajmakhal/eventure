@@ -18,10 +18,43 @@ export interface ComponentsPlan extends Schema.Component {
   };
 }
 
+export interface ComponentsLink extends Schema.Component {
+  collectionName: 'components_components_links';
+  info: {
+    displayName: 'Link';
+    icon: 'attachment';
+  };
+  attributes: {
+    text: Attribute.String;
+    url: Attribute.String;
+    isExternal: Attribute.Boolean;
+    category: Attribute.Enumeration<
+      ['Company', 'Help center', 'Legal', 'Download', 'Social media']
+    >;
+  };
+}
+
+export interface ComponentsCard extends Schema.Component {
+  collectionName: 'components_components_cards';
+  info: {
+    displayName: 'Card';
+    icon: 'cube';
+    description: '';
+  };
+  attributes: {
+    heading: Attribute.String;
+    description: Attribute.Text;
+    thumbnail: Attribute.Media<'images'>;
+    icon: Attribute.String;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
       'components.plan': ComponentsPlan;
+      'components.link': ComponentsLink;
+      'components.card': ComponentsCard;
     }
   }
 }

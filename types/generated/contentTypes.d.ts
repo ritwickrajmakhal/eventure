@@ -892,6 +892,45 @@ export interface ApiContactUsContactUs extends Schema.CollectionType {
   };
 }
 
+export interface ApiCustomerReviewCustomerReview extends Schema.CollectionType {
+  collectionName: 'customer_reviews';
+  info: {
+    singularName: 'customer-review';
+    pluralName: 'customer-reviews';
+    displayName: 'Customer Review';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Subject: Attribute.String & Attribute.Required;
+    Description: Attribute.Text & Attribute.Required;
+    event_template: Attribute.Relation<
+      'api::customer-review.customer-review',
+      'manyToOne',
+      'api::event-template.event-template'
+    >;
+    profilePic: Attribute.Media<'images'>;
+    userName: Attribute.String & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::customer-review.customer-review',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::customer-review.customer-review',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiEventTemplateEventTemplate extends Schema.CollectionType {
   collectionName: 'event_templates';
   info: {
@@ -913,6 +952,11 @@ export interface ApiEventTemplateEventTemplate extends Schema.CollectionType {
       'api::event-template.event-template',
       'manyToMany',
       'api::our-help.our-help'
+    >;
+    customer_reviews: Attribute.Relation<
+      'api::event-template.event-template',
+      'oneToMany',
+      'api::customer-review.customer-review'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1140,6 +1184,7 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::audience.audience': ApiAudienceAudience;
       'api::contact-us.contact-us': ApiContactUsContactUs;
+      'api::customer-review.customer-review': ApiCustomerReviewCustomerReview;
       'api::event-template.event-template': ApiEventTemplateEventTemplate;
       'api::footer.footer': ApiFooterFooter;
       'api::home.home': ApiHomeHome;

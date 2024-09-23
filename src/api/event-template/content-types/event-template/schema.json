@@ -43,6 +43,12 @@
       "relation": "manyToMany",
       "target": "api::our-help.our-help",
       "mappedBy": "event_templates"
+    },
+    "customer_reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::customer-review.customer-review",
+      "mappedBy": "event_template"
     }
   }
 }

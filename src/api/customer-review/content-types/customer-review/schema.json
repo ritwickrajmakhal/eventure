@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "customer_reviews",
+  "info": {
+    "singularName": "customer-review",
+    "pluralName": "customer-reviews",
+    "displayName": "Customer Review",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Subject": {
+      "type": "string",
+      "required": true
+    },
+    "Description": {
+      "type": "text",
+      "required": true
+    },
+    "event_template": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event-template.event-template",
+      "inversedBy": "customer_reviews"
+    },
+    "profilePic": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": false
+    },
+    "userName": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

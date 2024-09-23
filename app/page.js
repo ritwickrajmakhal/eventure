@@ -7,12 +7,12 @@ async function page() {
   const { heading, description, features, website_name } = res.data.attributes;
   return (
     <>
-      <div className="text-white">
+      <div className="dark:text-white">
         <div className="md:text-7xl text-center font-bold font-Inter mt-8 md:mt-24 text-5xl">
           <h1 className="m-3 md:m-5">{heading}</h1>
-          <h1 className="text-slate-400">{website_name}</h1>
+          <h1 className="dark:text-slate-400">{website_name}</h1>
         </div>
-        <div className="text-center m-8 md:m-16 text-sm md:text-lg text-slate-100 ">
+        <div className="text-center m-8 md:m-16 text-sm md:text-lg dark:text-slate-100 ">
           <p>{description}</p>
         </div>
 

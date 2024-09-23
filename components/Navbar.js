@@ -33,6 +33,7 @@ export default function Navbar() {
   const [avatar, setAvatar] = useState("");
   const userCookie = Cookies.get("session");
   const [session, setSession] = useState(null);
+
   useEffect(() => {
     if (userCookie) {
       setSession(JSON.parse(userCookie));
@@ -69,7 +70,10 @@ export default function Navbar() {
   }, [dropdownRef]);
 
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure
+      as="nav"
+      className="bg-white bg-opacity-30 backdrop-blur-lg shadow-md fixed w-full top-0 dark:bg-gray-900 dark:bg-opacity-50 z-10"
+    >
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -89,9 +93,7 @@ export default function Navbar() {
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             {/* logo */}
             <div className="flex flex-shrink-0 items-center">
-              <h1 className="text-white font-bold text-xl" href="/">
-                Eventure
-              </h1>
+              <h1 className="dark:text-white font-bold text-xl">Eventure</h1>
             </div>
             {/* navigation */}
             <div className="hidden sm:ml-6 sm:block">
@@ -112,7 +114,7 @@ export default function Navbar() {
                     className={classNames(
                       item.current
                         ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        : "dark:text-gray-300 text-gray-500 hover:bg-gray-700 hover:text-white",
                       "rounded-md px-3 py-2 text-sm font-medium"
                     )}
                   >
@@ -130,7 +132,6 @@ export default function Navbar() {
                 type="button"
                 className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
               >
-                <span className="absolute -inset-1.5" />
                 <span className="sr-only">View notifications</span>
                 <BellIcon aria-hidden="true" className="h-6 w-6" />
               </button>
@@ -139,8 +140,6 @@ export default function Navbar() {
               <Menu as="div" className="relative ml-3">
                 <div>
                   <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                    <span className="absolute -inset-1.5" />
-                    <span className="sr-only">Open user menu</span>
                     {avatar ? (
                       <Avatar
                         img={`${
@@ -153,14 +152,11 @@ export default function Navbar() {
                     )}
                   </MenuButton>
                 </div>
-                <MenuItems
-                  transition
-                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                >
+                <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none">
                   <MenuItem>
                     <Link
                       href="/account"
-                      className="flex gap-1 px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                      className="flex gap-1 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       <HiOutlineUserCircle className="w-5 h-5" />
                       Account
@@ -169,7 +165,7 @@ export default function Navbar() {
                   <MenuItem>
                     <Link
                       href="/dashboard"
-                      className="flex gap-1 px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                      className="flex gap-1 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       <HiOutlineViewGridAdd className="w-5 h-5" />
                       Dashboard
@@ -182,7 +178,7 @@ export default function Navbar() {
                         Cookies.remove("session");
                         window.location.reload();
                       }}
-                      className="flex gap-1 px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                      className="flex gap-1 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       <HiOutlineLogout className="w-5 h-5" />
                       Sign out
@@ -214,7 +210,7 @@ export default function Navbar() {
                 className={classNames(
                   item.current
                     ? "bg-gray-900 text-white"
-                    : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    : "dark:text-gray-300 text-gray-500 hover:bg-gray-700 hover:text-white",
                   "block rounded-md px-3 py-2 text-base font-medium"
                 )}
               >

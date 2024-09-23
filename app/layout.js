@@ -18,10 +18,14 @@ export default function RootLayout({ children }) {
       <head>
         <ThemeModeScript />
       </head>
-      <body className="min-h-screen relative h-full w-full bg-slate-950 bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#3e3e3e,transparent)]">
+      <body
+        className={`min-h-screen relative h-full w-full bg-slate-100 dark:bg-slate-950 bg-[radial-gradient(circle_500px_at_50%_200px,#8c52ff,transparent)] dark:bg-[radial-gradient(circle_500px_at_50%_200px,#3e3e3e,transparent)] transition-colors duration-300`}
+      >
         <Chatbot />
         <Navbar />
-        <div className="min-h-screen">{children}</div>
+        <div className="min-h-screen mt-16">
+          {children}
+        </div>
         <Footer />
       </body>
     </html>

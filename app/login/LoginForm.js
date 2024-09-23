@@ -108,7 +108,7 @@ const LoginForm = ({ providers, setActiveComponent }) => {
       >
         {loading ? "Signing in..." : "Sign In"}
       </button>
-      <div className="text-white flex justify-between w-full mb-2">
+      <div className="dark:text-white flex justify-between w-full mb-2">
         <Link href="#" onClick={() => setActiveComponent("forgot")}>
           Forgot Password?
         </Link>
@@ -116,7 +116,7 @@ const LoginForm = ({ providers, setActiveComponent }) => {
           Sign Up
         </Link>
       </div>
-      <div className="text-white">
+      <div className="dark:text-white">
         <p className="text-center text-sm mb-4">or you can sign in with</p>
         <div className="flex justify-center gap-2">
           {providers.map((provider, index) => (

@@ -5,9 +5,9 @@ const Gallery = ({ img }) => {
     
     return (
         <div>
-            <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
+            <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
                 <div >
-                    <Image class=" rounded-lg" src={img} alt="image" width={500} height={0}/>
+                    <Image className=" rounded-lg" src={img} alt="image" width={500} height={0}/>
                 </div>
             </div>
 

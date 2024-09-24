@@ -108,8 +108,15 @@ export function SignupForm({ setActiveComponent }) {
     <div className="space-y-4 md:space-y-6">
       <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
         <Image
-          className="mx-auto"
+          className="mx-auto hidden dark:block"
           src="/rectangular_logo.png"
+          height={0}
+          width={150}
+          alt="Website logo"
+        />
+        <Image
+          className="mx-auto block dark:hidden"
+          src="/rectangular_logo_light.png"
           height={0}
           width={150}
           alt="Website logo"

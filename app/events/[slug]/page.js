@@ -1,39 +1,21 @@
-"use client";
 import CustomerReview from "@/components/CustomerReview";
 import Link from "next/link";
 import Gallery from "@/components/Gallery";
 import Help1 from "@/components/Help1";
 import Help2 from "@/components/Help2";
 import Plan from "@/components/Plan";
-import { React, useEffect, useState } from "react";
 import request from "@/lib/request";
 
-export default function Page({ params }) {
-  const [eventData, setEventData] = useState();
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await request(
-          `/api/event-templates?populate=plans.services&filters[slug][$eq]=${params.slug}&populate=our_helps.image&populate=image&populate=customer_reviews.profilePic&populate=profilePic`
-        );
-
-        if (response.error) {
-          console.log(response.error);
-        } else {
-          setEventData(response.data[0]);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, [params]);
+export default async function Page({ params }) {
+  const res = await request(
+    `/api/event-templates?populate=plans.services&filters[slug][$eq]=${params.slug}&populate=our_helps.image&populate=image&populate=customer_reviews.profilePic&populate=profilePic`
+  );
+  const eventData = res.data[0];
 
   return (
     <div className="text-white w-4/5 m-auto">
-      <div className="gallery my-5 flex flex-wrap mt-5 md:flex-row flex-col items-center gap-5 md:gap-5">
-        {eventData?.attributes.image.data.slice(1).map((img, index) => (
+      <div className="gallery py-5 flex flex-wrap gap-5 justify-center">
+        {eventData?.attributes.image.data.slice(1,7).map((img, index) => (
           <Gallery
             key={index}
             img={(process.env.NEXT_PUBLIC_API_URL || "") + img.attributes.url}
@@ -41,21 +23,22 @@ export default function Page({ params }) {
         ))}
       </div>
 
-      <div className="customerReview  my-5">
-      <div className="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2 bg-white dark:bg-gray-800">
-
-        {eventData?.attributes.customer_reviews.data.slice(0,4).map((data, index) => (
-          <CustomerReview
-          key={index}
-            subject={data.attributes.Subject}
-            description={data.attributes.Description}
-            profilePic={
-              (process.env.NEXT_PUBLIC_API_URL || "") +
-              data.attributes.profilePic.data.attributes.url
-            }
-            userName={data.attributes.userName}
-          />
-        ))}
+      <div className="customerReview">
+        <div className="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2 bg-white dark:bg-gray-800">
+          {eventData?.attributes.customer_reviews.data
+            .slice(0, 4)
+            .map((data, index) => (
+              <CustomerReview
+                key={index}
+                subject={data.attributes.Subject}
+                description={data.attributes.Description}
+                profilePic={
+                  (process.env.NEXT_PUBLIC_API_URL || "") +
+                  data.attributes.profilePic.data.attributes.url
+                }
+                userName={data.attributes.userName}
+              />
+            ))}
         </div>
       </div>
 
@@ -130,7 +113,7 @@ export default function Page({ params }) {
             far, in reverse chronological order.
           </p>
           <Link
-            href="/createevent"
+            href="/events/create"
             className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Create Now

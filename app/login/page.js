@@ -12,10 +12,8 @@ export default function Login() {
   const providers = ["github", "google"];
   const [activeComponent, setActiveComponent] = useState("login");
   const userCookie = Cookies.get("session");
-  const [user, setUser] = useState(null);
   useEffect(() => {
     if (userCookie) {
-      setUser(JSON.parse(userCookie));
       redirect("/");
     }
   }, [userCookie]);

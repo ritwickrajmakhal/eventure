@@ -751,6 +751,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::audience.audience'
     >;
+    events: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::event.event'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -835,6 +840,11 @@ export interface ApiAudienceAudience extends Schema.CollectionType {
       'api::audience.audience',
       'manyToOne',
       'plugin::users-permissions.user'
+    >;
+    events: Attribute.Relation<
+      'api::audience.audience',
+      'oneToMany',
+      'api::event.event'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -931,6 +941,55 @@ export interface ApiCustomerReviewCustomerReview extends Schema.CollectionType {
   };
 }
 
+export interface ApiEventEvent extends Schema.CollectionType {
+  collectionName: 'events';
+  info: {
+    singularName: 'event';
+    pluralName: 'events';
+    displayName: 'event';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    description: Attribute.Text;
+    datetime: Attribute.DateTime & Attribute.Required;
+    venue: Attribute.Relation<
+      'api::event.event',
+      'oneToOne',
+      'api::venue.venue'
+    >;
+    duration: Attribute.Integer & Attribute.Required;
+    user: Attribute.Relation<
+      'api::event.event',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    audience: Attribute.Relation<
+      'api::event.event',
+      'manyToOne',
+      'api::audience.audience'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::event.event',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::event.event',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiEventTemplateEventTemplate extends Schema.CollectionType {
   collectionName: 'event_templates';
   info: {
@@ -958,6 +1017,7 @@ export interface ApiEventTemplateEventTemplate extends Schema.CollectionType {
       'oneToMany',
       'api::customer-review.customer-review'
     >;
+    thumbnail: Attribute.Media<'images'> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1164,6 +1224,54 @@ export interface ApiServicesPageServicesPage extends Schema.SingleType {
   };
 }
 
+export interface ApiVenueVenue extends Schema.CollectionType {
+  collectionName: 'venues';
+  info: {
+    singularName: 'venue';
+    pluralName: 'venues';
+    displayName: 'Venue';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    country: Attribute.String & Attribute.Required;
+    state: Attribute.String & Attribute.Required;
+    city: Attribute.String & Attribute.Required;
+    pincode: Attribute.BigInteger & Attribute.Required;
+    street_address: Attribute.Text;
+    capacity: Attribute.Integer & Attribute.Required;
+    booking_cost: Attribute.Integer & Attribute.Required;
+    media: Attribute.Media<'images' | 'videos', true>;
+    thumbnail: Attribute.Media<'images'> & Attribute.Required;
+    description: Attribute.Text;
+    parking_availability: Attribute.Boolean;
+    wifi_availability: Attribute.Boolean;
+    ac_availability: Attribute.Boolean;
+    event: Attribute.Relation<
+      'api::venue.venue',
+      'oneToOne',
+      'api::event.event'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::venue.venue',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::venue.venue',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1185,6 +1293,7 @@ declare module '@strapi/types' {
       'api::audience.audience': ApiAudienceAudience;
       'api::contact-us.contact-us': ApiContactUsContactUs;
       'api::customer-review.customer-review': ApiCustomerReviewCustomerReview;
+      'api::event.event': ApiEventEvent;
       'api::event-template.event-template': ApiEventTemplateEventTemplate;
       'api::footer.footer': ApiFooterFooter;
       'api::home.home': ApiHomeHome;
@@ -1192,6 +1301,7 @@ declare module '@strapi/types' {
       'api::our-help.our-help': ApiOurHelpOurHelp;
       'api::service.service': ApiServiceService;
       'api::services-page.services-page': ApiServicesPageServicesPage;
+      'api::venue.venue': ApiVenueVenue;
     }
   }
 }

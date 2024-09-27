@@ -49,6 +49,14 @@
       "relation": "oneToMany",
       "target": "api::customer-review.customer-review",
       "mappedBy": "event_template"
+    },
+    "thumbnail": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
     }
   }
 }

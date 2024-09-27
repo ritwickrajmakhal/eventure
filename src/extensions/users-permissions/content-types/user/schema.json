@@ -109,6 +109,12 @@
       "relation": "oneToMany",
       "target": "api::audience.audience",
       "mappedBy": "user"
+    },
+    "events": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::event.event",
+      "mappedBy": "user"
     }
   }
 }

@@ -1,0 +1,80 @@
+{
+  "kind": "collectionType",
+  "collectionName": "venues",
+  "info": {
+    "singularName": "venue",
+    "pluralName": "venues",
+    "displayName": "Venue"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "country": {
+      "type": "string",
+      "required": true
+    },
+    "state": {
+      "type": "string",
+      "required": true
+    },
+    "city": {
+      "type": "string",
+      "required": true
+    },
+    "pincode": {
+      "type": "biginteger",
+      "required": true
+    },
+    "street_address": {
+      "type": "text"
+    },
+    "capacity": {
+      "required": true,
+      "type": "integer"
+    },
+    "booking_cost": {
+      "type": "integer",
+      "required": true
+    },
+    "media": {
+      "allowedTypes": [
+        "images",
+        "videos"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "thumbnail": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "parking_availability": {
+      "type": "boolean"
+    },
+    "wifi_availability": {
+      "type": "boolean"
+    },
+    "ac_availability": {
+      "type": "boolean"
+    },
+    "event": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event",
+      "mappedBy": "venue"
+    }
+  }
+}

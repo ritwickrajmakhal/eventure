@@ -1164,6 +1164,54 @@ export interface ApiServicesPageServicesPage extends Schema.SingleType {
   };
 }
 
+export interface ApiVenueVenue extends Schema.CollectionType {
+  collectionName: 'venues';
+  info: {
+    singularName: 'venue';
+    pluralName: 'venues';
+    displayName: 'Venue';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    country: Attribute.String & Attribute.Required;
+    state: Attribute.String & Attribute.Required;
+    city: Attribute.String & Attribute.Required;
+    pincode: Attribute.BigInteger & Attribute.Required;
+    street_address: Attribute.Text;
+    capacity: Attribute.Integer & Attribute.Required;
+    booking_cost: Attribute.Integer & Attribute.Required;
+    media: Attribute.Media<'images' | 'videos', true>;
+    thumbnail: Attribute.Media<'images'> & Attribute.Required;
+    description: Attribute.Text;
+    parking_availability: Attribute.Boolean;
+    wifi_availability: Attribute.Boolean;
+    ac_availability: Attribute.Boolean;
+    event: Attribute.Relation<
+      'api::venue.venue',
+      'oneToOne',
+      'api::event.event'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::venue.venue',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::venue.venue',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1192,6 +1240,7 @@ declare module '@strapi/types' {
       'api::our-help.our-help': ApiOurHelpOurHelp;
       'api::service.service': ApiServiceService;
       'api::services-page.services-page': ApiServicesPageServicesPage;
+      'api::venue.venue': ApiVenueVenue;
     }
   }
 }

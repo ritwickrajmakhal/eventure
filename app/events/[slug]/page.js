@@ -5,6 +5,8 @@ import Help1 from "@/components/Help1";
 import Help2 from "@/components/Help2";
 import Plan from "@/components/Plan";
 import request from "@/lib/request";
+import { Button } from "flowbite-react";
+import { HiFire } from "react-icons/hi";
 
 export default async function Page({ params }) {
   const res = await request(
@@ -15,7 +17,7 @@ export default async function Page({ params }) {
   return (
     <div className="text-white w-4/5 m-auto">
       <div className="gallery py-5 flex flex-wrap gap-5 justify-center">
-        {eventData?.attributes.image.data.slice(1, 7).map((img, index) => (
+        {eventData?.attributes.image.data.slice(0,6).map((img, index) => (
           <Gallery
             key={index}
             img={(process.env.NEXT_PUBLIC_API_URL || "") + img.attributes.url}
@@ -25,7 +27,7 @@ export default async function Page({ params }) {
 
       <div className="customerReview">
         <div className="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2 bg-white dark:bg-gray-800">
-          {eventData?.attributes.customer_reviews.data
+          {eventData?.attributes.customer_reviews?.data
             .slice(0, 4)
             .map((data, index) => (
               <CustomerReview
@@ -50,7 +52,7 @@ export default async function Page({ params }) {
       </h1>
 
       <div className="first ">
-        {eventData?.attributes.our_helps.data.map((data, index) =>
+        {eventData?.attributes.our_helps?.data.map((data, index) =>
           index % 2 === 0 ? (
             <Help1
               key={index}
@@ -85,7 +87,7 @@ export default async function Page({ params }) {
         </div>
 
         <div className="flex justify-between w-5/6 m-auto overflow-auto">
-          {eventData?.attributes.plans.map((plan, index) => (
+          {eventData?.attributes?.plans.map((plan, index) => (
             <Plan
               key={index}
               price={plan.price}
@@ -99,6 +101,13 @@ export default async function Page({ params }) {
             />
           ))}
         </div>
+      </div>
+
+      <div className="flex justify-center">
+        <Button as={Link} href={`/events/create?template=${params.slug}`}>
+          <HiFire className="mr-2 h-5 w-5" />
+          Book Now
+        </Button>
       </div>
     </div>
   );

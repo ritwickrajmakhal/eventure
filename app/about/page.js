@@ -30,7 +30,7 @@ const AboutPage = () => {
       about: "about ritwick raj makhal",
       image: "/ritwick.jpg",
       delay: "100",
-      type: "fade-right",
+      type: "fade-up",
     },
     {
       name: "Rupam Bhakta",
@@ -44,14 +44,14 @@ const AboutPage = () => {
       about: "about pritha maity",
       image: "/subhadip.jpg",
       delay: "300",
-      type: "fade-down",
+      type: "fade-up",
     },
     {
       name: "Subhadip Gorai",
       about: "about subhadip gorai",
       image: "/subhadip.jpg",
       delay: "400",
-      type: "fade-left",
+      type: "fade-up",
     },
   ];
 

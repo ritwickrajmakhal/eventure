@@ -4,10 +4,10 @@ import "../style.css";
 
 const VenueSelector = ({ formData, venues, onSelectVenue }) => {
   return (
-    <div className="col-span-full">
+    <div className="col-span-full mb-3">
       <div className="mb-2 block">
         {/* Label for Venue Selection */}
-        <Label htmlFor="venue" value="Select a venue" />
+        <Label className="text-lg" htmlFor="venue" value="Select a venue" />
         
         {/* Render selected venue or all venues */}
         {formData.venue ? (

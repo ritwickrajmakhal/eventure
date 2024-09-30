@@ -4,10 +4,10 @@ import "../style.css";
 
 const EventTemplateSelector = ({ formData, eventTemplates, onSelectEventTemplate }) => {
   return (
-    <div className="col-span-full">
+    <div className="col-span-full mb-3">
       <div className="mb-2 block">
         {/* Label for Event Template Selection */}
-        <Label htmlFor="eventTemplate" value="Select an event template (optional)" />
+        <Label className="text-lg" htmlFor="eventTemplate" value="Select an event template (optional)" />
         
         {/* Render Selected Template or All Templates */}
         {formData.eventTemplate ? (

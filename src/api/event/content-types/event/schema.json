@@ -4,7 +4,7 @@
   "info": {
     "singularName": "event",
     "pluralName": "events",
-    "displayName": "event",
+    "displayName": "Event",
     "description": ""
   },
   "options": {
@@ -12,26 +12,18 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "name": {
+    "title": {
       "type": "string",
       "required": true
     },
     "description": {
       "type": "text"
     },
-    "datetime": {
-      "type": "datetime",
-      "required": true
-    },
     "venue": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::venue.venue",
       "inversedBy": "event"
-    },
-    "duration": {
-      "type": "integer",
-      "required": true
     },
     "user": {
       "type": "relation",
@@ -44,6 +36,11 @@
       "relation": "manyToOne",
       "target": "api::audience.audience",
       "inversedBy": "events"
+    },
+    "schedules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::schedule.schedule"
     }
   }
 }

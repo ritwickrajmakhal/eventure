@@ -946,22 +946,20 @@ export interface ApiEventEvent extends Schema.CollectionType {
   info: {
     singularName: 'event';
     pluralName: 'events';
-    displayName: 'event';
+    displayName: 'Event';
     description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
+    title: Attribute.String & Attribute.Required;
     description: Attribute.Text;
-    datetime: Attribute.DateTime & Attribute.Required;
     venue: Attribute.Relation<
       'api::event.event',
       'oneToOne',
       'api::venue.venue'
     >;
-    duration: Attribute.Integer & Attribute.Required;
     user: Attribute.Relation<
       'api::event.event',
       'manyToOne',
@@ -971,6 +969,11 @@ export interface ApiEventEvent extends Schema.CollectionType {
       'api::event.event',
       'manyToOne',
       'api::audience.audience'
+    >;
+    schedules: Attribute.Relation<
+      'api::event.event',
+      'oneToMany',
+      'api::schedule.schedule'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1163,18 +1166,53 @@ export interface ApiOurHelpOurHelp extends Schema.CollectionType {
   };
 }
 
+export interface ApiScheduleSchedule extends Schema.CollectionType {
+  collectionName: 'schedules';
+  info: {
+    singularName: 'schedule';
+    pluralName: 'schedules';
+    displayName: 'Schedule';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    start: Attribute.DateTime;
+    end: Attribute.DateTime;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::schedule.schedule',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::schedule.schedule',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiServiceService extends Schema.CollectionType {
   collectionName: 'services';
   info: {
     singularName: 'service';
     pluralName: 'services';
     displayName: 'Service';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     title: Attribute.String & Attribute.Required;
+    cost: Attribute.Integer & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1299,6 +1337,7 @@ declare module '@strapi/types' {
       'api::home.home': ApiHomeHome;
       'api::navbar.navbar': ApiNavbarNavbar;
       'api::our-help.our-help': ApiOurHelpOurHelp;
+      'api::schedule.schedule': ApiScheduleSchedule;
       'api::service.service': ApiServiceService;
       'api::services-page.services-page': ApiServicesPageServicesPage;
       'api::venue.venue': ApiVenueVenue;

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-const Plan = ({ type, services, premiumServices, price }) => {
+const Plan = ({ slug, type, services, premiumServices, price }) => {
   const unavailableServices = premiumServices.filter(
     (premiumService) =>
       !services.some((service) => service.id === premiumService.id)
@@ -62,7 +62,7 @@ const Plan = ({ type, services, premiumServices, price }) => {
           type="button"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center"
         >
-          <Link href={"/events/create"}>Choose plan</Link>
+          <Link href={`/events/create?template=${slug}&plan=${type}`}>Choose plan</Link>
         </button>
       </div>
     </div>

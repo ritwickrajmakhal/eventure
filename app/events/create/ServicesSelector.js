@@ -9,15 +9,21 @@ const animatedComponents = makeAnimated();
 const ServicesSelector = ({ services, onServiceSelect }) => {
   const [allServices, setAllServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false); // Add this state to handle client-side rendering
 
   // Fetch services from the API
   useEffect(() => {
     const fetchData = async () => {
       const res = await request("/api/services");
       setAllServices(res.data);
-      setIsLoading(false);
+      setIsLoading(false);      
     };
     fetchData();
+  }, []);
+
+  // Ensure that the component only renders on the client
+  useEffect(() => {
+    setIsClient(true);
   }, []);
 
   // Prepare options for react-select dropdown
@@ -28,15 +34,11 @@ const ServicesSelector = ({ services, onServiceSelect }) => {
 
   // Handle selection change
   const handleChange = (selectedOptions) =>
-    onServiceSelect(selectedOptions ? selectedOptions.map(({ value }) => value) : []);
+    onServiceSelect(allServices.filter(({ id }) => selectedOptions.some((option) => option.value === id)));
 
   // Set selected services as react-select values
-  const selectedOptions = services
-    .map((serviceId) =>
-      allServices.find(({ id }) => id === serviceId)
-    )
-    .filter(Boolean)
-    .map(({ id, attributes: { title } }) => ({ value: id, label: title }));
+  const selectedOptions = services.map(({id}) => options.find((option) => option.value === id));
+  if (!isClient) return null; // Render nothing on the server
 
   return (
     <div className="col-span-full mb-3">

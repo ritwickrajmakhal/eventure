@@ -5,7 +5,7 @@ import { Card } from "flowbite-react";
 import request from "@/lib/request";
 import Cookies from "js-cookie";
 
-const page = () => {
+const Dashboard = () => {
   const [session, setSession] = useState(null);
   const userCookie = Cookies.get("session");
   // Check if session exists, redirect to login if absent
@@ -78,4 +78,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Dashboard;

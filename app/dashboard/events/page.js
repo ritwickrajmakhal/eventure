@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import request from "@/lib/request";
 import EventTable from "./EventTable";
 
-const page = () => {
+const Events = () => {
   const [session, setSession] = useState(Cookies.get("session") ? JSON.parse(Cookies.get("session")) : null);
   const [events, setEvents] = useState(null);
 
@@ -49,4 +49,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Events;

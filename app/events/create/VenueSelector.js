@@ -1,8 +1,19 @@
 import { Label } from "flowbite-react";
 import Card from "./Card";
 import "../style.css";
+import { useState, useEffect } from "react";
+import request from "@/lib/request";
 
-const VenueSelector = ({ formData, venues, onSelectVenue }) => {
+const VenueSelector = ({ formData, onSelectVenue }) => {
+  const [venues, setVenues] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const venues = await request("/api/venues?populate=thumbnail");
+      setVenues(venues.data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="col-span-full mb-3">
       <div className="mb-2 block">
@@ -35,7 +46,7 @@ const VenueSelector = ({ formData, venues, onSelectVenue }) => {
                   title={name}
                   description={description}
                   image={`${process.env.NEXT_PUBLIC_API_URL || ""}${thumbnail.data.attributes.url}`}
-                  onSelect={onSelectVenue}
+                  onSelect={() => onSelectVenue(venue)}
                   isSelected={isSelected}
                 />
               );

@@ -90,7 +90,7 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
         {/* Calendar Display */}
         <div
           style={{ height: "450px" }}
-          className="bg-white text-black p-2 rounded-lg shadow-lg mt-2"
+          className="bg-white text-black p-2 rounded-lg shadow-lg mt-2 overflow-x-auto"
         >
           <DragAndDropCalendar
             defaultDate={defaultDate}

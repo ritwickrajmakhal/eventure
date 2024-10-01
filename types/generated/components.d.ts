@@ -23,6 +23,7 @@ export interface ComponentsLink extends Schema.Component {
   info: {
     displayName: 'Link';
     icon: 'attachment';
+    description: '';
   };
   attributes: {
     text: Attribute.String;

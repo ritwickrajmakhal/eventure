@@ -12,7 +12,7 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "title": {
+    "name": {
       "type": "string",
       "required": true
     },
@@ -41,6 +41,21 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::schedule.schedule"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Ongoing",
+        "Completed",
+        "Waiting for approval",
+        "Approved",
+        "Rejected"
+      ],
+      "required": true
+    },
+    "total_cost": {
+      "type": "integer",
+      "required": true
     }
   }
 }

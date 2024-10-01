@@ -953,7 +953,7 @@ export interface ApiEventEvent extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    title: Attribute.String & Attribute.Required;
+    name: Attribute.String & Attribute.Required;
     description: Attribute.Text;
     venue: Attribute.Relation<
       'api::event.event',
@@ -975,6 +975,11 @@ export interface ApiEventEvent extends Schema.CollectionType {
       'oneToMany',
       'api::schedule.schedule'
     >;
+    status: Attribute.Enumeration<
+      ['Ongoing', 'Completed', 'Waiting for approval', 'Approved', 'Rejected']
+    > &
+      Attribute.Required;
+    total_cost: Attribute.Integer & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1268,6 +1273,7 @@ export interface ApiVenueVenue extends Schema.CollectionType {
     singularName: 'venue';
     pluralName: 'venues';
     displayName: 'Venue';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -1292,6 +1298,7 @@ export interface ApiVenueVenue extends Schema.CollectionType {
       'oneToOne',
       'api::event.event'
     >;
+    slug: Attribute.UID & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

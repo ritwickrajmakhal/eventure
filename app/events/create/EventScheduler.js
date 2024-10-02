@@ -6,6 +6,7 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import request from "@/lib/request";
+import Cookies from "js-cookie";
 
 // Initialize drag and drop functionality
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -13,24 +14,35 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 
 const EventScheduler = ({ schedules, onScheduleUpdate }) => {
+  const [session, setSession] = useState(null);
+  const userCookie = Cookies.get("session");
+  // Check if session exists, redirect to login if absent
+  useEffect(() => {
+    if (userCookie) setSession(JSON.parse(userCookie));
+  }, [userCookie]);
+
   // fetch initial schedules of other events
   const [initialSchedules, setInitialSchedules] = useState([]);
 
   useEffect(() => {
-    const fetchSchedules = async () => {
-      const response = await request("/api/schedules");
-      if (response.data) {
-        setInitialSchedules(
-          response.data.map((schedule) => ({
-            title: schedule.attributes.title,
-            start: new Date(schedule.attributes.start),
-            end: new Date(schedule.attributes.end),
-          }))
-        );
-      }
-    };
-    fetchSchedules();
-  }, []);
+    if (session) {
+      const fetchSchedules = async () => {
+        const response = await request("/api/schedules", {
+          headers: { Authorization: `Bearer ${session.jwt}` },
+        });
+        if (response.data) {
+          setInitialSchedules(
+            response.data.map((schedule) => ({
+              title: schedule.attributes.title,
+              start: new Date(schedule.attributes.start),
+              end: new Date(schedule.attributes.end),
+            }))
+          );
+        }
+      };
+      fetchSchedules();
+    }
+  }, [session]);
 
   const { defaultDate, views } = useMemo(
     () => ({

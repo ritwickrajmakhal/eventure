@@ -13,24 +13,31 @@ import Link from "next/link";
 import { Avatar } from "flowbite-react";
 import Cookies from "js-cookie";
 import request from "@/lib/request";
-import { HiOutlineViewGridAdd, HiOutlineUserCircle, HiOutlineLogout } from "react-icons/hi";
+import {
+  HiOutlineViewGridAdd,
+  HiOutlineUserCircle,
+  HiOutlineLogout,
+} from "react-icons/hi";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar() {
+export default function Navbar({ navbar }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
-  const [navigation, setNavigation] = useState([
-    { name: "Home", href: "/", current: true },
-    { name: "Events", href: "/events", current: false },
-    { name: "Vanues", href: "/vanues", current: false },
-    { name: "Services", href: "/services", current: false },
-    { name: "About", href: "/about", current: false },
-    { name: "Contact", href: "/contact", current: false },
-  ]);
+  const [navigation, setNavigation] = useState(
+    navbar?.links.map(
+      (link, index) =>
+        ({
+          name: link.text,
+          href: link.url,
+          current: index === 0 ? true : false,
+        } || [])
+    )
+  );
+
   const [avatar, setAvatar] = useState("");
   const userCookie = Cookies.get("session");
   const [session, setSession] = useState(null);
@@ -94,7 +101,9 @@ export default function Navbar() {
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             {/* logo */}
             <div className="flex flex-shrink-0 items-center">
-              <h1 className="dark:text-white font-bold text-xl">Eventure</h1>
+              <h1 className="dark:text-white font-bold text-xl">
+                {navbar.website_name}
+              </h1>
             </div>
             {/* navigation */}
             <div className="hidden sm:ml-6 sm:block">

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "venue",
     "pluralName": "venues",
-    "displayName": "Venue"
+    "displayName": "Venue",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -43,20 +44,21 @@
       "required": true
     },
     "media": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "videos"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
     },
     "thumbnail": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": false,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "description": {
       "type": "text"
@@ -75,6 +77,10 @@
       "relation": "oneToOne",
       "target": "api::event.event",
       "mappedBy": "venue"
+    },
+    "slug": {
+      "type": "uid",
+      "required": true
     }
   }
 }

@@ -77,6 +77,15 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
     );
   };
 
+  // Handle event selection
+  const handleSelectEvent = (event) => {
+    if (window.confirm(`Do you want to remove this event "${event.title}"`)) {
+      const updatedSchedule = schedules.filter(
+        (existingEvent) => existingEvent !== event
+      );
+      onScheduleUpdate(updatedSchedule);
+    }
+  };
   return (
     <div className="col-span-full mb-3">
       <div className="mb-2 block">
@@ -104,6 +113,7 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
             onNavigate={(date) => setCurrentDate(date)}
             onView={(view) => setCurrentView(view)}
             step={60}
+            onSelectEvent={handleSelectEvent}
             selectable
             onSelectSlot={(slotInfo) => {
               if (!hasOverlap(slotInfo)) {

@@ -29,7 +29,7 @@ const ServicesSelector = ({ services, onServiceSelect }) => {
   // Prepare options for react-select dropdown
   const options = allServices.map(({ id, attributes: { title, cost } }) => ({
     value: id,
-    label: `${title} (${cost} USD)`,
+    label: `${title} (₹${cost})`,
   }));
 
   // Handle selection change

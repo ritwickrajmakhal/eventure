@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import request from "@/lib/request";
-import Plan from "@/components/Plan";
 import AudienceSelector from "./AudienceSelector";
 import VenueSelector from "./VenueSelector";
 import EventTemplateSelector from "./EventTemplateSelector";
@@ -15,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import OrderSummary from "./OrderSummary";
 import PlanSelector from "./PlanSelector";
 
-const CreateEventContent = ({ session }) => {
+const CreateEventContent = ({ router, session }) => {
   const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     name: "",
@@ -27,7 +26,7 @@ const CreateEventContent = ({ session }) => {
     services: [],
   });
   const [selectedPlan, setSelectedPlan] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   // Display toast message
   const showToast = (type, message) => {
     toast[type](message);
@@ -52,8 +51,6 @@ const CreateEventContent = ({ session }) => {
           const eventTemplate = await request(`/api/event-templates?filters[slug][$eq]=${eventTemplateSlug}&populate=thumbnail,plans,plans.services`);
           const selectedPlan = eventTemplate.data[0].attributes.plans.find((p) => p.type === plan);
           setSelectedPlan(selectedPlan);
-          console.log(selectedPlan);
-          
           setFormData((prevData) => ({ ...prevData, eventTemplate: eventTemplate.data[0], services: selectedPlan?.services.data || [] }));
         }
 
@@ -74,11 +71,87 @@ const CreateEventContent = ({ session }) => {
     }
   }, [searchParams, session]);
 
+  // Form validation
+
+  const validateForm = () => {
+    if (!formData.name) {
+      showToast("error", "Please enter event name");
+      return false;
+    }
+
+    if (!formData.eventTemplate) {
+      showToast("error", "Please select an event template");
+      return false;
+    }
+
+    if (!formData.venue) {
+      showToast("error", "Please select a venue");
+      return false;
+    }
+
+    if (!formData.audience) {
+      showToast("error", "Please select an audience");
+      return false;
+    }
+
+    if (formData.schedules.length === 0) {
+      showToast("error", "Please add at least one schedule");
+      return false;
+    }
+
+    return true;
+  }
+
   // Handle form submission
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
+    // Validate form
+    if (validateForm()) {
+      setLoading(true);
+      // create schedule in server and get the ids
+      const schedulePromises = formData.schedules.map(async (schedule) => {
+        const response = await request("/api/schedules", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${session.jwt }`,},
+          body: {data: schedule},
+        });
+        return { ...schedule, id: response.data.id };
+      });
+
+      // Wait for all schedules to be created and update formData.schedules
+      formData.schedules = await Promise.all(schedulePromises);
+
+      // Create event with the schedule ids
+      const jsonData = {
+        data: {
+          user: session.id,
+          name: formData.name,
+          description: formData.description,
+          audience: formData.audience.id,
+          venue: formData.venue.id,
+          schedules: formData.schedules.map(schedule => schedule.id),
+          services: formData.services.map(service => service.id),
+          status: "Waiting for approval",
+        }
+      };
+
+      console.log("jsonData", jsonData);
+
+      // Send event creation request
+      const response = await request("/api/events", {
+        method: "POST",
+        headers: {Authorization: `Bearer ${session.jwt}`,},
+        body: jsonData,
+      });
+
+      if(response.error) {
+        showToast("error", response.error.message);
+      }
+      else{
+        router.push(`/dashboard/events`);
+      }
+    }
   };
 
   return (
@@ -100,7 +173,7 @@ const CreateEventContent = ({ session }) => {
             </div>
             <div>
               <Label className="text-lg" htmlFor="description" value="Event Description" />
-              <TextInput id="description" value={formData.description} name="description" onChange={onInputChange} required placeholder="Teacher's Day is a special day for the appreciation of teachers." />
+              <TextInput id="description" value={formData.description} name="description" onChange={onInputChange} placeholder="Teacher's Day is a special day for the appreciation of teachers." />
             </div>
           </div>
 
@@ -122,13 +195,13 @@ const CreateEventContent = ({ session }) => {
             <AudienceSelector formData={formData} onSelect={(audience) => setFormData({ ...formData, audience: audience })} />
 
             {/* Event Plans for events templates */}
-            <PlanSelector selectedPlan={selectedPlan} eventTemplate={formData.eventTemplate}/>
+            <PlanSelector selectedPlan={selectedPlan} eventTemplate={formData.eventTemplate} />
             {/* Services */}
             <ServicesSelector services={formData.services} onServiceSelect={(selectedServices) => { setFormData((prevData) => ({ ...prevData, services: selectedServices, })); }} />
           </div>
 
           {/* Order summary */}
-          <OrderSummary formData={formData} />
+          <OrderSummary loading={loading} formData={formData} />
         </div>
       </div>
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={true} pauseOnHover theme="light" />
@@ -153,7 +226,7 @@ const CreateEvent = () => {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <CreateEventContent session={session} />
+      <CreateEventContent router={router} session={session} />
     </Suspense>
   );
 };

@@ -1,4 +1,4 @@
-const OrderSummary = ({ formData }) => {
+const OrderSummary = ({ loading, formData }) => {
   const { audience, venue, schedules, services } = formData;
   // calculate total duration in hours
   const totalDuration = schedules.reduce((acc, { start, end }) => acc + (end - start), 0) / 3600000;
@@ -16,59 +16,27 @@ const OrderSummary = ({ formData }) => {
               <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                 {services?.map((service) => (
                   <tr key={service.id}>
-                    <td className="whitespace-nowrap py-2 md:w-[384px]">
-                      <div className="flex items-center gap-4">
-                        <a href="#" className="hover:underline">
-                          {service.attributes.title}
-                        </a>
-                      </div>
-                    </td>
-                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">
-                      ₹{service.attributes.cost}/-
-                    </td>
+                    <td className="whitespace-nowrap py-2 md:w-[384px]"><div className="flex items-center gap-4">{service.attributes.title}</div></td>
+                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">₹{service.attributes.cost}/-</td>
                   </tr>
                 ))}
                 {venue && (
                   <tr>
-                    <td className="whitespace-nowrap py-2">
-                      <div className="flex items-center gap-4">
-                        <a href="#" className="hover:underline">
-                          {venue.attributes.name}
-                        </a>
-                      </div>
-                    </td>
-                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">
-                      ₹{venue.attributes.booking_cost}/-
-                    </td>
+                    <td className="whitespace-nowrap py-2"><div className="flex items-center gap-4">{venue.attributes.name}</div></td>
+                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">₹{venue.attributes.booking_cost}/-</td>
                   </tr>
                 )}
                 {audience && (
                   <tr>
-                    <td className="whitespace-nowrap py-2">
-                      <div className="flex items-center gap-4">
-                        <a href="#" className="hover:underline">
-                          Total Participants
-                        </a>
-                      </div>
-                    </td>
-                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">
-                      x {totalParticipants}
-                    </td>
+                    <td className="whitespace-nowrap py-2"><div className="flex items-center gap-4">Total Participants</div></td>
+                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">x {totalParticipants}</td>
                   </tr>
                 )}
 
                 {totalDuration > 0 && (
                   <tr>
-                    <td className="whitespace-nowrap py-2">
-                      <div className="flex items-center gap-4">
-                        <a href="#" className="hover:underline">
-                          Total Duration
-                        </a>
-                      </div>
-                    </td>
-                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">
-                      x {totalDuration} hours
-                    </td>
+                    <td className="whitespace-nowrap py-2"><div className="flex items-center gap-4">Total Duration</div></td>
+                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">x {totalDuration} hours</td>
                   </tr>
                 )}
               </tbody>
@@ -110,9 +78,10 @@ const OrderSummary = ({ formData }) => {
             </div>
             <button
               type="submit"
-              className="w-full py-3 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              disabled={loading}
+              className="w-full py-3 bg-primary-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
-              Confirm Order
+              {loading ? "Creating Event..." : "Create Event"}
             </button>
           </div>
         </div>

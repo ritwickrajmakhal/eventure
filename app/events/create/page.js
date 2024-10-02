@@ -13,6 +13,7 @@ import ServicesSelector from "./ServicesSelector";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import OrderSummary from "./OrderSummary";
+import PlanSelector from "./PlanSelector";
 
 const CreateEventContent = ({ session }) => {
   const searchParams = useSearchParams();
@@ -25,6 +26,7 @@ const CreateEventContent = ({ session }) => {
     schedules: [],
     services: [],
   });
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   // Display toast message
   const showToast = (type, message) => {
@@ -49,6 +51,9 @@ const CreateEventContent = ({ session }) => {
           const plan = searchParams.get("plan");
           const eventTemplate = await request(`/api/event-templates?filters[slug][$eq]=${eventTemplateSlug}&populate=thumbnail,plans,plans.services`);
           const selectedPlan = eventTemplate.data[0].attributes.plans.find((p) => p.type === plan);
+          setSelectedPlan(selectedPlan);
+          console.log(selectedPlan);
+          
           setFormData((prevData) => ({ ...prevData, eventTemplate: eventTemplate.data[0], services: selectedPlan?.services.data || [] }));
         }
 
@@ -100,10 +105,10 @@ const CreateEventContent = ({ session }) => {
           </div>
 
           {/* Event Template Selector */}
-          <EventTemplateSelector formData={formData} onSelectEventTemplate={(template) => setFormData({ ...formData, eventTemplate: template, })} />
+          <EventTemplateSelector eventTemplate={formData.eventTemplate} onSelectEventTemplate={(template) => setFormData({ ...formData, eventTemplate: template, })} />
 
           {/* Venue Selector */}
-          <VenueSelector formData={formData} onSelectVenue={(venue) => setFormData({ ...formData, venue: venue, })} />
+          <VenueSelector selectedVenue={formData.venue} onSelectVenue={(venue) => setFormData({ ...formData, venue: venue, })} />
 
           {/* Event Scheduler */}
           <EventScheduler schedules={formData.schedules} onScheduleUpdate={(updatedSchedules) => setFormData({ ...formData, schedules: updatedSchedules })} />
@@ -117,61 +122,13 @@ const CreateEventContent = ({ session }) => {
             <AudienceSelector formData={formData} onSelect={(audience) => setFormData({ ...formData, audience: audience })} />
 
             {/* Event Plans for events templates */}
-            {formData.eventTemplate && (
-              <div className="col-span-full mb-3">
-                <Label htmlFor="eventTemplate" value="Select a Plan" />
-                <div className="flex overflow-x-auto pt-2 gap-2">
-                  {formData.eventTemplate.attributes.plans.map(
-                    (plan, index) => (
-                      <Plan
-                        slug={formData.eventTemplate.attributes.slug}
-                        key={index}
-                        price={plan.price}
-                        premiumServices={
-                          formData.eventTemplate.attributes.plans.find(
-                            (plan) => plan.type === "Premium"
-                          )?.services.data || []
-                        }
-                        services={plan.services.data}
-                        type={plan.type}
-                      />
-                    )
-                  )}
-                </div>
-              </div>
-            )}
+            <PlanSelector selectedPlan={selectedPlan} eventTemplate={formData.eventTemplate}/>
             {/* Services */}
             <ServicesSelector services={formData.services} onServiceSelect={(selectedServices) => { setFormData((prevData) => ({ ...prevData, services: selectedServices, })); }} />
-
           </div>
 
           {/* Order summary */}
-          <div className="col-span-full xl:col-auto mt-3 bg-white p-3 rounded-lg shadow-sm dark:bg-gray-800">
-            <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
-            <OrderSummary formData={formData} />
-          </div>
-        </div>
-
-
-        <div className="col-span-full bg-white p-3 rounded-lg shadow-sm dark:bg-gray-800">
-          <div className="flex items-center gap-2">
-            <Checkbox id="accept" required />
-            <Label htmlFor="accept" className="flex">
-              I agree with the&nbsp;
-              <a
-                href="#"
-                className="text-cyan-600 hover:underline dark:text-cyan-500"
-              >
-                terms and conditions
-              </a>
-            </Label>
-          </div>
-          <button
-            type="submit"
-            className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg"
-          >
-            Create Event
-          </button>
+          <OrderSummary formData={formData} />
         </div>
       </div>
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={true} pauseOnHover theme="light" />

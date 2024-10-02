@@ -9,7 +9,6 @@ export interface ComponentsPlan extends Schema.Component {
   attributes: {
     type: Attribute.Enumeration<['Basic', 'Standard', 'Premium']> &
       Attribute.Required;
-    price: Attribute.Integer & Attribute.Required;
     services: Attribute.Relation<
       'components.plan',
       'oneToMany',

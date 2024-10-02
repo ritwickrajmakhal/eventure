@@ -4,7 +4,7 @@ import "../style.css";
 import { useState, useEffect } from "react";
 import request from "@/lib/request";
 
-const EventTemplateSelector = ({ formData, onSelectEventTemplate }) => {
+const EventTemplateSelector = ({ eventTemplate, onSelectEventTemplate }) => {
   const [eventTemplates, setEventTemplates] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -27,13 +27,13 @@ const EventTemplateSelector = ({ formData, onSelectEventTemplate }) => {
         />
 
         {/* Render Selected Template or All Templates */}
-        {formData.eventTemplate ? (
+        {eventTemplate ? (
           <Card
-            id={formData.eventTemplate.id}
-            title={formData.eventTemplate.attributes.title}
-            description={formData.eventTemplate.attributes.description}
+            id={eventTemplate.id}
+            title={eventTemplate.attributes.title}
+            description={eventTemplate.attributes.description}
             image={`${process.env.NEXT_PUBLIC_API_URL || ""}${
-              formData.eventTemplate.attributes.thumbnail.data.attributes.url
+              eventTemplate.attributes.thumbnail.data.attributes.url
             }`}
             onSelect={() => onSelectEventTemplate(null)}
             isSelected={true}
@@ -46,7 +46,7 @@ const EventTemplateSelector = ({ formData, onSelectEventTemplate }) => {
                 id,
                 attributes: { title, description, thumbnail },
               } = template;
-              const isSelected = formData.eventTemplate?.id === id;
+              const isSelected = eventTemplate?.id === id;
 
               return (
                 <Card

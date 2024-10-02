@@ -4,7 +4,7 @@ import "../style.css";
 import { useState, useEffect } from "react";
 import request from "@/lib/request";
 
-const VenueSelector = ({ formData, onSelectVenue }) => {
+const VenueSelector = ({ selectedVenue, onSelectVenue }) => {
   const [venues, setVenues] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -21,13 +21,13 @@ const VenueSelector = ({ formData, onSelectVenue }) => {
         <Label className="text-lg" htmlFor="venue" value="Select a venue" />
         
         {/* Render selected venue or all venues */}
-        {formData.venue ? (
+        {selectedVenue ? (
           <Card
-            id={formData.venue.id}
-            title={formData.venue.attributes.name}
-            description={formData.venue.attributes.description}
+            id={selectedVenue.id}
+            title={selectedVenue.attributes.name}
+            description={selectedVenue.attributes.description}
             image={`${process.env.NEXT_PUBLIC_API_URL || ""}${
-              formData.venue.attributes.thumbnail.data.attributes.url
+              selectedVenue.attributes.thumbnail.data.attributes.url
             }`}
             onSelect={() => onSelectVenue(null)}
             isSelected={true}
@@ -37,7 +37,7 @@ const VenueSelector = ({ formData, onSelectVenue }) => {
             {/* Render all available venues */}
             {venues?.map((venue) => {
               const { id, attributes: { name, description, thumbnail } } = venue;
-              const isSelected = formData.venue?.id === id;
+              const isSelected = selectedVenue?.id === id;
 
               return (
                 <Card

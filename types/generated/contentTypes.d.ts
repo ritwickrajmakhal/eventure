@@ -1230,6 +1230,7 @@ export interface ApiVenueVenue extends Schema.CollectionType {
     singularName: 'venue';
     pluralName: 'venues';
     displayName: 'Venue';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -1241,19 +1242,20 @@ export interface ApiVenueVenue extends Schema.CollectionType {
     city: Attribute.String & Attribute.Required;
     pincode: Attribute.BigInteger & Attribute.Required;
     street_address: Attribute.Text;
-    capacity: Attribute.Integer & Attribute.Required;
-    booking_cost: Attribute.Integer & Attribute.Required;
     media: Attribute.Media<'images' | 'videos', true>;
     thumbnail: Attribute.Media<'images'> & Attribute.Required;
     description: Attribute.Text;
-    parking_availability: Attribute.Boolean;
-    wifi_availability: Attribute.Boolean;
-    ac_availability: Attribute.Boolean;
     event: Attribute.Relation<
       'api::venue.venue',
       'oneToOne',
       'api::event.event'
     >;
+    amenities: Attribute.DynamicZone<['components.amenities']>;
+    slug: Attribute.UID & Attribute.Required;
+    category: Attribute.String;
+    area: Attribute.Integer;
+    capacity: Attribute.Integer;
+    bookingCost: Attribute.Integer;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

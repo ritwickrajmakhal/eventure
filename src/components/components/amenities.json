@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_components_amenities",
+  "info": {
+    "displayName": "Amenity",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

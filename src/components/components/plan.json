@@ -15,10 +15,6 @@
       ],
       "required": true
     },
-    "price": {
-      "type": "integer",
-      "required": true
-    },
     "services": {
       "type": "relation",
       "relation": "oneToMany",

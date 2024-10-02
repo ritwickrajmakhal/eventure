@@ -4,7 +4,7 @@
   "info": {
     "singularName": "event",
     "pluralName": "events",
-    "displayName": "event",
+    "displayName": "Event",
     "description": ""
   },
   "options": {
@@ -19,19 +19,11 @@
     "description": {
       "type": "text"
     },
-    "datetime": {
-      "type": "datetime",
-      "required": true
-    },
     "venue": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::venue.venue",
       "inversedBy": "event"
-    },
-    "duration": {
-      "type": "integer",
-      "required": true
     },
     "user": {
       "type": "relation",
@@ -44,6 +36,26 @@
       "relation": "manyToOne",
       "target": "api::audience.audience",
       "inversedBy": "events"
+    },
+    "schedules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::schedule.schedule"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Ongoing",
+        "Completed",
+        "Waiting for approval",
+        "Approved",
+        "Rejected"
+      ],
+      "required": true
+    },
+    "total_cost": {
+      "type": "integer",
+      "required": true
     }
   }
 }

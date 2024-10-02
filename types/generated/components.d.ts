@@ -49,12 +49,24 @@ export interface ComponentsCard extends Schema.Component {
   };
 }
 
+export interface ComponentsAmenities extends Schema.Component {
+  collectionName: 'components_components_amenities';
+  info: {
+    displayName: 'Amenity';
+    description: '';
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
       'components.plan': ComponentsPlan;
       'components.link': ComponentsLink;
       'components.card': ComponentsCard;
+      'components.amenities': ComponentsAmenities;
     }
   }
 }

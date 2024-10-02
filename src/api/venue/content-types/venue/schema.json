@@ -35,14 +35,6 @@
     "street_address": {
       "type": "text"
     },
-    "capacity": {
-      "required": true,
-      "type": "integer"
-    },
-    "booking_cost": {
-      "type": "integer",
-      "required": true
-    },
     "media": {
       "type": "media",
       "multiple": true,
@@ -63,24 +55,33 @@
     "description": {
       "type": "text"
     },
-    "parking_availability": {
-      "type": "boolean"
-    },
-    "wifi_availability": {
-      "type": "boolean"
-    },
-    "ac_availability": {
-      "type": "boolean"
-    },
     "event": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::event.event",
       "mappedBy": "venue"
     },
+    "amenities": {
+      "type": "dynamiczone",
+      "components": [
+        "components.amenities"
+      ]
+    },
     "slug": {
       "type": "uid",
       "required": true
+    },
+    "category": {
+      "type": "string"
+    },
+    "area": {
+      "type": "integer"
+    },
+    "capacity": {
+      "type": "integer"
+    },
+    "bookingCost": {
+      "type": "integer"
     }
   }
 }

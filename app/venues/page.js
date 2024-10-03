@@ -4,12 +4,12 @@ import Card3 from "./Card3";
 
 const page = async () => {
   const res = await request("/api/venues?populate=thumbnail");
-  const vanue = res.data;
+  const venue = res.data;
   
   return (
     <div className="flex justify-center items-center gap-5 flex-wrap">
-      {vanue.map((vanue, index) => {
-        const { thumbnail, name, description, street_address, slug } = vanue.attributes;
+      {venue.map((venue, index) => {
+        const { thumbnail, name, description, street_address, slug } = venue.attributes;
 
         return (
           <Card3

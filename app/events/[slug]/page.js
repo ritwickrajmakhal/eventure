@@ -17,7 +17,7 @@ export default async function Page({ params }) {
       {/* Heading part */}
       <div className="heading pt-8 pb-5">
         <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-        Lat&apos;s Organize{" "}
+        Let&apos;s Organize{" "}
           <mark class="px-2  text-white bg-blue-900 rounded dark:bg-gray-700">
             {params.slug}
           </mark>{" "}

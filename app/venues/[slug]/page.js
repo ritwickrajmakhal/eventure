@@ -27,7 +27,6 @@ const page = async ({ params }) => {
       amenities,
     },
   } = venueData;
-  // console.log(vanueData);
   const mapUrl = `https://maps.google.com/maps?q=${city}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
   return (
     <div className="flex flex-col justify-center items-center gap-8">
@@ -42,7 +41,6 @@ const page = async ({ params }) => {
         />
 
         <div className="max-w-7xl mx-auto ">
-          <div className="flex justify-between items-center mb-4"></div>
           <div className="bg-white p-4 rounded-md shadow-md">
             <h1 className="text-2xl font-bold text-blue-600 mb-3">{name}</h1>
             <div className="flex">
@@ -105,13 +103,13 @@ const page = async ({ params }) => {
                 <div className="book flex justify-center items-center m-8">
                   <button
                     type="button"
-                    class="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
+                    className="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
                   >
                     Book Now
                   </button>
                   <button
                     type="button"
-                    class="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
+                    className="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
                   >
                     Cut Now
                   </button>
@@ -122,20 +120,16 @@ const page = async ({ params }) => {
         </div>
       </>
       <div id="gmap" className="map w-4/6 mb-5 border-2 border-gray-700 rounded-lg">
-        <div class="mapouter">
-          <div class="gmap_canvas">
-            <iframe
-              width="100%"
-              height="400"
-              id="map"
-              src={mapUrl}
-              frameborder="0"
-              scrolling="no"
-              marginheight="0"
-              marginwidth="0"
-            ></iframe>
-          </div>
-        </div>
+        <iframe
+          width="100%"
+          height="400"
+          id="map"
+          src={mapUrl}
+          frameBorder="0"
+          scrolling="no"
+          marginHeight="0"
+          marginWidth="0"
+        ></iframe>
       </div>
     </div>
   );

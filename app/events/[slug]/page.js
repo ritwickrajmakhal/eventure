@@ -17,24 +17,40 @@ export default async function Page({ params }) {
 
   return (
     <div className="text-white w-4/5 m-auto">
-      {/* Gallery Section */}
+      {/* Heading part */}
+      <div className="heading pt-8 pb-5">
+        <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+        Let&apos;s Organize{" "}
+          <mark class="px-2  text-white bg-blue-900 rounded dark:bg-gray-700">
+            {params.slug}
+          </mark>{" "}
+          . . .
+        </h1>
+      </div>
+
       <div className="gallery py-5 flex flex-wrap gap-5 justify-center">
         {eventData?.attributes.image.data.slice(0, 6).map((img, index) => (
           <Gallery key={index} img={apiUrl + img.attributes.url} />
         ))}
       </div>
 
-      {/* Customer Review Section */}
-      <div className="customerReview grid mb-8 rounded-lg shadow-sm md:mb-12 md:grid-cols-2 bg-white dark:bg-gray-800">
-        {eventData?.attributes.customer_reviews?.data.slice(0, 4).map((data, index) => (
-          <CustomerReview
-            key={index}
-            subject={data.attributes.Subject}
-            description={data.attributes.Description}
-            profilePic={apiUrl + data.attributes.profilePic.data.attributes.url}
-            userName={data.attributes.userName}
-          />
-        ))}
+      <div className="customerReview mt-8">
+        <div className="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2 bg-white dark:bg-gray-800">
+          {eventData?.attributes.customer_reviews.data
+            .slice(0, 4)
+            .map((data, index) => (
+              <CustomerReview
+                key={index}
+                subject={data.attributes.Subject}
+                description={data.attributes.Description}
+                profilePic={
+                  (process.env.NEXT_PUBLIC_API_URL || "") +
+                  data.attributes.profilePic.data.attributes.url
+                }
+                userName={data.attributes.userName}
+              />
+            ))}
+        </div>
       </div>
 
       {/* Help Section */}

@@ -37,6 +37,7 @@ export default function Navbar({ navbar }) {
         } || [])
     )
   );
+
   const [avatar, setAvatar] = useState("");
   const userCookie = Cookies.get("session");
   const [session, setSession] = useState(null);

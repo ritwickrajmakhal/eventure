@@ -14,6 +14,17 @@ export default async function Page({ params }) {
 
   return (
     <div className="text-white w-4/5 m-auto">
+      {/* Heading part */}
+      <div className="heading pt-8 pb-5">
+        <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+        Let&apos;s Organize{" "}
+          <mark class="px-2  text-white bg-blue-900 rounded dark:bg-gray-700">
+            {params.slug}
+          </mark>{" "}
+          . . .
+        </h1>
+      </div>
+
       <div className="gallery py-5 flex flex-wrap gap-5 justify-center">
         {eventData?.attributes.image.data.slice(1, 7).map((img, index) => (
           <Gallery
@@ -23,7 +34,7 @@ export default async function Page({ params }) {
         ))}
       </div>
 
-      <div className="customerReview">
+      <div className="customerReview mt-8">
         <div className="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2 bg-white dark:bg-gray-800">
           {eventData?.attributes.customer_reviews.data
             .slice(0, 4)

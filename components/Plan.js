@@ -13,12 +13,9 @@ const Plan = ({ type, services, premiumServices, price }) => {
           {type}
         </h5>
         <div className="flex items-baseline text-gray-900 dark:text-white">
-          <span className="text-3xl font-semibold">$</span>
-          <span className="text-5xl font-extrabold tracking-tight">
+          <span className="text-3xl font-bold">$ </span>
+          <span className="text-5xl font-bold tracking-tight">
             {price}
-          </span>
-          <span className="ms-1 text-xl font-normal text-gray-500 dark:text-gray-400">
-            /month
           </span>
         </div>
         <ul role="list" className="space-y-5 my-7">

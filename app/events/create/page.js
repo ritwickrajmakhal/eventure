@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import OrderSummary from "./OrderSummary";
 import PlanSelector from "./PlanSelector";
+import { v4 as uuidv4 } from "uuid";
 
 const CreateEventContent = ({ router, session }) => {
   const searchParams = useSearchParams();
@@ -20,7 +21,7 @@ const CreateEventContent = ({ router, session }) => {
     name: "",
     description: "",
     eventTemplate: null,
-    audience: null,
+    audiences: [],
     venue: null,
     schedules: [],
     services: [],
@@ -89,8 +90,13 @@ const CreateEventContent = ({ router, session }) => {
       return false;
     }
 
-    if (!formData.audience) {
-      showToast("error", "Please select an audience");
+    if (formData.audiences.length === 0) {
+      showToast("error", "Please select at least one audience");
+      return false;
+    }
+
+    if (formData.venue.attributes.capacity < formData.audiences.reduce((acc, audience) => acc + audience.attributes.details.length, 0)) {
+      showToast("error", "Audience size exceeds venue capacity");
       return false;
     }
 
@@ -113,8 +119,8 @@ const CreateEventContent = ({ router, session }) => {
       const schedulePromises = formData.schedules.map(async (schedule) => {
         const response = await request("/api/schedules", {
           method: "POST",
-          headers: { Authorization: `Bearer ${session.jwt }`,},
-          body: {data: schedule},
+          headers: { Authorization: `Bearer ${session.jwt}`, },
+          body: { data: schedule },
         });
         return { ...schedule, id: response.data.id };
       });
@@ -125,10 +131,11 @@ const CreateEventContent = ({ router, session }) => {
       // Create event with the schedule ids
       const jsonData = {
         data: {
+          slug: uuidv4(),
           user: session.id,
           name: formData.name,
           description: formData.description,
-          audience: formData.audience.id,
+          audiences: formData.audiences.map(audience => audience.id),
           venue: formData.venue.id,
           schedules: formData.schedules.map(schedule => schedule.id),
           services: formData.services.map(service => service.id),
@@ -136,21 +143,21 @@ const CreateEventContent = ({ router, session }) => {
         }
       };
 
-      console.log("jsonData", jsonData);
-
       // Send event creation request
       const response = await request("/api/events", {
         method: "POST",
-        headers: {Authorization: `Bearer ${session.jwt}`,},
+        headers: { Authorization: `Bearer ${session.jwt}`, },
         body: jsonData,
       });
 
-      if(response.error) {
+      if (response.error) {
         showToast("error", response.error.message);
       }
-      else{
-        router.push(`/dashboard/events`);
+      else {
+        showToast("success", "Event created successfully");
+        router.push(`/dashboard/myevents`);
       }
+      setLoading(false);
     }
   };
 
@@ -192,12 +199,12 @@ const CreateEventContent = ({ router, session }) => {
           <div className="bg-white p-3 rounded-lg shadow-sm dark:bg-gray-800">
             <h3 className="text-xl font-semibold mb-4">Event Logistics</h3>
             {/* Audience Selector */}
-            <AudienceSelector formData={formData} onSelect={(audience) => setFormData({ ...formData, audience: audience })} />
+            <AudienceSelector audiences={formData.audiences} onAudienceSelect={(selectedAudiences) => setFormData((prevData) => ({ ...prevData, audiences: selectedAudiences, }))} />
 
             {/* Event Plans for events templates */}
             <PlanSelector selectedPlan={selectedPlan} eventTemplate={formData.eventTemplate} />
             {/* Services */}
-            <ServicesSelector services={formData.services} onServiceSelect={(selectedServices) => { setFormData((prevData) => ({ ...prevData, services: selectedServices, })); }} />
+            <ServicesSelector services={formData.services} onServiceSelect={(selectedServices) => setFormData((prevData) => ({ ...prevData, services: selectedServices, }))} />
           </div>
 
           {/* Order summary */}

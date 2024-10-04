@@ -15,15 +15,16 @@ const localizer = momentLocalizer(moment);
 
 const EventScheduler = ({ schedules, onScheduleUpdate }) => {
   const [session, setSession] = useState(null);
+  const [initialSchedules, setInitialSchedules] = useState([]); // Keep initialSchedules separate
+  const [userSchedules, setUserSchedules] = useState([...schedules]); // Separate user-created schedules
   const userCookie = Cookies.get("session");
-  // Check if session exists, redirect to login if absent
+
+  // Fetch and set session from cookies
   useEffect(() => {
     if (userCookie) setSession(JSON.parse(userCookie));
   }, [userCookie]);
 
-  // fetch initial schedules of other events
-  const [initialSchedules, setInitialSchedules] = useState([]);
-
+  // Fetch initial schedules from the server
   useEffect(() => {
     if (session) {
       const fetchSchedules = async () => {
@@ -31,18 +32,19 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
           headers: { Authorization: `Bearer ${session.jwt}` },
         });
         if (response.data) {
-          setInitialSchedules(
-            response.data.map((schedule) => ({
-              title: schedule.attributes.title,
-              start: new Date(schedule.attributes.start),
-              end: new Date(schedule.attributes.end),
-            }))
-          );
+          const fetchedSchedules = response.data.map((schedule) => ({
+            title: schedule.attributes.title,
+            start: moment(schedule.attributes.start).toDate(),
+            end: moment(schedule.attributes.end).toDate(),
+          }));
+          setInitialSchedules(fetchedSchedules); // Only set once after fetching
         }
       };
       fetchSchedules();
     }
   }, [session]);
+
+  const allEvents = [...initialSchedules, ...userSchedules]; // Merge only for display purposes
 
   const { defaultDate, views } = useMemo(
     () => ({
@@ -52,63 +54,92 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
     []
   );
 
-  // State to manage the current view and date
   const [currentDate, setCurrentDate] = useState(defaultDate);
   const [currentView, setCurrentView] = useState(Views.MONTH);
 
-  // Handle new event creation by selecting a time range
+  const now = new Date();
+
+  // Function to check if an event overlaps with existing ones
+  const hasOverlap = ({ start, end }, excludeEvent = null) => {
+    return allEvents.some(
+      (existingEvent) =>
+        existingEvent !== excludeEvent && start < existingEvent.end && end > existingEvent.start
+    );
+  };
+
+  // Handle event creation
   const handleSelectSlot = ({ start, end }) => {
+    if (start < now) {
+      alert("You cannot create an event in the past!");
+      return;
+    }
+
+    if (hasOverlap({ start, end })) {
+      alert("Event overlap detected! Please select a different time.");
+      return;
+    }
+
     const title = prompt("Your Event Name");
     if (title) {
       const newEvent = { title, start, end };
-      const updatedSchedule = [...schedules, newEvent]; // Adding new event
-      onScheduleUpdate(updatedSchedule); // Update in parent state
+      const updatedSchedule = [...userSchedules, newEvent]; // Only update userSchedules
+      setUserSchedules(updatedSchedule);
+      onScheduleUpdate(updatedSchedule); // Update parent component
     }
   };
 
-  // Handle event drag and drop to a new time slot
+  // Handle dragging and dropping events
   const handleEventDrop = ({ event, start, end }) => {
-    const updatedSchedule = schedules.map((existingEvent) =>
+    if (start < now) {
+      alert("You cannot move the event into the past!");
+      return;
+    }
+
+    if (hasOverlap({ start, end }, event)) {
+      alert("Event overlap detected! Please adjust your event.");
+      return;
+    }
+
+    const updatedEvents = userSchedules.map((existingEvent) =>
       existingEvent === event ? { ...existingEvent, start, end } : existingEvent
     );
-    onScheduleUpdate(updatedSchedule); // Update in parent state
+    setUserSchedules(updatedEvents);
+    onScheduleUpdate(updatedEvents); // Update parent component
   };
 
-  // Handle event resizing
+  // Handle resizing events
   const handleEventResize = ({ event, start, end }) => {
-    const updatedSchedule = schedules.map((existingEvent) =>
+    if (start < now) {
+      alert("You cannot resize the event into the past!");
+      return;
+    }
+
+    if (hasOverlap({ start, end }, event)) {
+      alert("Event overlap detected! Please adjust your event.");
+      return;
+    }
+
+    const updatedEvents = userSchedules.map((existingEvent) =>
       existingEvent === event ? { ...existingEvent, start, end } : existingEvent
     );
-    onScheduleUpdate(updatedSchedule);
+    setUserSchedules(updatedEvents);
+    onScheduleUpdate(updatedEvents); // Update parent component
   };
 
-  // Check if events overlap
-  const hasOverlap = ({ start, end }) => {
-    return schedules.some(
-      (existingEvent) => start < existingEvent.end && end > existingEvent.start
-    );
-  };
-
-  // Handle event selection
+  // Handle event deletion
   const handleSelectEvent = (event) => {
-    if (window.confirm(`Do you want to remove this event "${event.title}"`)) {
-      const updatedSchedule = schedules.filter(
-        (existingEvent) => existingEvent !== event
-      );
-      onScheduleUpdate(updatedSchedule);
+    if (window.confirm(`Do you want to remove this event "${event.title}"?`)) {
+      const updatedEvents = userSchedules.filter((existingEvent) => existingEvent !== event);
+      setUserSchedules(updatedEvents);
+      onScheduleUpdate(updatedEvents); // Update parent component
     }
   };
+
   return (
     <div className="col-span-full mb-3">
       <div className="mb-2 block">
-        {/* Label for Event Scheduling */}
-        <Label
-          className="text-lg"
-          htmlFor="venue"
-          value="Schedule your event"
-        />
+        <Label className="text-lg" htmlFor="venue" value="Schedule your event" />
 
-        {/* Calendar Display */}
         <div
           style={{ height: "450px" }}
           className="bg-white text-black p-2 rounded-lg shadow-lg mt-2 overflow-x-auto"
@@ -116,7 +147,7 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
           <DragAndDropCalendar
             defaultDate={defaultDate}
             localizer={localizer}
-            events={[...initialSchedules, ...schedules]} // Combine initial schedules with added ones
+            events={allEvents} // Show both initial and newly created schedules
             startAccessor="start"
             endAccessor="end"
             views={views}
@@ -131,9 +162,7 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
               if (!hasOverlap(slotInfo)) {
                 handleSelectSlot(slotInfo);
               } else {
-                alert(
-                  "Event overlap detected! Please select a different time."
-                );
+                alert("Event overlap detected! Please select a different time.");
               }
             }}
             onEventDrop={handleEventDrop}

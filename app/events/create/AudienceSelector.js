@@ -1,13 +1,19 @@
-import { Select, Label } from "flowbite-react";
+import { Label } from "flowbite-react";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import request from "@/lib/request";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
-const AudienceSelector = ({ formData, onSelect }) => {
+const animatedComponents = makeAnimated();
+
+const AudienceSelector = ({ audiences, onAudienceSelect }) => {
   const [session, setSession] = useState(null);
-  const [audiences, setAudiences] = useState([]);
+  const [allAudiences, setAllAudiences] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const userCookie = Cookies.get("session");
+  const [isClient, setIsClient] = useState(false); // Add this state to handle client-side rendering
 
   useEffect(() => {
     if (userCookie) setSession(JSON.parse(userCookie));
@@ -19,11 +25,31 @@ const AudienceSelector = ({ formData, onSelect }) => {
         const aud = await request(`/api/audiences?filters[user][$eq]=${session.id}`, {
           headers: { Authorization: `Bearer ${session.jwt}` },
         });
-        setAudiences(aud.data);
+        setAllAudiences(aud.data);
+        setIsLoading(false);
       };
       fetchData();
     }
   }, [session]);
+
+  // Ensure that the component only renders on the client
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Prepare options for react-select dropdown
+  const options = allAudiences.map(({ id, attributes: { name, details } }) => ({
+    value: id,
+    label: `${name} (${details.length} participants)`
+  }));
+
+  // Handle selection change
+  const handleChange = (selectedOptions) =>
+    onAudienceSelect(allAudiences.filter(({ id }) => selectedOptions.some((option) => option.value === id)));
+
+  // Set selected services as react-select values
+  const selectedOptions = audiences.map(({ id }) => options.find((option) => option.value === id));
+  if (!isClient) return null; // Render nothing on the server
 
   return (
     <div className="mb-3">
@@ -34,24 +60,20 @@ const AudienceSelector = ({ formData, onSelect }) => {
           create one
         </Link>
       </div>
-      
-      {/* Audience dropdown */}
+
       <Select
-        id="audience"
-        required
-        value={formData.audience?.id || ""}
-        onChange={(e) => onSelect(audiences.find((aud) => aud.id == e.target.value))}
-      >
-        <option value="">Select an audience</option>
-        {audiences?.map((audience) => {
-          const { id, attributes: { name, details } } = audience;
-          return (
-            <option key={id} value={id}>
-              {`${name} (${details.length} participants)`}
-            </option>
-          );
-        })}
-      </Select>
+        isMulti
+        closeMenuOnSelect={false}
+        components={animatedComponents}
+        value={selectedOptions}
+        onChange={handleChange}
+        options={options}
+        isLoading={isLoading}
+        isSearchable={true}
+        isClearable={true}
+        placeholder="Select audiences"
+        className="text-black"
+      />
     </div>
   );
 };

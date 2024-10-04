@@ -1,10 +1,10 @@
 const OrderSummary = ({ loading, formData }) => {
-  const { audience, venue, schedules, services } = formData;
+  const { audiences, venue, schedules, services } = formData;
   // calculate total duration in hours
-  const totalDuration = schedules.reduce((acc, { start, end }) => acc + (end - start), 0) / 3600000;
-  const totalParticipants = audience ? audience.attributes.details.length : 0;
+  const totalDuration = Math.round(schedules.reduce((acc, { start, end }) => acc + (end - start), 0) / 3600000);
+  const totalParticipants = audiences.reduce((acc, audience) => acc + audience.attributes.details.length, 0);
   const totalServicesCost = services.reduce((acc, service) => acc + service.attributes.cost, 0);
-  const totalVenueCost = venue ? venue.attributes.booking_cost : 0;
+  const totalVenueCost = venue ? venue.attributes.bookingCost : 0;
   const totalCost = (totalServicesCost + totalVenueCost) * totalDuration * totalParticipants;
   return (
     <div className="col-span-full xl:col-auto mt-3 bg-white p-3 rounded-lg shadow-sm dark:bg-gray-800">
@@ -23,10 +23,10 @@ const OrderSummary = ({ loading, formData }) => {
                 {venue && (
                   <tr>
                     <td className="whitespace-nowrap py-2"><div className="flex items-center gap-4">{venue.attributes.name}</div></td>
-                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">₹{venue.attributes.booking_cost}/-</td>
+                    <td className="text-right text-base font-bold text-gray-900 dark:text-white">₹{venue.attributes.bookingCost}/-</td>
                   </tr>
                 )}
-                {audience && (
+                {audiences && (
                   <tr>
                     <td className="whitespace-nowrap py-2"><div className="flex items-center gap-4">Total Participants</div></td>
                     <td className="text-right text-base font-bold text-gray-900 dark:text-white">x {totalParticipants}</td>
@@ -58,6 +58,7 @@ const OrderSummary = ({ loading, formData }) => {
                 id="terms-checkbox-2"
                 type="checkbox"
                 defaultValue=""
+                required
                 className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
               />
               <label

@@ -74,7 +74,7 @@ const Dashboard = ({ children }) => {
                 Dashboard
               </Sidebar.Item>
               <Sidebar.Collapse icon={HiCalendar} label="Events">
-                <Sidebar.Item as={Link} href="/dashboard/events">
+                <Sidebar.Item as={Link} href="/dashboard/myevents">
                   My Events
                 </Sidebar.Item>
               </Sidebar.Collapse>

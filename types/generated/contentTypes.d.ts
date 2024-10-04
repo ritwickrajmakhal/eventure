@@ -843,7 +843,7 @@ export interface ApiAudienceAudience extends Schema.CollectionType {
     >;
     events: Attribute.Relation<
       'api::audience.audience',
-      'oneToMany',
+      'manyToMany',
       'api::event.event'
     >;
     createdAt: Attribute.DateTime;
@@ -965,9 +965,9 @@ export interface ApiEventEvent extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-    audience: Attribute.Relation<
+    audiences: Attribute.Relation<
       'api::event.event',
-      'manyToOne',
+      'manyToMany',
       'api::audience.audience'
     >;
     schedules: Attribute.Relation<
@@ -979,7 +979,13 @@ export interface ApiEventEvent extends Schema.CollectionType {
       ['Ongoing', 'Completed', 'Waiting for approval', 'Approved', 'Rejected']
     > &
       Attribute.Required;
-    total_cost: Attribute.Integer & Attribute.Required;
+    slug: Attribute.UID & Attribute.Required;
+    services: Attribute.Relation<
+      'api::event.event',
+      'oneToMany',
+      'api::service.service'
+    >;
+    timeline: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1297,7 +1303,7 @@ export interface ApiVenueVenue extends Schema.CollectionType {
     slug: Attribute.UID & Attribute.Required;
     category: Attribute.String;
     area: Attribute.Integer;
-    capacity: Attribute.Integer;
+    capacity: Attribute.Integer & Attribute.Required;
     bookingCost: Attribute.Integer;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

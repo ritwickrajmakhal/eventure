@@ -35,9 +35,9 @@
     },
     "events": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "api::event.event",
-      "mappedBy": "audience"
+      "mappedBy": "audiences"
     }
   }
 }

@@ -31,9 +31,9 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "events"
     },
-    "audience": {
+    "audiences": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::audience.audience",
       "inversedBy": "events"
     },
@@ -53,9 +53,17 @@
       ],
       "required": true
     },
-    "total_cost": {
-      "type": "integer",
+    "slug": {
+      "type": "uid",
       "required": true
+    },
+    "services": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::service.service"
+    },
+    "timeline": {
+      "type": "json"
     }
   }
 }

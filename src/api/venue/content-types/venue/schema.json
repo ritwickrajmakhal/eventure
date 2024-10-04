@@ -78,7 +78,8 @@
       "type": "integer"
     },
     "capacity": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
     },
     "bookingCost": {
       "type": "integer"

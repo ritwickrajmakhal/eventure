@@ -1,7 +1,38 @@
-import React from "react";
-import {Card} from "flowbite-react";
+"use client";
 
-const page = () => {
+import { useState, useEffect } from "react";
+import { Card } from "flowbite-react";
+import request from "@/lib/request";
+import Cookies from "js-cookie";
+
+const Dashboard = () => {
+  const [session, setSession] = useState(null);
+  const userCookie = Cookies.get("session");
+  // Check if session exists, redirect to login if absent
+  useEffect(() => {
+    if (userCookie) setSession(JSON.parse(userCookie));
+  }, [userCookie]);
+
+  const [events, setEvents] = useState(null);
+  const [audiences, setAudiences] = useState(null);
+  
+  useEffect(() => {
+    if (session) {
+      const fetchData = async () => {
+        const [events, audiences] = await Promise.all([
+          request(`/api/events?filters[user][$eq]=${session.id}&sort[id]=desc`, {
+            headers: { Authorization: `Bearer ${session.jwt}` },
+          }),
+          request(`/api/audiences?filters[user][$eq]=${session.id}`, {
+            headers: { Authorization: `Bearer ${session.jwt}` },
+          }),
+        ]);
+        setEvents(events);
+        setAudiences(audiences);
+      };
+      fetchData();
+    }
+  }, [session]);
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
@@ -11,19 +42,25 @@ const page = () => {
         {/* Total Events */}
         <Card>
           <h2 className="text-xl font-bold mb-2">Total Events</h2>
-          <p className="text-3xl font-semibold">25</p>
+          <p className="text-3xl font-semibold">
+            {events ? events.data.length : 0}
+          </p>
         </Card>
 
         {/* Upcoming Events */}
         <Card>
           <h2 className="text-xl font-bold mb-2">Upcoming Events</h2>
-          <p className="text-3xl font-semibold">5</p>
+          <p className="text-3xl font-semibold">
+            {events ? events.data.filter((event) => ["Approved", "Waiting for Approval"].includes(event.attributes.status)).length : 0}
+          </p>
         </Card>
 
         {/* Registered Users */}
         <Card>
           <h2 className="text-xl font-bold mb-2">Registered Users</h2>
-          <p className="text-3xl font-semibold">320</p>
+          <p className="text-3xl font-semibold">
+            {audiences ? audiences.data.reduce((acc, audience) => acc + audience.attributes.details.length, 0) : 0}
+          </p>
         </Card>
       </div>
 
@@ -35,15 +72,10 @@ const page = () => {
           <p>Date: Sept 15, 2024</p>
           <p>Location: New York</p>
         </Card>
-        <Card>
-          <h3 className="font-bold text-xl">Event Name 2</h3>
-          <p>Date: Sept 18, 2024</p>
-          <p>Location: Los Angeles</p>
-        </Card>
         {/* Add more events as needed */}
       </div>
     </div>
   );
 };
 
-export default page;
+export default Dashboard;

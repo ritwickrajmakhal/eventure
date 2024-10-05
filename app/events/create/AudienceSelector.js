@@ -56,7 +56,7 @@ const AudienceSelector = ({ audiences, onAudienceSelect }) => {
       {/* Label and Link for creating a new audience */}
       <div className="mb-2 block">
         <Label className="text-lg" htmlFor="audience" value="Target Audience - Don't have one? " />
-        <Link href="/dashboard/audiences" className="hover:underline dark:text-blue-500 text-lg">
+        <Link href="/dashboard/audiences?showImportModal=true" className="hover:underline dark:text-blue-500 text-lg">
           create one
         </Link>
       </div>

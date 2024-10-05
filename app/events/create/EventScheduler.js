@@ -7,6 +7,7 @@ import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import request from "@/lib/request";
 import Cookies from "js-cookie";
+import showToast from "@/lib/toast";
 
 // Initialize drag and drop functionality
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -70,12 +71,12 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
   // Handle event creation
   const handleSelectSlot = ({ start, end }) => {
     if (start < now) {
-      alert("You cannot create an event in the past!");
+      showToast("error", "You cannot create an event in the past!");
       return;
     }
 
     if (hasOverlap({ start, end })) {
-      alert("Event overlap detected! Please select a different time.");
+      showToast("error", "Event overlap detected! Please select a different time.");
       return;
     }
 
@@ -91,12 +92,12 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
   // Handle dragging and dropping events
   const handleEventDrop = ({ event, start, end }) => {
     if (start < now) {
-      alert("You cannot move the event into the past!");
+      showToast("error", "You cannot move the event into the past!");
       return;
     }
 
     if (hasOverlap({ start, end }, event)) {
-      alert("Event overlap detected! Please adjust your event.");
+      showToast("error", "Event overlap detected! Please adjust your event.");
       return;
     }
 
@@ -110,12 +111,12 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
   // Handle resizing events
   const handleEventResize = ({ event, start, end }) => {
     if (start < now) {
-      alert("You cannot resize the event into the past!");
+      showToast("error", "You cannot resize the event into the past!");
       return;
     }
 
     if (hasOverlap({ start, end }, event)) {
-      alert("Event overlap detected! Please adjust your event.");
+      showToast("error", "Event overlap detected! Please adjust your event.");
       return;
     }
 
@@ -162,7 +163,7 @@ const EventScheduler = ({ schedules, onScheduleUpdate }) => {
               if (!hasOverlap(slotInfo)) {
                 handleSelectSlot(slotInfo);
               } else {
-                alert("Event overlap detected! Please select a different time.");
+                showToast("error", "Event overlap detected! Please select a different time.");
               }
             }}
             onEventDrop={handleEventDrop}

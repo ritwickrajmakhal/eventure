@@ -1,5 +1,5 @@
 "use client";
-import { Label, TextInput, Checkbox } from "flowbite-react";
+import { Label, TextInput } from "flowbite-react";
 import Cookies from "js-cookie";
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -9,11 +9,13 @@ import VenueSelector from "./VenueSelector";
 import EventTemplateSelector from "./EventTemplateSelector";
 import EventScheduler from "./EventScheduler";
 import ServicesSelector from "./ServicesSelector";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import OrderSummary from "./OrderSummary";
 import PlanSelector from "./PlanSelector";
 import { v4 as uuidv4 } from "uuid";
+import { Button } from "@headlessui/react";
+import { HiSparkles } from "react-icons/hi";
+import { useGenerativeAI } from "@/lib/useGenerativeAI";
+import showToast from "@/lib/toast";
 
 const CreateEventContent = ({ router, session }) => {
   const searchParams = useSearchParams();
@@ -27,11 +29,11 @@ const CreateEventContent = ({ router, session }) => {
     services: [],
   });
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [loading, setLoading] = useState(false);
-  // Display toast message
-  const showToast = (type, message) => {
-    toast[type](message);
-  };
+  const [loading, setLoading] = useState({
+    form: false,      // For form submission
+    generate: false,  // For description generation
+  });
+  const { generateText, response, error } = useGenerativeAI();
 
   // Handle form input changes
   const onInputChange = (e) => {
@@ -80,11 +82,6 @@ const CreateEventContent = ({ router, session }) => {
       return false;
     }
 
-    if (!formData.eventTemplate) {
-      showToast("error", "Please select an event template");
-      return false;
-    }
-
     if (!formData.venue) {
       showToast("error", "Please select a venue");
       return false;
@@ -97,6 +94,11 @@ const CreateEventContent = ({ router, session }) => {
 
     if (formData.venue.attributes.capacity < formData.audiences.reduce((acc, audience) => acc + audience.attributes.details.length, 0)) {
       showToast("error", "Audience size exceeds venue capacity");
+      return false;
+    }
+
+    if(formData.services.length === 0){
+      showToast("error", "Please select at least one service");
       return false;
     }
 
@@ -161,6 +163,23 @@ const CreateEventContent = ({ router, session }) => {
     }
   };
 
+  // Update the description when the response is ready
+  useEffect(() => {
+    if (response) setFormData((prevData) => ({ ...prevData, description: response }));
+    else if (error) showToast("error", "Failed to generate description");
+    setLoading((prevState) => ({ ...prevState, generate: false }));
+  }, [response, error]);
+
+  const generateDesc = async () => {
+    if (!formData.name) {
+      showToast("error", "Please provide an event name before generating the description.");
+      return;
+    }
+    setFormData((prevData) => ({ ...prevData, description: "" }));
+    setLoading((prevState) => ({ ...prevState, generate: true }));
+    await generateText(`Generate a description for the event: ${formData.name}`);
+  };
+
   return (
     <form onSubmit={handleFormSubmit}>
       <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 gap-3 dark:text-white">
@@ -179,8 +198,18 @@ const CreateEventContent = ({ router, session }) => {
               <TextInput id="name" value={formData.name} name="name" onChange={onInputChange} placeholder="Teacher's Day" required />
             </div>
             <div>
-              <Label className="text-lg" htmlFor="description" value="Event Description" />
-              <TextInput id="description" value={formData.description} name="description" onChange={onInputChange} placeholder="Teacher's Day is a special day for the appreciation of teachers." />
+              <label className="text-lg" htmlFor="description">Event Description</label>
+              <div className="relative">
+                <TextInput
+                  id="description"
+                  value={formData.description}
+                  name="description"
+                  onChange={onInputChange}
+                  placeholder={loading.generate ? "Generating description..." : "E.g: A fun-filled event to celebrate the teachers."}
+                  className="w-full pr-10 rounded-lg bg-white dark:bg-gray-700 border-r-0"
+                />
+                <Button disabled={loading.generate} onClick={generateDesc} className="absolute inset-y-0 right-0 p-2 rounded-r-lg"><HiSparkles className="w-6 h-6 text-blue-500" /></Button>
+              </div>
             </div>
           </div>
 
@@ -208,10 +237,9 @@ const CreateEventContent = ({ router, session }) => {
           </div>
 
           {/* Order summary */}
-          <OrderSummary loading={loading} formData={formData} />
+          <OrderSummary loading={loading.form} formData={formData} />
         </div>
       </div>
-      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={true} pauseOnHover theme="light" />
     </form>
   );
 };

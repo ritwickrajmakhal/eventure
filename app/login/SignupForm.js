@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState, useCallback } from "react";
 import request from "@/lib/request";
 
-export function SignupForm({ setActiveComponent }) {
+export function SignupForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -273,13 +273,7 @@ export function SignupForm({ setActiveComponent }) {
 
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
           Already have an account?{" "}
-          <Link
-            href="#"
-            onClick={() => setActiveComponent("login")}
-            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-          >
-            Login here
-          </Link>
+          <Link href="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Login here</Link>
         </p>
       </form>
     </div>

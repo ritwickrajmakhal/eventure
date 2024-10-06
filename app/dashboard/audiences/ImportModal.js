@@ -12,7 +12,6 @@ const ImportModal = ({
   handleInputChange,
   formData,
   loading,
-  error,
 }) => {
   const toggleButtonRef = useRef(null);
 
@@ -69,10 +68,9 @@ const ImportModal = ({
               />
             </div>
           )}
-          <Button className="flex m-auto" color="blue" type="submit" disabled={loading}>
-            {loading ? "Loading..." : edit ? "Save" : "Import"}
+          <Button className="flex m-auto" color="blue" type="submit" disabled={loading.form}>
+            {loading.form ? "Loading..." : edit ? "Save" : "Import"}
           </Button>
-          {error && <p className="text-red-500">{error}</p>}
         </form>
       </Modal.Body>
     </Modal>

@@ -21,7 +21,7 @@ const EventTable = ({ events }) => (
             <Table.Cell>{status}</Table.Cell>
             <Table.Cell>{new Date(createdAt).toLocaleDateString('en-GB')}</Table.Cell>
             <Table.Cell>
-              <Link href={`/dashboard/myevents/${slug}`} className="hover:underline">View</Link>
+              <Link href={`/dashboard/myevents/${slug}`} className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">View</Link>
             </Table.Cell>
           </Table.Row>
         ))}

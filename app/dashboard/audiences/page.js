@@ -1,154 +1,177 @@
 "use client";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import { useState, useEffect } from "react";
-import { Button, Card } from "flowbite-react";
+import { useState, useEffect, Suspense } from "react";
+import { Button, Table } from "flowbite-react";
 import request from "@/lib/request";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from "uuid";
 import { convertToJSON } from "@/lib/convertToJSON";
-import { HiOutlineArrowRight } from "react-icons/hi";
 import Link from "next/link";
 import ImportModal from "./ImportModal";
+import { useSearchParams } from "next/navigation";
+import showToast from "@/lib/toast";
+import PreLoader from "@/components/PreLoader";
 
-// Validate and filter JSON data to ensure it has required fields
+// Validate and filter the JSON data
 const validateAndFilterJsonData = (jsonDetails) => {
   const requiredFields = ["email", "name"];
-  if (!Array.isArray(jsonDetails) || jsonDetails.length === 0) {
-    throw new Error("JSON data should be a non-empty array.");
-  }
-  const hasValidFields = obj =>
-    requiredFields.every(field => Object.keys(obj).some(key => key.toLowerCase() === field && obj[key]?.trim()));
+  const hasValidFields = (obj) =>
+    requiredFields.every((field) =>
+      Object.keys(obj).some((key) => key.toLowerCase() === field && obj[key]?.trim())
+    );
   const validEntries = jsonDetails.filter(hasValidFields);
-  if (validEntries.length === 0) {
-    throw new Error("No valid entries found. Each entry must have both 'email' and 'name' fields.");
-  }
+  if (!validEntries.length) throw new Error("Each entry must have 'email' and 'name'.");
   return validEntries;
 };
 
+// Main Page Component
 const Page = () => {
   const [session, setSession] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({ name: "", desc: "", details: null });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState({ fetch: true, form: false });
   const [audiences, setAudiences] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
-  // Get user session from cookie on page load
   useEffect(() => {
     const userCookie = Cookies.get("session");
     if (userCookie) {
-      setSession(JSON.parse(userCookie));
+      const sessionData = JSON.parse(userCookie);
+      setSession(sessionData);
+
+      const fetchAudiences = async () => {
+        setLoading((prev) => ({ ...prev, fetch: true }));
+        const res = await request(`/api/audiences?filters[user][$eq]=${sessionData.id}&sort[id]=desc`, {
+          headers: { Authorization: `Bearer ${sessionData.jwt}` },
+        });
+        setAudiences(res.data || []);
+        setLoading((prev) => ({ ...prev, fetch: false }));
+      };
+
+      fetchAudiences();
     }
   }, []);
 
-  // Fetch audiences on page load and when session changes 
-  useEffect(() => {
-    if (session) {
-      const fetchAudiences = async () => {
-        const res = await request(`/api/audiences?filters[user][$eq]=${session.id}`, {
-          headers: { Authorization: `Bearer ${session.jwt}` },
-        });
-        if (res.data) setAudiences(res.data);
-      };
-      fetchAudiences();
-    }
-  }, [session]);
-
-  // Close modal and reset form data when modal is closed
+  // Close the modal and reset the form data
   const closeModal = () => {
     setOpenModal(false);
     setFormData({ name: "", desc: "", details: null });
-    setError(null);
-    setLoading(false);
+    setLoading((prev) => ({ ...prev, form: false }));
   };
 
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData(prev => ({ ...prev, [name]: files ? files[0] : value }));
+    setFormData((prev) => ({ ...prev, [name]: files ? files[0] : value }));
   };
 
-  // Create audience and save to database when form is submitted
+  // Create a new audience with the form data
   const createAudience = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    let validDetails;
+    setLoading((prev) => ({ ...prev, form: true }));
     try {
-      if (formData.details) {
-        const jsonDetails = await convertToJSON(formData.details);
-        validDetails = validateAndFilterJsonData(jsonDetails);
-      }
-      else{
-        validDetails = [{"name": "", "email": ""}];
-      }
-      const requestBody = {
-        data: {
-          slug: uuidv4(),
-          name: formData.name,
-          user: session.id,
-          desc: formData.desc,
-          details: validDetails,
-        },
-      };
+      const jsonDetails = formData.details ? await convertToJSON(formData.details) : [{ name: "", email: "" }];
+      const validDetails = validateAndFilterJsonData(jsonDetails);
       const res = await request("/api/audiences", {
         method: "POST",
-        body: requestBody,
+        body: {
+          data: { slug: uuidv4(), name: formData.name, user: session.id, desc: formData.desc, details: validDetails },
+        },
         headers: { Authorization: `Bearer ${session.jwt}` },
       });
-      if (res.result) {
-        setAudiences(prev => [...prev, res.data]);
-        closeModal();
-      } else {
-        setError(res.error.message || "An error occurred");
-      }
+      res.result ? setAudiences((prev) => [res.data, ...prev]) : showToast("error", res.error.message);
+      closeModal();
+      showToast("success", "Audience created successfully.");
     } catch (error) {
-      setError(error.message || "An error occurred");
+      showToast("error", error.message);
     } finally {
-      setLoading(false);
+      setLoading((prev) => ({ ...prev, form: false }));
     }
   };
 
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-3">
         <h1 className="text-3xl font-semibold text-gray-800 dark:text-white">Audiences</h1>
         <Button pill color="blue" onClick={() => setOpenModal(true)}>
           <PlusCircleIcon className="mr-2 h-5 w-5" />
           Create
         </Button>
-        <ImportModal
-          headerLabel={"Create your audience"}
+      </div>
+
+      <Suspense fallback={<PreLoader />}>
+        <AudienceContent
           openModal={openModal}
-          closeModal={closeModal}
-          handleSubmit={createAudience}
-          handleInputChange={handleInputChange}
+          setOpenModal={setOpenModal}
           formData={formData}
+          handleInputChange={handleInputChange}
+          createAudience={createAudience}
           loading={loading}
-          error={error}
+          audiences={audiences}
         />
-      </div>
-      <div className="flex gap-4 flex-wrap mt-3 justify-center">
-        {audiences.length ? audiences.map((audience, index) => (
-          <div key={index} className="w-full sm:w-1/2 lg:w-1/6">
-            <AudienceCard audience={audience} />
-          </div>
-        )) : <p>No Audience found</p>}
-      </div>
+      </Suspense>
     </div>
   );
 };
 
-const AudienceCard = ({ audience }) => {
-  const { name, desc, slug } = audience.attributes;
+// Audience Content Component that uses useSearchParams
+function AudienceContent({ openModal, setOpenModal, formData, handleInputChange, createAudience, loading, audiences }) {
+  const searchParams = useSearchParams();
+  const shouldShowModal = searchParams.get("showImportModal") === "true";
+
+  useEffect(() => {
+    setOpenModal(shouldShowModal);
+  }, [shouldShowModal, setOpenModal]);
+
   return (
-    <Card className="max-w-full h-full bg-white shadow-lg rounded-lg overflow-hidden dark:bg-gray-800">
-      <h5 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{name}</h5>
-      <p className="text-gray-700 dark:text-gray-400 mb-6">{desc || "No description available."}</p>
-      <Button as={Link} href={`audiences/${slug}`} color="blue" size="sm" passHref>
-        View <HiOutlineArrowRight className="ml-2 h-5 w-5" />
-      </Button>
-    </Card>
+    <>
+      <ImportModal
+        headerLabel="Create your audience"
+        openModal={openModal}
+        closeModal={() => setOpenModal(false)}
+        handleSubmit={createAudience}
+        handleInputChange={handleInputChange}
+        formData={formData}
+        loading={loading}
+      />
+      {loading.fetch ? (
+        <PreLoader />
+      ) : audiences.length ? (
+        <div className="overflow-x-auto">
+          <Table hoverable>
+            <Table.Head>
+              <Table.HeadCell>Audience Name</Table.HeadCell>
+              <Table.HeadCell>Created At</Table.HeadCell>
+              <Table.HeadCell>Participants</Table.HeadCell>
+              <Table.HeadCell>
+                <span className="sr-only">View</span>
+              </Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              {audiences.map(({ id, attributes: { name, details, createdAt, slug } }) => (
+                <Table.Row key={id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    {name}
+                  </Table.Cell>
+                  <Table.Cell>{new Date(createdAt).toLocaleDateString()}</Table.Cell>
+                  <Table.Cell>{details.length}</Table.Cell>
+                  <Table.Cell>
+                    <Link
+                      href={`/dashboard/audiences/${slug}`}
+                      className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                    >
+                      View
+                    </Link>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        </div>
+      ) : (
+        <p className="text-gray-500 dark:text-gray-400">No audiences found.</p>
+      )}
+    </>
   );
-};
+}
 
 export default Page;

@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Chatbot from "@/components/Chat/Chatbot";
 import { ThemeModeScript } from "flowbite-react";
 import request from "@/lib/request";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default async function RootLayout({ children }) {
       <body
         className={`min-h-screen relative h-full w-full bg-slate-100 dark:bg-slate-950 bg-[radial-gradient(circle_500px_at_50%_200px,#B797FD,transparent)] dark:bg-[radial-gradient(circle_500px_at_50%_200px,#3e3e3e,transparent)] transition-colors duration-300`}
       >
+        <ToastContainer />
         <Chatbot />
         <Navbar navbar={navbar.data?.attributes} />
         <div className="min-h-screen mt-16 py-4">

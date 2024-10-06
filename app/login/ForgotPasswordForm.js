@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 
-export const ForgotPasswordForm = ({setActiveComponent}) => {
+export const ForgotPasswordForm = () => {
   return (
     <form className="space-y-6" action="#">
       <Image
@@ -53,7 +54,7 @@ export const ForgotPasswordForm = ({setActiveComponent}) => {
         Reset My Password
       </button>
       <button className="w-full dark:text-white hover:underline focus:outline-none font-medium text-sm text-center">
-        <span onClick={() => setActiveComponent("login")}>Back to login</span>
+        <Link href="/login">Back to login</Link>
       </button>
     </form>
   );

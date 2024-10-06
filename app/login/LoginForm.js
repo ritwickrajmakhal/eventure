@@ -6,7 +6,7 @@ import request from "@/lib/request";
 import Cookies from "js-cookie";
 
 
-const LoginForm = ({ providers, setActiveComponent }) => {
+const LoginForm = ({ providers }) => {
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -116,12 +116,8 @@ const LoginForm = ({ providers, setActiveComponent }) => {
         {loading ? "Signing in..." : "Sign In"}
       </button>
       <div className="dark:text-white flex justify-between w-full mb-2">
-        <Link href="#" onClick={() => setActiveComponent("forgot")}>
-          Forgot Password?
-        </Link>
-        <Link href="#" onClick={() => setActiveComponent("signup")}>
-          Sign Up
-        </Link>
+        <Link href="/login?view=forgot">Forgot Password?</Link>
+        <Link href="/login?view=signup">Sign Up</Link>
       </div>
       <div className="dark:text-white">
         <p className="text-center text-sm mb-4">or you can sign in with</p>

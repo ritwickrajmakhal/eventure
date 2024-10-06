@@ -9,7 +9,6 @@ import VenueSelector from "./VenueSelector";
 import EventTemplateSelector from "./EventTemplateSelector";
 import EventScheduler from "./EventScheduler";
 import ServicesSelector from "./ServicesSelector";
-import "react-toastify/dist/ReactToastify.css";
 import OrderSummary from "./OrderSummary";
 import PlanSelector from "./PlanSelector";
 import { v4 as uuidv4 } from "uuid";
@@ -83,11 +82,6 @@ const CreateEventContent = ({ router, session }) => {
       return false;
     }
 
-    if (!formData.eventTemplate) {
-      showToast("error", "Please select an event template");
-      return false;
-    }
-
     if (!formData.venue) {
       showToast("error", "Please select a venue");
       return false;
@@ -100,6 +94,11 @@ const CreateEventContent = ({ router, session }) => {
 
     if (formData.venue.attributes.capacity < formData.audiences.reduce((acc, audience) => acc + audience.attributes.details.length, 0)) {
       showToast("error", "Audience size exceeds venue capacity");
+      return false;
+    }
+
+    if(formData.services.length === 0){
+      showToast("error", "Please select at least one service");
       return false;
     }
 

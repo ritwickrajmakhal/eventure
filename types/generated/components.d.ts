@@ -17,6 +17,19 @@ export interface ComponentsPlan extends Schema.Component {
   };
 }
 
+export interface ComponentsMember extends Schema.Component {
+  collectionName: 'components_components_members';
+  info: {
+    displayName: 'member';
+    icon: 'user';
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    description: Attribute.Text;
+    avatar: Attribute.Media<'images'> & Attribute.Required;
+  };
+}
+
 export interface ComponentsLink extends Schema.Component {
   collectionName: 'components_components_links';
   info: {
@@ -64,6 +77,7 @@ declare module '@strapi/types' {
   export module Shared {
     export interface Components {
       'components.plan': ComponentsPlan;
+      'components.member': ComponentsMember;
       'components.link': ComponentsLink;
       'components.card': ComponentsCard;
       'components.amenities': ComponentsAmenities;

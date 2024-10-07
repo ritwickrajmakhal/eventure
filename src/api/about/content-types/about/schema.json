@@ -1,0 +1,47 @@
+{
+  "kind": "singleType",
+  "collectionName": "abouts",
+  "info": {
+    "singularName": "about",
+    "pluralName": "abouts",
+    "displayName": "About",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": false
+    },
+    "description": {
+      "type": "text"
+    },
+    "members": {
+      "displayName": "member",
+      "type": "component",
+      "repeatable": true,
+      "component": "components.member"
+    },
+    "our_story": {
+      "type": "text"
+    },
+    "get_to_know_us": {
+      "type": "text"
+    },
+    "event_templates": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::event-template.event-template"
+    },
+    "background": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

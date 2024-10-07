@@ -8,19 +8,20 @@
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Installation](#installation)
-  - [Prerequisites](#prerequisites)
-  - [Step-by-step Guide](#step-by-step-guide)
-- [Environment Variables](#environment-variables)
-- [Usage](#usage)
-  - [Production Build](#production-build)
-- [Current Contributors](#current-contributors)
-- [Contributing ](#contributing-)
-- [Questions?](#questions)
+- [EVENTURE](#eventure)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Features](#features)
+  - [Tech Stack](#tech-stack)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Step-by-step Guide](#step-by-step-guide)
+  - [Environment Variables](#environment-variables)
+  - [Usage](#usage)
+    - [Production Build](#production-build)
+  - [Current Contributors](#current-contributors)
+  - [Contributing ](#contributing-)
+  - [Questions?](#questions)
 
 ## Overview
 
@@ -38,11 +39,10 @@ EVENTURE simplifies event creation, registration, and management by offering an 
 
 - **Frontend:** Next.js (React Framework)
 - **Backend:** Strapi CMS
-- **Authentication:** NextAuth.js (OAuth with GitHub, Google)
-- **Database:** PostgreSQL (through Strapi)
 - **Deployment:** Vercel
 - **Bot Service:** Azure Bot Service
 - **Version Control:** GitHub
+- **APIs:** Google Gemini API
 
 ## Installation
 
@@ -76,16 +76,13 @@ To get a local copy of this project up and running, follow these simple steps:
 
    ```bash
    NEXT_PUBLIC_CHATBOT_SECRET_KEY=your_chatbot_api_key_from_azure_bot_service
-   GITHUB_ID=your_github_oauth_app_id
-   GITHUB_SECRET=your_github_oauth_app_secrate
-   GOOGLE_ID=your_google_oauth_app_id
-   GOOGLE_SECRET=your_google_oauth_app_secrate
-   NEXTAUTH_URL=http://localhost:3000/
-   NEXTAUTH_SECRET=any_random_string
-   NEXT_PUBLIC_API_URL=strapi_api_url
+   NEXT_PUBLIC_API_URL=http://localhost:1337
+   API_URL=http://localhost:1337
+   NEXT_PUBLIC_BACKEND_URL=http://localhost:1337
+   NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
    ```
 
-   - Replace `your_chatbot_api_key_from_azure_bot_service`, `your_github_oauth_app_id`, `your_google_oauth_app_id`, and other values with the appropriate credentials for your services.
+   - Replace `your_chatbot_api_key_from_azure_bot_service`, `your_gemini_api_key`, and other values with the appropriate credentials for your services.
 
 4. **Start the development server**
 
@@ -102,13 +99,10 @@ To get a local copy of this project up and running, follow these simple steps:
 | Variable Name                  | Description                                                    |
 | ------------------------------ | -------------------------------------------------------------- |
 | NEXT_PUBLIC_CHATBOT_SECRET_KEY | API key for the Azure chatbot service                          |
-| GITHUB_ID                      | GitHub OAuth application ID                                    |
-| GITHUB_SECRET                  | GitHub OAuth application secret                                |
-| GOOGLE_ID                      | Google OAuth application ID                                    |
-| GOOGLE_SECRET                  | Google OAuth application secret                                |
-| NEXTAUTH_URL                   | URL for NextAuth, typically `http://localhost:3000/` for local |
-| NEXTAUTH_SECRET                | Secret key for NextAuth session management                     |
-| NEXT_PUBLIC_API_URL            | Strapi API URL for fetching event-related data                 |
+| NEXT_PUBLIC_API_URL            | URL for the Strapi API                                         |
+| API_URL                        | URL for the Strapi API                                         |
+| NEXT_PUBLIC_BACKEND_URL        | URL for the Strapi backend                                     |
+| NEXT_PUBLIC_GEMINI_API_KEY     | API key for the Google Gemini API                              |
 
 Make sure that your `.env.local` file is never pushed to version control, as it contains sensitive information.
 

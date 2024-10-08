@@ -1,6 +1,4 @@
 module.exports = ({ env }) => {
-  const enableCustomSecurity = env("ENABLE_CUSTOM_SECURITY", "false") === "true"; // Check if custom security is enabled
-
   return [
     'strapi::logger',
     'strapi::errors',
@@ -8,8 +6,9 @@ module.exports = ({ env }) => {
       name: 'strapi::security',
       config: {
         contentSecurityPolicy: {
-          // Always apply the second contentSecurityPolicy
+          useDefaults: true,
           directives: {
+            'connect-src': ["'self'", 'https:'],
             'script-src': ["'self'", "editor.unlayer.com", 'unsafe-inline', 'https://maps.googleapis.com'],
             'frame-src': ["'self'", "editor.unlayer.com"],
             'media-src': [
@@ -18,10 +17,12 @@ module.exports = ({ env }) => {
               'data:',
               'https://maps.gstatic.com',
               'https://maps.googleapis.com',
+              `https://${env('STORAGE_ACCOUNT')}.blob.core.windows.net`,
             ],
             'img-src': [
               "'self'",
               'data:',
+              'blob:',
               'market-assets.strapi.io',
               'cdn.jsdelivr.net',
               'strapi.io',
@@ -47,27 +48,9 @@ module.exports = ({ env }) => {
               'khms3.google.com',
               'khms3.googleapis.com',
               'streetviewpixels-pa.googleapis.com',
+              `${env('STORAGE_ACCOUNT')}.blob.core.windows.net`,
             ],
-            // Conditionally add the first contentSecurityPolicy if custom security is enabled
-            ...(enableCustomSecurity && {
-              'connect-src': ["'self'", 'https:'],
-              'img-src': [
-                "'self'",
-                'data:',
-                'blob:',
-                'dl.airtable.com', // Required for Strapi < 4.10.6, you can remove it otherwise
-                'https://market-assets.strapi.io', // Required for Strapi >= 4.10.6, you can remove it otherwise
-                `https://${env('STORAGE_ACCOUNT')}.blob.core.windows.net`,
-              ],
-              'media-src': [
-                "'self'",
-                'data:',
-                'blob:',
-                'dl.airtable.com', // Required for Strapi < 4.10.6, you can remove it otherwise
-                `https://${env('STORAGE_ACCOUNT')}.blob.core.windows.net`,
-              ],
-              upgradeInsecureRequests: null,
-            }),
+            upgradeInsecureRequests: null,
           },
         },
       },

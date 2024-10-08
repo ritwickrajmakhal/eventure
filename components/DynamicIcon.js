@@ -1,7 +1,6 @@
-import React from 'react';
-
 // DynamicIcon component definition
 export const DynamicIcon = async ({ iconName = 'fa/FaFileExcel', ...props }) => {
+  iconName = iconName.slice(0, 2).toLocaleLowerCase() + "/" + iconName;
   const [library, iconComponent] = iconName.split('/');
   
   // If either the library or icon component is not provided, return null

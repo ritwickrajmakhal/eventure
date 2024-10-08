@@ -143,7 +143,7 @@ const page = async () => {
                   const { id, url, isExternal, icon } = social_link;
                   return (
                     <Link href={url} key={id} target={isExternal && "_blank"}>
-                      <DynamicIcon iconName={icon.slice(0, 2) + "/" + icon} className="text-white text-[35px] hover:text-lime-400 transition-all" />
+                      <DynamicIcon iconName={icon} className="text-white text-[35px] hover:text-lime-400 transition-all" />
                     </Link>
                   )
                 })}

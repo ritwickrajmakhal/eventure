@@ -25,6 +25,10 @@
         "Download",
         "Social media"
       ]
+    },
+    "icon": {
+      "type": "customField",
+      "customField": "plugin::react-icons.icon"
     }
   }
 }

@@ -14,16 +14,9 @@
     "description": {
       "type": "text"
     },
-    "thumbnail": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
-    },
     "icon": {
-      "type": "string"
+      "type": "customField",
+      "customField": "plugin::react-icons.icon"
     }
   }
 }

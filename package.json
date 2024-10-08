@@ -22,6 +22,7 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
     "strapi-plugin-email-designer": "^2.2.1",
+    "strapi-plugin-react-icons": "^0.3.1",
     "strapi-provider-email-azure": "^1.0.3",
     "strapi-provider-upload-azure-storage": "^3.4.0",
     "styled-components": "5.3.3"

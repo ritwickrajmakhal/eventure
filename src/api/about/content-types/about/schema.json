@@ -31,17 +31,34 @@
     "get_to_know_us": {
       "type": "text"
     },
-    "event_templates": {
+    "event_showcases": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::event-template.event-template"
     },
     "background": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
+    },
+    "social_links": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.link"
+    },
+    "map": {
+      "type": "customField",
+      "customField": "plugin::google-maps.location-picker"
+    },
+    "mobile": {
+      "type": "string",
+      "unique": false
+    },
+    "email": {
+      "type": "email"
     }
   }
 }

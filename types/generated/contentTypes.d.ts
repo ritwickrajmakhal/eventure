@@ -773,6 +773,51 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface PluginReactIconsIconlibrary extends Schema.CollectionType {
+  collectionName: 'iconlibrary';
+  info: {
+    singularName: 'iconlibrary';
+    pluralName: 'iconlibraries';
+    displayName: 'IconLibrary';
+  };
+  options: {
+    draftAndPublish: false;
+    comment: '';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    abbreviation: Attribute.String &
+      Attribute.Required &
+      Attribute.Unique &
+      Attribute.SetMinMaxLength<{
+        maxLength: 3;
+      }>;
+    isEnabled: Attribute.Boolean & Attribute.DefaultTo<true>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::react-icons.iconlibrary',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::react-icons.iconlibrary',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginGoogleMapsConfig extends Schema.SingleType {
   collectionName: 'google_maps_configs';
   info: {
@@ -926,12 +971,17 @@ export interface ApiAboutAbout extends Schema.SingleType {
     members: Attribute.Component<'components.member', true>;
     our_story: Attribute.Text;
     get_to_know_us: Attribute.Text;
-    event_templates: Attribute.Relation<
+    event_showcases: Attribute.Relation<
       'api::about.about',
       'oneToMany',
       'api::event-template.event-template'
     >;
     background: Attribute.Media<'images'>;
+    social_links: Attribute.Component<'components.link', true>;
+    map: Attribute.JSON &
+      Attribute.CustomField<'plugin::google-maps.location-picker'>;
+    mobile: Attribute.String;
+    email: Attribute.Email;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -994,6 +1044,33 @@ export interface ApiAudienceAudience extends Schema.CollectionType {
   };
 }
 
+export interface ApiCityCity extends Schema.CollectionType {
+  collectionName: 'cities';
+  info: {
+    singularName: 'city';
+    pluralName: 'cities';
+    displayName: 'City';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    state: Attribute.Relation<
+      'api::city.city',
+      'manyToOne',
+      'api::state.state'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::city.city', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::city.city', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiContactUsContactUs extends Schema.CollectionType {
   collectionName: 'contact_uses';
   info: {
@@ -1025,6 +1102,41 @@ export interface ApiContactUsContactUs extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::contact-us.contact-us',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCountryCountry extends Schema.CollectionType {
+  collectionName: 'countries';
+  info: {
+    singularName: 'country';
+    pluralName: 'countries';
+    displayName: 'Country';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    states: Attribute.Relation<
+      'api::country.country',
+      'oneToMany',
+      'api::state.state'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::country.country',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::country.country',
       'oneToOne',
       'admin::user'
     > &
@@ -1150,7 +1262,6 @@ export interface ApiEventTemplateEventTemplate extends Schema.CollectionType {
     description: Attribute.Text & Attribute.Required;
     image: Attribute.Media<'images', true> & Attribute.Required;
     slug: Attribute.UID & Attribute.Required;
-    plans: Attribute.DynamicZone<['components.plan']>;
     our_helps: Attribute.Relation<
       'api::event-template.event-template',
       'manyToMany',
@@ -1162,6 +1273,7 @@ export interface ApiEventTemplateEventTemplate extends Schema.CollectionType {
       'api::customer-review.customer-review'
     >;
     thumbnail: Attribute.Media<'images'> & Attribute.Required;
+    plans: Attribute.Component<'components.plan', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1192,8 +1304,8 @@ export interface ApiFooterFooter extends Schema.SingleType {
     draftAndPublish: true;
   };
   attributes: {
-    links: Attribute.DynamicZone<['components.link']>;
     copyright: Attribute.String;
+    links: Attribute.Component<'components.link', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1226,8 +1338,8 @@ export interface ApiHomeHome extends Schema.SingleType {
   attributes: {
     heading: Attribute.String;
     description: Attribute.Text;
-    features: Attribute.DynamicZone<['components.card']>;
     website_name: Attribute.String;
+    features: Attribute.Component<'components.card', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1244,13 +1356,14 @@ export interface ApiNavbarNavbar extends Schema.SingleType {
     singularName: 'navbar';
     pluralName: 'navbars';
     displayName: 'Navbar';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     website_name: Attribute.String;
-    links: Attribute.DynamicZone<['components.link']>;
+    links: Attribute.Component<'components.link', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1384,7 +1497,7 @@ export interface ApiServicesPageServicesPage extends Schema.SingleType {
     draftAndPublish: true;
   };
   attributes: {
-    services: Attribute.DynamicZone<['components.card']>;
+    services: Attribute.Component<'components.card', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1396,6 +1509,47 @@ export interface ApiServicesPageServicesPage extends Schema.SingleType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::services-page.services-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiStateState extends Schema.CollectionType {
+  collectionName: 'states';
+  info: {
+    singularName: 'state';
+    pluralName: 'states';
+    displayName: 'State';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    country: Attribute.Relation<
+      'api::state.state',
+      'manyToOne',
+      'api::country.country'
+    >;
+    cities: Attribute.Relation<
+      'api::state.state',
+      'oneToMany',
+      'api::city.city'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::state.state',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::state.state',
       'oneToOne',
       'admin::user'
     > &
@@ -1416,11 +1570,6 @@ export interface ApiVenueVenue extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String & Attribute.Required;
-    country: Attribute.String & Attribute.Required;
-    state: Attribute.String & Attribute.Required;
-    city: Attribute.String & Attribute.Required;
-    pincode: Attribute.BigInteger & Attribute.Required;
-    street_address: Attribute.Text;
     media: Attribute.Media<'images' | 'videos', true>;
     thumbnail: Attribute.Media<'images'> & Attribute.Required;
     description: Attribute.Text;
@@ -1429,12 +1578,15 @@ export interface ApiVenueVenue extends Schema.CollectionType {
       'oneToOne',
       'api::event.event'
     >;
-    amenities: Attribute.DynamicZone<['components.amenities']>;
     slug: Attribute.UID & Attribute.Required;
     category: Attribute.String;
     area: Attribute.Integer;
     capacity: Attribute.Integer & Attribute.Required;
     bookingCost: Attribute.Integer;
+    amenities: Attribute.Component<'components.amenities', true>;
+    map: Attribute.JSON &
+      Attribute.Required &
+      Attribute.CustomField<'plugin::google-maps.location-picker'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1470,12 +1622,15 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'plugin::react-icons.iconlibrary': PluginReactIconsIconlibrary;
       'plugin::google-maps.config': PluginGoogleMapsConfig;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::email-designer.email-template': PluginEmailDesignerEmailTemplate;
       'api::about.about': ApiAboutAbout;
       'api::audience.audience': ApiAudienceAudience;
+      'api::city.city': ApiCityCity;
       'api::contact-us.contact-us': ApiContactUsContactUs;
+      'api::country.country': ApiCountryCountry;
       'api::customer-review.customer-review': ApiCustomerReviewCustomerReview;
       'api::event.event': ApiEventEvent;
       'api::event-template.event-template': ApiEventTemplateEventTemplate;
@@ -1486,6 +1641,7 @@ declare module '@strapi/types' {
       'api::schedule.schedule': ApiScheduleSchedule;
       'api::service.service': ApiServiceService;
       'api::services-page.services-page': ApiServicesPageServicesPage;
+      'api::state.state': ApiStateState;
       'api::venue.venue': ApiVenueVenue;
     }
   }

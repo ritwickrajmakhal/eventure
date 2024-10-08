@@ -5,6 +5,7 @@ export interface ComponentsPlan extends Schema.Component {
   info: {
     displayName: 'Plan';
     description: '';
+    icon: 'book';
   };
   attributes: {
     type: Attribute.Enumeration<['Basic', 'Standard', 'Premium']> &
@@ -44,6 +45,7 @@ export interface ComponentsLink extends Schema.Component {
     category: Attribute.Enumeration<
       ['Company', 'Help center', 'Legal', 'Download', 'Social media']
     >;
+    icon: Attribute.String & Attribute.CustomField<'plugin::react-icons.icon'>;
   };
 }
 
@@ -57,8 +59,7 @@ export interface ComponentsCard extends Schema.Component {
   attributes: {
     heading: Attribute.String;
     description: Attribute.Text;
-    thumbnail: Attribute.Media<'images'>;
-    icon: Attribute.String;
+    icon: Attribute.String & Attribute.CustomField<'plugin::react-icons.icon'>;
   };
 }
 
@@ -67,6 +68,7 @@ export interface ComponentsAmenities extends Schema.Component {
   info: {
     displayName: 'Amenity';
     description: '';
+    icon: 'check';
   };
   attributes: {
     title: Attribute.String & Attribute.Required;

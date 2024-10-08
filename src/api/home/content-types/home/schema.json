@@ -18,14 +18,13 @@
     "description": {
       "type": "text"
     },
-    "features": {
-      "type": "dynamiczone",
-      "components": [
-        "components.card"
-      ]
-    },
     "website_name": {
       "type": "string"
+    },
+    "features": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.card"
     }
   }
 }

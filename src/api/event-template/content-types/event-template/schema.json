@@ -32,12 +32,6 @@
       "type": "uid",
       "required": true
     },
-    "plans": {
-      "type": "dynamiczone",
-      "components": [
-        "components.plan"
-      ]
-    },
     "our_helps": {
       "type": "relation",
       "relation": "manyToMany",
@@ -51,12 +45,17 @@
       "mappedBy": "event_template"
     },
     "thumbnail": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": false,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "plans": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.plan"
     }
   }
 }

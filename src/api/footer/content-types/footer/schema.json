@@ -12,14 +12,13 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "links": {
-      "type": "dynamiczone",
-      "components": [
-        "components.link"
-      ]
-    },
     "copyright": {
       "type": "string"
+    },
+    "links": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.link"
     }
   }
 }

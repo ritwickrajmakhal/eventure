@@ -13,10 +13,9 @@
   "pluginOptions": {},
   "attributes": {
     "services": {
-      "type": "dynamiczone",
-      "components": [
-        "components.card"
-      ]
+      "type": "component",
+      "repeatable": true,
+      "component": "components.card"
     }
   }
 }

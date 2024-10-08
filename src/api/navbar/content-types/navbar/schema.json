@@ -4,7 +4,8 @@
   "info": {
     "singularName": "navbar",
     "pluralName": "navbars",
-    "displayName": "Navbar"
+    "displayName": "Navbar",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -15,10 +16,9 @@
       "type": "string"
     },
     "links": {
-      "type": "dynamiczone",
-      "components": [
-        "components.link"
-      ]
+      "type": "component",
+      "repeatable": true,
+      "component": "components.link"
     }
   }
 }

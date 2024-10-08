@@ -60,7 +60,7 @@ const Page = ({ params: { slug } }) => {
     });
     if (!res.error) setRowData(updatedData);
     setLoading({ ...loading, remove: false });
-  }, [rowData, session, audience]);
+  }, [rowData, session, audience, loading]);
 
   const removeAudience = async () => {
     setLoading({ ...loading, remove: true });

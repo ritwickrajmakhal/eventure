@@ -16,25 +16,6 @@
       "type": "string",
       "required": true
     },
-    "country": {
-      "type": "string",
-      "required": true
-    },
-    "state": {
-      "type": "string",
-      "required": true
-    },
-    "city": {
-      "type": "string",
-      "required": true
-    },
-    "pincode": {
-      "type": "biginteger",
-      "required": true
-    },
-    "street_address": {
-      "type": "text"
-    },
     "media": {
       "type": "media",
       "multiple": true,
@@ -61,12 +42,6 @@
       "target": "api::event.event",
       "mappedBy": "venue"
     },
-    "amenities": {
-      "type": "dynamiczone",
-      "components": [
-        "components.amenities"
-      ]
-    },
     "slug": {
       "type": "uid",
       "required": true
@@ -83,6 +58,16 @@
     },
     "bookingCost": {
       "type": "integer"
+    },
+    "amenities": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.amenities"
+    },
+    "map": {
+      "type": "customField",
+      "required": true,
+      "customField": "plugin::google-maps.location-picker"
     }
   }
 }

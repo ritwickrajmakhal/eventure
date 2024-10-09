@@ -7,11 +7,15 @@ import Plan from "@/components/Plan";
 import request from "@/lib/request";
 import { Button } from "flowbite-react";
 import { HiFire } from "react-icons/hi";
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params }) {
   const res = await request(
     `/api/event-templates?populate=plans.services&filters[slug][$eq]=${params.slug}&populate=our_helps.image&populate=image&populate=customer_reviews.profilePic`
   );
+  if (res.data.length === 0) {
+    notFound();
+  }
   const eventData = res.data[0];
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
 

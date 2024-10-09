@@ -1,4 +1,3 @@
-import React from "react";
 import request from "@/lib/request";
 import Gallery from "../Gallery";
 import Amenities from "../Amenities";
@@ -18,16 +17,12 @@ const page = async ({ params }) => {
       description,
       area,
       capacity,
-      country,
-      state,
-      city,
-      pincode,
-      street_address,
+      map,
       bookingCost,
       amenities,
     },
   } = venueData;
-  const mapUrl = `https://maps.google.com/maps?q=${city}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_API_KEY}&q=${map.coordinates.lat},${map.coordinates.lng}&zoom=14&maptype=satellite`;
   return (
     <div className="flex flex-col justify-center items-center gap-8">
       <>
@@ -77,11 +72,7 @@ const page = async ({ params }) => {
                   <div className="flex items-center">
                     <div className="ml-2">
                       <p className="font-bold">Address</p>
-                      <p> Country : {country}</p>
-                      <p> State : {state}</p>
-                      <p>City : {city}</p>
-                      <p>Street address : {street_address}</p>
-                      <p>Pin code : {pincode}</p>
+                      {map.address}
                     </div>
                   </div>
                 </div>

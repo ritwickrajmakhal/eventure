@@ -7,6 +7,7 @@ import { BiLike } from "react-icons/bi";
 import { FaFacebook, FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import dynamic from "next/dynamic";
+import { DynamicIcon } from "@/components/DynamicIcon";
 
 // Dynamically import the client-side part
 const AboutPage = dynamic(() => import("./AboutPage"), {
@@ -14,8 +15,8 @@ const AboutPage = dynamic(() => import("./AboutPage"), {
 });
 
 const page = async () => {
-  const res = await request("/api/about?populate=members.avatar,event_templates.thumbnail,background");
-  const { attributes: { heading, description, our_story, get_to_know_us, members, event_templates, background } } = res.data;
+  const res = await request("/api/about?populate=members.avatar,event_showcases.thumbnail,background,map,social_links");
+  const { attributes: { heading, description, our_story, get_to_know_us, members, event_showcases, background, map, mobile, email, social_links } } = res.data;
   return (
     <>
       {/* Arrow Button */}
@@ -91,7 +92,7 @@ const page = async () => {
           Event Showcase
         </div>
         <div className="h-auto flex justify-center my-5 flex-wrap gap-10">
-          {event_templates?.data.slice(0, 10).map((event_template) => {
+          {event_showcases?.data.slice(0, 10).map((event_template) => {
             const { id, attributes: { title, thumbnail } } = event_template;
             return (
               <Card2
@@ -119,38 +120,40 @@ const page = async () => {
               <div className="w-fit text-[40px]">
                 <MdOutlineLocationOn />
               </div>
-              <div>
-                National Highway 6, Banitabla, Uluberia, Howrah, West Bengal
-                711316
-              </div>
+              <div>{map.address}</div>
             </div>
             <div className="text-white w-full gap-10 flex items-center">
               <div className="w-fit text-[35px]">
                 <MdOutlinePhone />
               </div>
-              <div>+91 8391037376</div>
+              <div>{mobile}</div>
             </div>
             <div className="text-white w-full gap-10 flex items-center">
               <div className="w-fit text-[35px]">
                 <MdOutlineMail />
               </div>
-              <div>official@eveture.com</div>
+              <div>{email}</div>
             </div>
             <div className="text-white w-full gap-10 flex items-center">
               <div className="w-fit text-[35px]">
                 <BiLike />
               </div>
               <div className="flex gap-3">
-                <FaFacebook />
-                <FaGithub />
-                <FaXTwitter />
+                {social_links?.map((social_link) => {
+                  const { id, url, isExternal, icon } = social_link;
+                  return (
+                    <Link href={url} key={id} target={isExternal && "_blank"}>
+                      <DynamicIcon iconName={icon} className="text-white text-[35px] hover:text-lime-400 transition-all" />
+                    </Link>
+                  )
+                })}
               </div>
             </div>
           </div>
           <div className="md:w-1/2">
             <iframe
               className="w-[90%] h-[50vh]"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5665.106380137488!2d88.08114767067778!3d22.479693618649698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a02843a3e865dc5%3A0xe175b11added28f9!2sCalcutta%20Institute%20of%20Technology%20(CIT)!5e0!3m2!1sen!2sin!4v1725290534956!5m2!1sen!2sin"
+              src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_API_KEY}&q=${map.coordinates.lat},${map.coordinates.lng}&zoom=14&maptype=satellite`}
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

@@ -1,5 +1,6 @@
 import request from "@/lib/request";
 import "./style.css";
+import { DynamicIcon } from "@/components/DynamicIcon";
 
 const page = async () => {
   const res = await request("/api/services-page?populate=services");
@@ -7,12 +8,6 @@ const page = async () => {
 
   return (
     <div className="text-white">
-      {/* Font */}
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      ></link>
-
       {/* service section  */}
       <section className="services" id="services">
         <h1 className="heading">
@@ -22,7 +17,7 @@ const page = async () => {
         <div className="box-container">
           {services.map((service, index) => (
             <div className="box" key={index}>
-              <i className={service.icon}></i>
+              <DynamicIcon className="mx-auto w-10 h-10" iconName={service.icon} />
               <h3>{service.heading}</h3>
               <p>{service.description}</p>
             </div>

@@ -46,5 +46,11 @@ module.exports = ({ env }) => {
       },
     },
     "react-icons": true,
+    'import-export-entries': {
+      enabled: true,
+      config: {
+        serverPublicHostname: env("STORAGE_URL"),
+      },
+    },
   };
 };

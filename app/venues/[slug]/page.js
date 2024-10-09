@@ -2,11 +2,15 @@ import request from "@/lib/request";
 import Gallery from "../Gallery";
 import Amenities from "../Amenities";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 const page = async ({ params }) => {
   const res = await request(
     `/api/venues?filters[slug][$eq]=${params.slug}&populate=*`
   );
+  if(res.data.length === 0) {
+    notFound();
+  }
   const venueData = res.data[0];
   const {
     id,

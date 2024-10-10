@@ -1,5 +1,6 @@
 module.exports = ({ env }) => {
   const enableUpload = env("ENABLE_UPLOAD_FROM_AZURE", "false") === "true"; // Check if upload is enabled through an environment variable
+  const enableEmail = env("ENABLE_EMAIL_FROM_AZURE", "false") === "true"; // Check if upload is enabled through an environment variable
 
   return {
     "users-permissions": {
@@ -34,17 +35,19 @@ module.exports = ({ env }) => {
         },
       },
     }),
-    email: {
-      config: {
-        provider: "strapi-provider-email-azure",
-        providerOptions: {
-          endpoint: env("AZURE_ENDPOINT"),
-        },
-        settings: {
-          defaultFrom: env("FALLBACK_EMAIL"),
+    ...(enableEmail && {
+      email: {
+        config: {
+          provider: "strapi-provider-email-azure",
+          providerOptions: {
+            endpoint: env("AZURE_ENDPOINT"),
+          },
+          settings: {
+            defaultFrom: env("FALLBACK_EMAIL"),
+          },
         },
       },
-    },
+    }),
     "react-icons": true,
     'import-export-entries': {
       enabled: true,

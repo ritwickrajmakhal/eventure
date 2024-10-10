@@ -1,61 +1,143 @@
-# 🚀 Getting started with Strapi
+<div align="center">
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+# Eventure Backend
 
-### `develop`
+[![Eventure Website](https://img.shields.io/website?url=https://eventure-backend.azurewebsites.net)](https://eventure-backend.azurewebsites.net)
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+</div>
 
-```
-npm run develop
-# or
-yarn develop
-```
+## Table of Contents
 
-### `start`
+- [Eventure Backend](#eventure-backend)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Setup Instructions](#setup-instructions)
+  - [Contributors](#contributors)
+  - [Contributing](#contributing)
+  - [Support](#support)
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
+## Overview
 
-```
-npm run start
-# or
-yarn start
-```
+The **Eventure Backend** powers the Eventure platform, built using the Strapi headless CMS and hosted on Azure App Services. This repository contains all the backend logic and configurations necessary for managing the project’s content and API. It integrates features like email notifications via Azure Email Service and location services using the Google Maps API.
 
-### `build`
+## Installation
 
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
+Follow the steps below to set up the project locally.
 
-```
-npm run build
-# or
-yarn build
-```
+### Prerequisites
 
-## ⚙️ Deployment
+Ensure the following tools are installed on your system:
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
+- [Node.js](https://nodejs.org/) (version 14 or later)
+- [npm](https://www.npmjs.com/) (version 6 or later)
+- [PostgreSQL](https://www.postgresql.org/download/) (version 13 or later)
+- [Azure Email Service](https://market.strapi.io/providers/strapi-provider-email-azure) (optional, required for email functionality)
+- [Google Maps API Key](https://developers.google.com/maps/documentation/javascript/get-api-key) (optional, needed for location services)
 
-```
-yarn strapi deploy
-```
+### Setup Instructions
 
-## 📚 Learn more
+1. **Clone the Repository**  
+   Download the project and move into the project directory:
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+   ```bash
+   git clone https://github.com/ritwickrajmakhal/eventure-backend.git
+   cd eventure-backend
+   ```
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+2. **Install Dependencies**  
+   Run the following command to install all the necessary dependencies:
 
-## ✨ Community
+   ```bash
+   npm install
+   ```
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+3. **Database Configuration**  
+   Create a new PostgreSQL database locally or on your preferred cloud platform.
 
----
+4. **Azure Email Service Setup (Optional)**  
+   If you plan to use email notifications, configure an Azure Email Service account and note down the credentials.
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+5. **Configure Environment Variables**  
+   Create a `.env` file in the root directory and add the following environment variables:
+
+   ```bash
+   HOST=0.0.0.0
+   PORT=1337
+   URL=http://localhost:1337
+   APP_KEYS=<your_app_keys>
+   API_TOKEN_SALT=<your_api_token_salt>
+   ADMIN_JWT_SECRET=<your_admin_jwt_secret>
+   TRANSFER_TOKEN_SALT=<your_transfer_token_salt>
+   JWT_SECRET=<your_jwt_secret>
+
+   # Database
+   DATABASE_CLIENT=postgres
+   DATABASE_NAME=<your_database_name>
+   DATABASE_USERNAME=<your_database_username>
+   DATABASE_PASSWORD=<your_database_password>
+
+   # Email
+   ENABLE_EMAIL_FROM_AZURE=true
+   AZURE_ENDPOINT=<your_azure_endpoint>
+   EMAIL_SERVICE_ADDRESS=<your_email_service_address>
+   FALLBACK_EMAIL=<your_fallback_email>
+
+   STORAGE_URL=http://localhost:1337
+   ```
+
+6. **Start the Development Server**  
+   Launch the backend by running the following command:
+
+   ```bash
+   npm run develop
+   ```
+
+   The backend should now be running locally at `http://localhost:1337`.
+
+7. **Access the Admin Panel**  
+   To access Strapi’s admin dashboard, open your browser and navigate to:
+
+   ```bash
+   http://localhost:1337/admin
+   ```
+
+## Contributors
+
+Contributions to the Eventure Backend are made by developers from the community. To view a complete list of contributors, visit our [contributors page](https://github.com/ritwickrajmakhal/eventure/graphs/contributors).
+
+<a href="https://github.com/ritwickrajmakhal/eventure/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=ritwickrajmakhal/eventure-backend" alt="Contributors"/>
+</a>
+
+This image is powered by [contributors-img](https://contributors-img.web.app).
+
+## Contributing
+
+We welcome contributions from developers interested in improving Eventure! Here’s how you can contribute:
+
+1. **Fork** the repository.
+2. **Create a new branch** for your feature or fix:
+
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+
+3. **Commit your changes** with a clear message:
+
+   ```bash
+   git commit -m "Add feature: your-feature"
+   ```
+
+4. **Push to your branch**:
+
+   ```bash
+   git push origin feature/your-feature
+   ```
+
+5. Open a **Pull Request** and wait for feedback or approval.
+
+## Support
+
+If you have any questions, issues, or suggestions, feel free to open an issue on GitHub or reach out to any of the contributors. We're happy to help!

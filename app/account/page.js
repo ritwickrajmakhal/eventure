@@ -12,15 +12,17 @@ const Account = () => {
   const userCookie = Cookies.get("session");
   const [session, setSession] = useState(null);
   const router = useRouter();
-  useEffect(() => { userCookie ? setSession(JSON.parse(userCookie)) : router.push("/login"); }, [userCookie]);
+  useEffect(() => { userCookie ? setSession(JSON.parse(userCookie)) : router.push("/login"); }, [userCookie, router]);
   const [user, setUser] = useState(null);
 
   // Fetch user information from the server and set it to the state
   useEffect(() => {
     if (session) {
       const fetchInformation = async () => {
-        const res = await request(`/api/users/me?populate=*`, { headers: { Authorization: "Bearer " + session.jwt, }, });
+        const res = await request(`/api/users/me?populate=avatar,country,state,city`, { headers: { Authorization: "Bearer " + session.jwt, }, });
         if (res.result) setUser(res.result);
+        console.log(res);
+        
       };
       fetchInformation();
     }

@@ -1,130 +1,101 @@
 import request from "@/lib/request";
-import Gallery from "../Gallery";
-import Amenities from "../Amenities";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Badge, Button, Carousel } from "flowbite-react";
+import Image from "next/image";
+import Link from "next/link";
 
 const page = async ({ params }) => {
-  const res = await request(
-    `/api/venues?filters[slug][$eq]=${params.slug}&populate=*`
-  );
-  if(res.data.length === 0) {
+  const res = await request(`/api/venues?filters[slug][$eq]=${params.slug}&populate=*`);
+  if (res.data.length === 0) {
     notFound();
   }
   const venueData = res.data[0];
   const {
-    id,
-    attributes: {
-      name,
-      media,
-      category,
-      description,
-      area,
-      capacity,
-      map,
-      bookingCost,
-      amenities,
-    },
-  } = venueData;
-  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_API_KEY}&q=${map.coordinates.lat},${map.coordinates.lng}&zoom=14&maptype=satellite`;
-  return (
-    <div className="flex flex-col justify-center items-center gap-8">
-      <>
-        <Link
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-          rel="stylesheet"
-        />
-        <Link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
+    name,
+    description,
+    area,
+    capacity,
+    map,
+    bookingCost,
+    amenities,
+    media,
+  } = venueData.attributes;
 
-        <div className="max-w-7xl mx-auto ">
-          <div className="bg-white p-4 rounded-md shadow-md">
-            <h1 className="text-2xl font-bold text-blue-600 mb-3">{name}</h1>
-            <div className="flex">
-              <div className="w-2/3">
-                <div className="flex flex-wrap gap-2">
-                  {media.data.slice(0, 2).map((image, index) => {
-                    const { url } = image.attributes;
-                    return (
-                      <Gallery
-                        key={index}
-                        media={`${process.env.NEXT_PUBLIC_API_URL || ""}${url}`}
-                      />
-                    );
-                  })}
-                </div>
-                <p className="mt-4 text-lg font-bold">{category}</p>
-                <p>{description}</p>
-                <div className="flex items-center mt-2">
-                  <i className="fas fa-door-open mr-2"></i>
-                  <p>{area} sq feet hall room</p>
-                  <i className="fas fa-users ml-4 mr-2"></i>
-                  <p>Holds more than {capacity} people</p>
-                </div>
-                <p className="mt-4 text-lg font-bold">Amenities</p>
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  {amenities.map((data, index) => {
-                    const { title } = data;
-                    return <Amenities key={index} ami={title} />;
-                  })}
-                </div>
-              </div>
-              <div className="w-1/3 pl-4">
-                <div className="bg-gray-100 p-4 rounded-md shadow-md mt-4">
-                  <div className="flex items-center">
-                    <div className="ml-2">
-                      <p className="font-bold">Address</p>
-                      {map.address}
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gray-100 p-4 rounded-md shadow-md mt-4">
-                  <div className="flex items-center">
-                    <i className="fas fa-map-marker-alt text-blue-600 text-2xl"></i>
-                    <div className="ml-2">
-                      <p className="font-bold">Location</p>
-                      <Link href={"#gmap"}>
-                        <p className="text-blue-600">See on Map</p>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gray-100 p-4 rounded-md shadow-md mt-4">
-                  <p className="font-bold">Booking Cost(~)</p>
-                  <p className="text-green-600 font-bold">$ {bookingCost}</p>
-                </div>
-                <div className="book flex justify-center items-center m-8">
-                  <button
-                    type="button"
-                    className="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
-                  >
-                    Book Now
-                  </button>
-                  <button
-                    type="button"
-                    className="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
-                  >
-                    Cut Now
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+  // Prepare the Google Maps URL
+  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_API_KEY}&q=${map.coordinates.lat},${map.coordinates.lng}&zoom=14&maptype=satellite`;
+
+  return (
+    <div className="container mx-auto my-10 p-6 bg-gray-100 dark:bg-gray-800 dark:text-gray-300 rounded-lg shadow-md">
+      {/* Venue Overview */}
+      <div className="bg-white p-6 rounded-md shadow-md dark:bg-gray-900 dark:border-gray-700">
+        <h1 className="text-3xl font-bold text-blue-700 dark:text-white mb-4">{name}</h1>
+        <p className="text-gray-700 dark:text-gray-400 mb-4">{description}</p>
+        <div className="flex flex-wrap gap-4 mb-6">
+          <Badge color="purple">Area: {area} sq. ft</Badge>
+          <Badge color="blue">Capacity: {capacity} people</Badge>
+          <Badge color="green">₹{bookingCost} per booking</Badge>
         </div>
-      </>
-      <div id="gmap" className="map w-4/6 mb-5 border-2 border-gray-700 rounded-lg">
-        <iframe
-          width="100%"
-          height="400"
-          id="map"
-          src={mapUrl}
-          frameBorder="0"
-          scrolling="no"
-          marginHeight="0"
-          marginWidth="0"
-        ></iframe>
+      </div>
+
+      {/* Media Carousel */}
+      <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 my-6">
+        <Carousel pauseOnHover>
+          {media.data?.map((mediaItem) => {
+            const { id, attributes: { alternativeText, url, mime } } = mediaItem;
+            return mime.startsWith("image/") ? (
+              <Image
+                key={id}
+                src={`${process.env.NEXT_PUBLIC_API_URL || ""}${url}`}
+                alt={alternativeText || "Venue Image"}
+                width={600}
+                height={400}
+                layout="responsive"
+                objectFit="cover"
+                className="rounded-lg"
+              />
+            ) : (<video
+              key={id}
+              autoPlay
+              loop
+              muted
+              className="w-full h-full rounded-lg object-cover"
+            >
+              <source src={`${process.env.NEXT_PUBLIC_API_URL || ""}${url}`} type={mime} />
+              Your browser does not support the video tag.
+            </video>);
+          })}
+        </Carousel>
+      </div>
+
+      {/* Venue Location */}
+      <div className="bg-white p-6 rounded-md shadow-md dark:bg-gray-900 dark:border-gray-700 mb-6">
+        <h3 className="text-xl font-semibold dark:text-white mb-2">Location</h3>
+        <p className="text-gray-700 dark:text-gray-400 mb-4">{map.address}</p>
+        <div className="w-full h-96 border rounded-lg">
+          <iframe
+            src={mapUrl}
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            allowFullScreen=""
+            loading="lazy"
+            className="rounded-lg"
+          ></iframe>
+        </div>
+      </div>
+
+      {/* Amenities */}
+      <div className="bg-white p-6 rounded-md shadow-md dark:bg-gray-900 dark:border-gray-700 mb-6">
+        <h3 className="text-xl font-semibold dark:text-white mb-2">Amenities</h3>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {amenities.map((amenity, index) => <Badge key={index} color="info">{amenity.title}</Badge>)}
+        </div>
+      </div>
+
+      {/* Booking Buttons */}
+      <div className="flex justify-center space-x-4">
+        <Button as={Link} href={`/events/create?venue=${params.slug}`} color="success" className="px-4 py-2 rounded-lg text-white">Book Now</Button>
+        <Button as={Link} href="/venues" color="failure" className="px-4 py-2 rounded-lg text-white">Cancel</Button>
       </div>
     </div>
   );

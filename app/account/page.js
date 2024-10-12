@@ -1,6 +1,6 @@
 "use client";
 
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Information from "./Information";
 import Profile from "./Profile";
@@ -11,32 +11,20 @@ import Cookies from "js-cookie";
 const Account = () => {
   const userCookie = Cookies.get("session");
   const [session, setSession] = useState(null);
-  useEffect(() => {
-    if (userCookie) {
-      setSession(JSON.parse(userCookie));
-    } else {
-      redirect("/login");
-    }
-  }, [userCookie]);
-
-  const [user, setUser] = useState({});
+  const router = useRouter();
+  useEffect(() => { userCookie ? setSession(JSON.parse(userCookie)) : router.push("/login"); }, [userCookie]);
+  const [user, setUser] = useState(null);
 
   // Fetch user information from the server and set it to the state
   useEffect(() => {
-    if (session && !user.id) {
+    if (session) {
       const fetchInformation = async () => {
-        const res = await request(`/api/users/me?populate=*`, {
-          headers: {
-            Authorization: "Bearer " + session.jwt,
-          },
-        });
-        if (res.result) {
-          setUser({ ...user, ...res.result });
-        }
+        const res = await request(`/api/users/me?populate=*`, { headers: { Authorization: "Bearer " + session.jwt, }, });
+        if (res.result) setUser(res.result);
       };
       fetchInformation();
     }
-  }, [session, user]);
+  }, [session]);
 
   return (
     <>

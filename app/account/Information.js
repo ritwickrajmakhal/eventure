@@ -1,24 +1,14 @@
 import { Button, Label, TextInput } from "flowbite-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import request from "@/lib/request";
+import showToast from "@/lib/toast";
 
 
 const Information = ({ user, setUser, session }) => {
-  const [serverMsg, setServerMsg] = useState({
-    error: "",
-    success: "",
-  });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setServerMsg({ ...serverMsg, error: "", success: "" });
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [serverMsg]);
-
   const updateInformation = async () => {
-    if (session) {      
+    if (session) {
       setLoading(true);
       const res = await request(`/api/users/${session.id}`, {
         method: "PUT",
@@ -29,11 +19,7 @@ const Information = ({ user, setUser, session }) => {
           Authorization: "Bearer " + session.jwt,
         },
       });
-      if (res.error) {
-        setServerMsg({ ...serverMsg, error: res.error.message });
-      } else {
-        setServerMsg({ ...serverMsg, success: "Saved!" });
-      }
+      res.error ? showToast("error", res.error.message) : showToast("success", "Information updated successfully");
       setLoading(false);
     }
   };
@@ -57,7 +43,7 @@ const Information = ({ user, setUser, session }) => {
                 type="text"
                 name="first-name"
                 placeholder="First Name"
-                value={user.firstName || ""}
+                value={user?.firstName || ""}
                 onChange={(e) =>
                   setUser({ ...user, firstName: e.target.value })
                 }
@@ -70,7 +56,7 @@ const Information = ({ user, setUser, session }) => {
                 name="last-name"
                 type="text"
                 placeholder="Last Name"
-                value={user.lastName || ""}
+                value={user?.lastName || ""}
                 onChange={(e) => setUser({ ...user, lastName: e.target.value })}
               />
             </div>
@@ -81,7 +67,7 @@ const Information = ({ user, setUser, session }) => {
                 name="country"
                 type="text"
                 placeholder="United States"
-                value={user.country || ""}
+                value={user?.country || ""}
                 onChange={(e) => setUser({ ...user, country: e.target.value })}
               />
             </div>
@@ -92,7 +78,7 @@ const Information = ({ user, setUser, session }) => {
                 name="state"
                 type="text"
                 placeholder="e.g. West Bengal"
-                value={user.state || ""}
+                value={user?.state || ""}
                 onChange={(e) => setUser({ ...user, state: e.target.value })}
               />
             </div>
@@ -103,7 +89,7 @@ const Information = ({ user, setUser, session }) => {
                 type="text"
                 name="city"
                 placeholder="e.g. San Francisco"
-                value={user.city || ""}
+                value={user?.city || ""}
                 onChange={(e) => setUser({ ...user, city: e.target.value })}
               />
             </div>
@@ -114,7 +100,7 @@ const Information = ({ user, setUser, session }) => {
                 type="text"
                 name="address"
                 placeholder="e.g. California"
-                value={user.address || ""}
+                value={user?.address || ""}
                 onChange={(e) => setUser({ ...user, address: e.target.value })}
               />
             </div>
@@ -125,7 +111,7 @@ const Information = ({ user, setUser, session }) => {
                 type="email"
                 name="email"
                 placeholder="example@company.com"
-                value={user.email || ""}
+                value={user?.email || ""}
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
               />
             </div>
@@ -136,7 +122,7 @@ const Information = ({ user, setUser, session }) => {
                 type="number"
                 name="phone-number"
                 placeholder="e.g. +(12)3456 789"
-                value={user.phoneNumber || ""}
+                value={user?.phoneNumber || ""}
                 onChange={(e) =>
                   setUser({
                     ...user,
@@ -151,7 +137,7 @@ const Information = ({ user, setUser, session }) => {
                 id="organization"
                 type="text"
                 placeholder="Company Name"
-                value={user.organization || ""}
+                value={user?.organization || ""}
                 onChange={(e) =>
                   setUser({
                     ...user,
@@ -168,7 +154,7 @@ const Information = ({ user, setUser, session }) => {
                 type="number"
                 name="zip-code"
                 placeholder={123456}
-                value={user.zipCode || ""}
+                value={user?.zipCode || ""}
                 onChange={(e) => setUser({ ...user, zipCode: e.target.value })}
               />
             </div>
@@ -176,15 +162,6 @@ const Information = ({ user, setUser, session }) => {
               <Button color="blue" type="submit">
                 {loading ? "Saving..." : "Save"}
               </Button>
-
-              <div className="ml-3">
-                {serverMsg.error && (
-                  <p className="text-red-400">{serverMsg.error}</p>
-                )}
-                {serverMsg.success && (
-                  <p className="text-green-400">{serverMsg.success}</p>
-                )}
-              </div>
             </div>
           </div>
         </form>

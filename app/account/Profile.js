@@ -15,7 +15,9 @@ const Profile = ({ user, setUser, session }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const updatePassword = async () => {
+  // Update user's password
+  const updatePassword = async (e) => {
+    e.preventDefault();
     if (session) {
       if (password !== confirmPassword) {
         showToast("error", "Passwords do not match");
@@ -33,11 +35,18 @@ const Profile = ({ user, setUser, session }) => {
           Authorization: "Bearer " + session.jwt,
         },
       });
-      res.error ? showToast("error", res.error.message) : showToast("success", "Password updated successfully");
+      if (res.error) showToast("error", res.error.message);
+      else {
+        showToast("success", "Password updated successfully");
+        setCurrentPassword("");
+        setPassword("");
+        setConfirmPassword("");
+      }
       setLoading({ ...loading, password: false });
     }
   };
 
+  // Upload image to server
   const uploadImage = async (e) => {
     if (session) {
       const file = e.target.files[0]; // Select file from input
@@ -60,7 +69,7 @@ const Profile = ({ user, setUser, session }) => {
           });
 
           if (response.error) {
-            console.error("File upload error:", response.error);
+            showToast("error", response.error.message);
             return;
           }
 
@@ -119,17 +128,10 @@ const Profile = ({ user, setUser, session }) => {
             </div>
 
             <div className="flex items-center gap-2">
-              <input
-                type="file"
-                name="file"
-                multiple={false}
-                accept="image/*"
-                id="file-upload"
-                className="hidden"
-                onChange={uploadImage}
-              />
+              <input type="file" name="file" multiple={false} accept="image/*" id="file-upload" className="hidden" onChange={uploadImage} />
               <Button
                 gradientDuoTone="cyanToBlue"
+                disabled={loading.image}
                 onClick={() => document.getElementById("file-upload").click()}
               >
                 <svg
@@ -153,49 +155,22 @@ const Profile = ({ user, setUser, session }) => {
         <h3 className="mb-4 text-xl font-semibold dark:text-white">
           Password information
         </h3>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            updatePassword();
-          }}
-        >
+        <form onSubmit={updatePassword} >
           <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6 sm:col-span-3">
               <Label htmlFor="current-password" value="Current password" />
-              <TextInput
-                id="current-password"
-                type="password"
-                placeholder="••••••••"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                required
-              />
+              <TextInput id="current-password" type="password" placeholder="••••••••" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required />
             </div>
             <div className="col-span-6 sm:col-span-3">
               <Label htmlFor="password" value="New password" />
-              <TextInput
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                data-popover-target="popover-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <TextInput id="password" type="password" placeholder="••••••••" data-popover-target="popover-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
             <div className="col-span-6 sm:col-span-3">
               <Label htmlFor="confirm-password" value="Confirm password" />
-              <TextInput
-                id="confirm-password"
-                type="password"
-                placeholder="••••••••"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
+              <TextInput id="confirm-password" type="password" placeholder="••••••••" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
             </div>
             <div className="col-span-6 sm:col-full flex items-center">
-              <Button color="blue" type="submit">{loading.password ? "Updating..." : "Update password"}</Button>
+              <Button disabled={loading.password} color="blue" type="submit">{loading.password ? "Updating..." : "Update password"}</Button>
             </div>
           </div>
         </form>

@@ -13,7 +13,7 @@ const AudienceSelector = ({ audiences, onAudienceSelect }) => {
   const [allAudiences, setAllAudiences] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const userCookie = Cookies.get("session");
-  const [isClient, setIsClient] = useState(false); // Add this state to handle client-side rendering
+  const [mounted, setMounted] = useState(false); // Add this state to handle client-side rendering
 
   useEffect(() => {
     if (userCookie) setSession(JSON.parse(userCookie));
@@ -34,7 +34,7 @@ const AudienceSelector = ({ audiences, onAudienceSelect }) => {
 
   // Ensure that the component only renders on the client
   useEffect(() => {
-    setIsClient(true);
+    setMounted(true);
   }, []);
 
   // Prepare options for react-select dropdown
@@ -49,7 +49,7 @@ const AudienceSelector = ({ audiences, onAudienceSelect }) => {
 
   // Set selected services as react-select values
   const selectedOptions = audiences.map(({ id }) => options.find((option) => option.value === id));
-  if (!isClient) return null; // Render nothing on the server
+  if (!mounted) return null; // Render nothing on the server
 
   return (
     <div className="mb-3">

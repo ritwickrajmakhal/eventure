@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState, useCallback } from "react";
 import request from "@/lib/request";
+import showToast from "@/lib/toast";
+import { useRouter } from "next/navigation";
 
 export function SignupForm() {
   const [formData, setFormData] = useState({
@@ -14,10 +16,7 @@ export function SignupForm() {
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [serverMsg, setServerMsg] = useState({
-    message: null,
-    type: null,
-  });
+  const router = useRouter();
 
   const validateForm = useCallback(() => {
     const { name, email, password, confirmPassword } = formData;
@@ -69,23 +68,15 @@ export function SignupForm() {
 
     if (validateForm()) {
       setLoading(true);
-      setServerMsg(null);
       try {
         const response = await request("/api/auth/local/register", {
           method: "POST",
           body: { ...formData, username: formData.email.split("@")[0] },
         });
 
-        if (response.error) {
-          setServerMsg({
-            message: response.error.message,
-            type: "error",
-          });
-        } else {
-          setServerMsg({
-            message: "Account created successfully.",
-            type: "success",
-          });
+        if (response.error) showToast("error", response.error.message);
+        else {
+          showToast("success", "Account created successfully.");
           setFormData({
             name: "",
             email: "",
@@ -93,11 +84,11 @@ export function SignupForm() {
             confirmPassword: "",
           });
           setTouched({});
+          setErrors({});
+          router.push("/login");
         }
       } catch (error) {
-        setServerMsg(
-          error.message || "Something went wrong, please try again."
-        );
+        showToast("error", "Something went wrong. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -121,18 +112,6 @@ export function SignupForm() {
           width={150}
           alt="Website logo"
         />
-        {serverMsg && (
-          <>
-            <div className="hidden text-green-600 text-red-600"></div>
-            <p
-              className={`text-${
-                serverMsg.type === "error" ? "red" : "green"
-              }-600 text-sm font-light text-center`}
-            >
-              {serverMsg.message}
-            </p>
-          </>
-        )}
 
         <div>
           <label

@@ -1,9 +1,8 @@
 "use client";
 
-import { redirect } from "next/navigation";
-import { useState, useEffect, Suspense } from "react";
+import { useEffect, Suspense } from "react";
 import Cookies from "js-cookie";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import LoginForm from "./LoginForm";
 import { SignupForm } from "./SignupForm";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
@@ -12,15 +11,11 @@ import { ForgotPasswordForm } from "./ForgotPasswordForm";
 export default function Login() {
   const providers = ["github", "google"];
   const userCookie = Cookies.get("session");
-
+  const router = useRouter();
   // Check if user is already logged in
   useEffect(() => {
-    if (userCookie) {
-      redirect("/");
-    }
+    if (userCookie) router.push("/");
   }, [userCookie]);
-
-  if (userCookie) return null;
 
   return (
     <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 mx-auto my-20">

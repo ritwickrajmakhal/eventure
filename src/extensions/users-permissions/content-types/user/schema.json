@@ -89,16 +89,7 @@
     "phoneNumber": {
       "type": "biginteger"
     },
-    "country": {
-      "type": "string"
-    },
-    "state": {
-      "type": "string"
-    },
-    "city": {
-      "type": "string"
-    },
-    "address": {
+    "street_address": {
       "type": "string"
     },
     "organization": {
@@ -115,6 +106,21 @@
       "relation": "oneToMany",
       "target": "api::event.event",
       "mappedBy": "user"
+    },
+    "country": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::country.country"
+    },
+    "state": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::state.state"
+    },
+    "city": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::city.city"
     }
   }
 }

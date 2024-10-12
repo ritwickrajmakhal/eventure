@@ -1,13 +1,12 @@
-import Provider from "./Provider";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import request from "@/lib/request";
 import Cookies from "js-cookie";
+import showToast from "@/lib/toast";
 
 
 const LoginForm = ({ providers }) => {
-  const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -30,13 +29,10 @@ const LoginForm = ({ providers }) => {
         jwt: res.result.jwt.toString(),
         id: res.result.user.id,
       };
-      // Set the user cookie
+      // Set the user cookie and redirect to home page
       Cookies.set("session", JSON.stringify(session), { expires: 7 });
-      // Redirect to a different page after successful login
       window.location.href = "/";
-    } else {
-      setServerError(res.error.message);
-    }
+    } else showToast("error", res.error.message);
     setLoading(false);
   };
 
@@ -56,11 +52,6 @@ const LoginForm = ({ providers }) => {
         width={150}
         alt="Website logo"
       />
-      {serverError && (
-        <div className="text-red-500 text-sm font-medium text-center">
-          {serverError}
-        </div>
-      )}
       <div>
         <label
           htmlFor="email"
@@ -123,7 +114,9 @@ const LoginForm = ({ providers }) => {
         <p className="text-center text-sm mb-4">or you can sign in with</p>
         <div className="flex justify-center gap-2">
           {providers.map((provider, index) => (
-            <Provider key={index} provider={provider} />
+            <Link key={index} href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/connect/${provider}`}>
+              <Image src={`/icons/${provider}.svg`} alt={provider} className="w-6 h-6 mr-2 cursor-pointer" width={24} height={24} />
+            </Link>
           ))}
         </div>
       </div>

@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSearchParams, useParams } from "next/navigation"; // Import useParams for dynamic routing
+import { useEffect } from "react";
+import { useSearchParams, useParams, useRouter } from "next/navigation"; // Import useParams for dynamic routing
 import request from "@/lib/request";
 import Cookies from "js-cookie";
+import showToast from "@/lib/toast";
 
 const LoginRedirect = () => {
-  const [text, setText] = useState("Loading...");
   const searchParams = useSearchParams();
   const { provider } = useParams(); // Extract 'provider' from the dynamic route
+  const router = useRouter();
 
   useEffect(() => {
     const accessToken = searchParams.get("access_token");
@@ -34,17 +35,18 @@ const LoginRedirect = () => {
           // Redirect to a different page after successful login
           window.location.href = "/";
         } else {
-          setText(res.error.message);
+          showToast("error", res.error.message);
+          router.push('/login');
         }
       };
 
       login();
     } else {
-      setText("No access token found in the URL or provider is missing.");
+      showToast("error", "No access token found in the URL or provider is missing.");
     }
   }, [searchParams, provider]);
 
-  return <p className="text-white">{text}</p>;
+  return <></>;
 };
 
 export default LoginRedirect;

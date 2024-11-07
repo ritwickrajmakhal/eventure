@@ -28,7 +28,7 @@ const page = async () => {
         <div
           className="before:content-[''] before:absolute before:top-0 before:w-full before:h-screen before:bg-[rgba(0,0,0,0.6)] w-full h-screen fixed top-0 -z-50 bg-cover"
           style={{
-            backgroundImage: `url(${process.env.NEXT_PUBLIC_API_URL || ''}${background.data.attributes.url})`,
+            backgroundImage: `url(${process.env.NEXT_PUBLIC_API_URL || ''}${background.data?.attributes.url})`,
           }}
         ></div>
       </section>

@@ -9,7 +9,7 @@ const page = async () => {
   return (
     <div className="flex justify-center items-center gap-5 flex-wrap">
       {venue.map((venue, index) => {
-        const { thumbnail, name, description, street_address, slug } = venue.attributes;
+        const { thumbnail, name, description, map: {address}, slug } = venue.attributes;
 
         return (
           <Card3
@@ -19,7 +19,7 @@ const page = async () => {
             }`}
             name={name}
             description={description}
-            street_address={street_address}
+            street_address={address}
             slug={slug}
           />
         );

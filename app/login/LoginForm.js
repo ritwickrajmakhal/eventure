@@ -4,6 +4,7 @@ import { useState } from "react";
 import request from "@/lib/request";
 import Cookies from "js-cookie";
 import showToast from "@/lib/toast";
+import Logo from "@/components/Logo";
 
 
 const LoginForm = ({ providers }) => {
@@ -38,20 +39,7 @@ const LoginForm = ({ providers }) => {
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
-      <Image
-        className="mx-auto hidden dark:block"
-        src="/rectangular_logo.png"
-        height={0}
-        width={150}
-        alt="Website logo"
-      />
-      <Image
-        className="mx-auto block dark:hidden"
-        src="/rectangular_logo_light.png"
-        height={0}
-        width={150}
-        alt="Website logo"
-      />
+      <Logo />
       <div>
         <label
           htmlFor="email"

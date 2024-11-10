@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState, useCallback } from "react";
 import request from "@/lib/request";
 import showToast from "@/lib/toast";
 import { useRouter } from "next/navigation";
+import Logo from "@/components/Logo";
 
 export function SignupForm() {
   const [formData, setFormData] = useState({
@@ -98,21 +98,7 @@ export function SignupForm() {
   return (
     <div className="space-y-4 md:space-y-6">
       <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-        <Image
-          className="mx-auto hidden dark:block"
-          src="/rectangular_logo.png"
-          height={0}
-          width={150}
-          alt="Website logo"
-        />
-        <Image
-          className="mx-auto block dark:hidden"
-          src="/rectangular_logo_light.png"
-          height={0}
-          width={150}
-          alt="Website logo"
-        />
-
+        <Logo />
         <div>
           <label
             htmlFor="name"

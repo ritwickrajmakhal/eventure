@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import LoginForm from "./LoginForm";
 import { SignupForm } from "./SignupForm";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
-
+import ResetPasswordForm from "./ResetPasswordForm";
 // The main component with both login logic and suspense boundary
 export default function Login() {
   const providers = ["github", "google"];
@@ -30,12 +30,13 @@ export default function Login() {
 function LoginContent({ providers }) {
   const searchParams = useSearchParams(); // CSR method wrapped in Suspense boundary
   const view = searchParams.get("view") || "login";
-
+  const code = searchParams.get("code")
   return (
     <>
       {view === "login" && <LoginForm providers={providers} />}
       {view === "signup" && <SignupForm />}
       {view === "forgot" && <ForgotPasswordForm />}
+      {view === "reset" && <ResetPasswordForm code={code}/>}
     </>
   );
 }

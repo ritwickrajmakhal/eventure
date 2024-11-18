@@ -80,6 +80,7 @@ To get a local copy of this project up and running, follow these simple steps:
    API_URL=http://localhost:1337
    NEXT_PUBLIC_BACKEND_URL=http://localhost:1337
    NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
+   GOOGLE_MAPS_API_KEY=your_google_maps_api_key
    ```
 
    - Replace `your_chatbot_api_key_from_azure_bot_service`, `your_gemini_api_key`, and other values with the appropriate credentials for your services.
@@ -103,6 +104,7 @@ To get a local copy of this project up and running, follow these simple steps:
 | API_URL                        | URL for the Strapi API                                         |
 | NEXT_PUBLIC_BACKEND_URL        | URL for the Strapi backend                                     |
 | NEXT_PUBLIC_GEMINI_API_KEY     | API key for the Google Gemini API                              |
+| GOOGLE_MAPS_API_KEY            | API key for the Google Maps API                                |
 
 Make sure that your `.env.local` file is never pushed to version control, as it contains sensitive information.
 

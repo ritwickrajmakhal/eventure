@@ -1,0 +1,64 @@
+{
+  "kind": "singleType",
+  "collectionName": "abouts",
+  "info": {
+    "singularName": "about",
+    "pluralName": "abouts",
+    "displayName": "About",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": false
+    },
+    "description": {
+      "type": "text"
+    },
+    "members": {
+      "displayName": "member",
+      "type": "component",
+      "repeatable": true,
+      "component": "components.member"
+    },
+    "our_story": {
+      "type": "text"
+    },
+    "get_to_know_us": {
+      "type": "text"
+    },
+    "event_showcases": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::event-template.event-template"
+    },
+    "background": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "social_links": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.link"
+    },
+    "map": {
+      "type": "customField",
+      "customField": "plugin::google-maps.location-picker"
+    },
+    "mobile": {
+      "type": "string",
+      "unique": false
+    },
+    "email": {
+      "type": "email"
+    }
+  }
+}

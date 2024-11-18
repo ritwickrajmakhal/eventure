@@ -1,0 +1,69 @@
+{
+  "kind": "collectionType",
+  "collectionName": "events",
+  "info": {
+    "singularName": "event",
+    "pluralName": "events",
+    "displayName": "Event",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "venue": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::venue.venue",
+      "inversedBy": "event"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "events"
+    },
+    "audiences": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::audience.audience",
+      "inversedBy": "events"
+    },
+    "schedules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::schedule.schedule"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Ongoing",
+        "Completed",
+        "Waiting for approval",
+        "Approved",
+        "Rejected"
+      ],
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "required": true
+    },
+    "services": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::service.service"
+    },
+    "timeline": {
+      "type": "json"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_components_amenities",
+  "info": {
+    "displayName": "Amenity",
+    "description": "",
+    "icon": "check"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

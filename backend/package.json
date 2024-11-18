@@ -1,0 +1,42 @@
+{
+  "name": "eventure-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Strapi application",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi",
+    "deploy": "strapi deploy"
+  },
+  "dependencies": {
+    "@amicaldo/strapi-google-maps": "^1.1.5",
+    "@strapi/plugin-cloud": "4.25.15",
+    "@strapi/plugin-i18n": "4.25.15",
+    "@strapi/plugin-users-permissions": "4.25.15",
+    "@strapi/strapi": "4.25.15",
+    "better-sqlite3": "8.6.0",
+    "pg": "^8.12.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "5.3.4",
+    "strapi-plugin-email-designer": "^2.2.1",
+    "strapi-plugin-import-export-entries": "^1.23.1",
+    "strapi-plugin-react-icons": "^0.3.1",
+    "strapi-provider-email-azure": "^1.0.3",
+    "strapi-provider-upload-azure-storage": "^3.4.0",
+    "styled-components": "5.3.3"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "strapi": {
+    "uuid": "e1d48b94-98a2-4840-b2ae-032fecc4aec1"
+  },
+  "engines": {
+    "node": "20.x",
+    "npm": ">=10.0.0"
+  },
+  "license": "MIT"
+}

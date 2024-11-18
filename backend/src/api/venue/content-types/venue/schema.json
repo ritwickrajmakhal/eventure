@@ -1,0 +1,73 @@
+{
+  "kind": "collectionType",
+  "collectionName": "venues",
+  "info": {
+    "singularName": "venue",
+    "pluralName": "venues",
+    "displayName": "Venue",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "media": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "videos"
+      ]
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "description": {
+      "type": "text"
+    },
+    "event": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event",
+      "mappedBy": "venue"
+    },
+    "slug": {
+      "type": "uid",
+      "required": true
+    },
+    "category": {
+      "type": "string"
+    },
+    "area": {
+      "type": "integer"
+    },
+    "capacity": {
+      "type": "integer",
+      "required": true
+    },
+    "bookingCost": {
+      "type": "integer"
+    },
+    "amenities": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.amenities"
+    },
+    "map": {
+      "type": "customField",
+      "required": true,
+      "customField": "plugin::google-maps.location-picker"
+    }
+  }
+}

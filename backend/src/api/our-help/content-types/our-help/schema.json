@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "our_helps",
+  "info": {
+    "singularName": "our-help",
+    "pluralName": "our-helps",
+    "displayName": "our-help",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "event_templates": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::event-template.event-template",
+      "inversedBy": "our_helps"
+    }
+  }
+}

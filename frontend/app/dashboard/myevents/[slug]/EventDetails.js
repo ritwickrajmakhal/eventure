@@ -1,7 +1,8 @@
 import { Card, Badge, Timeline, Button } from 'flowbite-react';
+import Link from 'next/link';
 import { HiCalendar } from 'react-icons/hi';
 
-const EventDetails = ({ eventData }) => {
+const EventDetails = ({ eventData, handleSendInvitation }) => {
   const { name, description, status, venue, schedules, services, audiences } = eventData.attributes;
   const venueDetails = venue.data.attributes;
   const scheduleDetails = schedules.data;
@@ -13,12 +14,8 @@ const EventDetails = ({ eventData }) => {
     alert("Event canceled!");
   };
 
-  const handleSendInvitation = () => {
-    alert("Invitations sent!");
-  };
-
   return (
-    <div className="container mx-auto my-10 p-6 bg-white dark:bg-gray-800 dark:text-gray-300 rounded-lg shadow-md">
+    <div className="container mx-auto p-6 bg-white dark:bg-gray-800 dark:text-gray-300 rounded-lg shadow-md">
       {/* Event Overview */}
       <Card className="mb-6 dark:bg-gray-900 dark:border-gray-700">
         <h2 className="text-2xl font-bold text-center mb-4 dark:text-white">{name}</h2>
@@ -113,12 +110,11 @@ const EventDetails = ({ eventData }) => {
         >
           Cancel Event
         </Button>
+        {/* <Link href={`/dashboard/myevents/${slug}/Invitation`}> */}
         <Button
           color="success"
           onClick={handleSendInvitation}
-          className="dark:bg-green-700 dark:hover:bg-green-800"
-        >
-          Send Invitation
+          className="dark:bg-green-700 dark:hover:bg-green-800">Send Invitation
         </Button>
       </div>
     </div>

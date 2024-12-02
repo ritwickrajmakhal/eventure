@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_components_testimonials",
+  "info": {
+    "displayName": "Testimonial",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "quote": {
+      "type": "text",
+      "required": true
+    },
+    "author": {
+      "type": "string",
+      "required": true
+    },
+    "position": {
+      "type": "string",
+      "required": true
+    },
+    "rating": {
+      "type": "enumeration",
+      "enum": [
+        "One star",
+        "Two stars",
+        "Three stars",
+        "Four stars",
+        "Five stars"
+      ],
+      "required": true
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}

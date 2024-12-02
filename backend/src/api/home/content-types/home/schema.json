@@ -25,6 +25,22 @@
       "type": "component",
       "repeatable": true,
       "component": "components.card"
+    },
+    "testimonials": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.testimonial",
+      "required": false
+    },
+    "howitworks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.card"
+    },
+    "supports": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.card"
     }
   }
 }

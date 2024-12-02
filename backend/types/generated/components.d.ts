@@ -1,20 +1,47 @@
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Attribute, Schema } from '@strapi/strapi';
 
-export interface ComponentsPlan extends Schema.Component {
-  collectionName: 'components_components_plans';
+export interface ComponentsAmenities extends Schema.Component {
+  collectionName: 'components_components_amenities';
   info: {
-    displayName: 'Plan';
     description: '';
-    icon: 'book';
+    displayName: 'Amenity';
+    icon: 'check';
   };
   attributes: {
-    type: Attribute.Enumeration<['Basic', 'Standard', 'Premium']> &
-      Attribute.Required;
-    services: Attribute.Relation<
-      'components.plan',
-      'oneToMany',
-      'api::service.service'
+    title: Attribute.String & Attribute.Required;
+  };
+}
+
+export interface ComponentsCard extends Schema.Component {
+  collectionName: 'components_components_cards';
+  info: {
+    description: '';
+    displayName: 'Card';
+    icon: 'cube';
+  };
+  attributes: {
+    description: Attribute.Text;
+    heading: Attribute.String & Attribute.Required;
+    icon: Attribute.String & Attribute.CustomField<'plugin::react-icons.icon'>;
+    link: Attribute.Component<'components.link'>;
+  };
+}
+
+export interface ComponentsLink extends Schema.Component {
+  collectionName: 'components_components_links';
+  info: {
+    description: '';
+    displayName: 'Link';
+    icon: 'attachment';
+  };
+  attributes: {
+    category: Attribute.Enumeration<
+      ['Company', 'Help center', 'Legal', 'Download', 'Social media']
     >;
+    icon: Attribute.String & Attribute.CustomField<'plugin::react-icons.icon'>;
+    isExternal: Attribute.Boolean;
+    text: Attribute.String & Attribute.Required;
+    url: Attribute.String & Attribute.Required;
   };
 }
 
@@ -25,64 +52,57 @@ export interface ComponentsMember extends Schema.Component {
     icon: 'user';
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
-    description: Attribute.Text;
     avatar: Attribute.Media<'images'> & Attribute.Required;
-  };
-}
-
-export interface ComponentsLink extends Schema.Component {
-  collectionName: 'components_components_links';
-  info: {
-    displayName: 'Link';
-    icon: 'attachment';
-    description: '';
-  };
-  attributes: {
-    text: Attribute.String;
-    url: Attribute.String;
-    isExternal: Attribute.Boolean;
-    category: Attribute.Enumeration<
-      ['Company', 'Help center', 'Legal', 'Download', 'Social media']
-    >;
-    icon: Attribute.String & Attribute.CustomField<'plugin::react-icons.icon'>;
-  };
-}
-
-export interface ComponentsCard extends Schema.Component {
-  collectionName: 'components_components_cards';
-  info: {
-    displayName: 'Card';
-    icon: 'cube';
-    description: '';
-  };
-  attributes: {
-    heading: Attribute.String;
     description: Attribute.Text;
-    icon: Attribute.String & Attribute.CustomField<'plugin::react-icons.icon'>;
+    name: Attribute.String & Attribute.Required;
   };
 }
 
-export interface ComponentsAmenities extends Schema.Component {
-  collectionName: 'components_components_amenities';
+export interface ComponentsPlan extends Schema.Component {
+  collectionName: 'components_components_plans';
   info: {
-    displayName: 'Amenity';
     description: '';
-    icon: 'check';
+    displayName: 'Plan';
+    icon: 'book';
   };
   attributes: {
-    title: Attribute.String & Attribute.Required;
+    services: Attribute.Relation<
+      'components.plan',
+      'oneToMany',
+      'api::service.service'
+    >;
+    type: Attribute.Enumeration<['Basic', 'Standard', 'Premium']> &
+      Attribute.Required;
+  };
+}
+
+export interface ComponentsTestimonial extends Schema.Component {
+  collectionName: 'components_components_testimonials';
+  info: {
+    description: '';
+    displayName: 'Testimonial';
+  };
+  attributes: {
+    author: Attribute.String & Attribute.Required;
+    avatar: Attribute.Media<'images'>;
+    position: Attribute.String & Attribute.Required;
+    quote: Attribute.Text & Attribute.Required;
+    rating: Attribute.Enumeration<
+      ['One star', 'Two stars', 'Three stars', 'Four stars', 'Five stars']
+    > &
+      Attribute.Required;
   };
 }
 
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
-      'components.plan': ComponentsPlan;
-      'components.member': ComponentsMember;
-      'components.link': ComponentsLink;
-      'components.card': ComponentsCard;
       'components.amenities': ComponentsAmenities;
+      'components.card': ComponentsCard;
+      'components.link': ComponentsLink;
+      'components.member': ComponentsMember;
+      'components.plan': ComponentsPlan;
+      'components.testimonial': ComponentsTestimonial;
     }
   }
 }

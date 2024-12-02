@@ -1,10 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import request from "@/lib/request";
+import TestimonialSection from "@/components/TestimonialSection";
+import HowItWorksSection from "@/components/HowItWorksSection";
+import Support from "@/components/Support";
 
 async function page() {
-  const res = await request("/api/home?populate=features");
-  const { heading, description, features, website_name } = res.data.attributes;
+  const res = await request("/api/home?populate=features,testimonials.avatar,howitworks,supports.link");
+  const { heading, description, features, website_name, testimonials, howitworks, supports } = res.data.attributes;
   return (
     <>
       <div className="dark:text-white">
@@ -36,8 +39,7 @@ async function page() {
         </div>
 
         {/* Key features section */}
-        <div className="flex flex-col items-center justify-center md:gap-10 ">
-          <p className="bg-white h-[1.5px] opacity-10 w-3/4 md:m-10 m-5"></p>
+        <div className="flex flex-col items-center justify-center md:gap-10 py-12">
 
           <div className="flex md:flex-row flex-col items-center gap-5 md:gap-10">
             {features.slice(0, 2).map((feature, index) => (
@@ -58,9 +60,11 @@ async function page() {
               />
             ))}
           </div>
-          <p className="bg-white h-[1.5px] opacity-10 w-3/4 md:m-10 m-5"></p>
         </div>
         {/* Feature section end here */}
+        <HowItWorksSection howitworks={howitworks} />
+        <TestimonialSection testimonials={testimonials} />
+        <Support supports={supports} />
       </div>
     </>
   );

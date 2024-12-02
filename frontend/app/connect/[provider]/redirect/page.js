@@ -44,7 +44,7 @@ const LoginRedirect = () => {
     } else {
       showToast("error", "No access token found in the URL or provider is missing.");
     }
-  }, [searchParams, provider]);
+  }, [searchParams, provider, router]);
 
   return <></>;
 };

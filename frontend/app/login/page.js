@@ -15,7 +15,7 @@ export default function Login() {
   // Check if user is already logged in
   useEffect(() => {
     if (userCookie) router.push("/");
-  }, [userCookie]);
+  }, [userCookie, router]);
 
   return (
     <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 mx-auto my-20">

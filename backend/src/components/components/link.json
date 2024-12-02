@@ -8,13 +8,16 @@
   "options": {},
   "attributes": {
     "text": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "url": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "isExternal": {
-      "type": "boolean"
+      "type": "boolean",
+      "required": false
     },
     "category": {
       "type": "enumeration",

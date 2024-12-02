@@ -9,14 +9,20 @@
   "attributes": {
     "heading": {
       "type": "string",
-      "required": false
+      "required": true
     },
     "description": {
-      "type": "text"
+      "type": "text",
+      "required": false
     },
     "icon": {
       "type": "customField",
       "customField": "plugin::react-icons.icon"
+    },
+    "link": {
+      "type": "component",
+      "repeatable": false,
+      "component": "components.link"
     }
   }
 }

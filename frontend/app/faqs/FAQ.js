@@ -55,8 +55,6 @@ export default function FAQ({ faqs_page }) {
         </p>
         <Button as={Link} target={'_blank' && faqs_page.contact_btn.isExternal} href={faqs_page.contact_btn.url} className='mt-6' pill>{faqs_page.contact_btn.text}</Button>
       </div>
-
-      {/* Background Decorations */}
     </div>
   );
 }

@@ -86,7 +86,7 @@ const Page = () => {
 
   return (
     <>
-      <h1 className="text-5xl font-extrabold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-br from-indigo-500 to-red-500">
+      <h1 className="text-5xl font-extrabold text-center my-5 bg-clip-text text-transparent bg-gradient-to-br from-indigo-500 to-red-500">
         Explore <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-red-400">Venues</span>
       </h1>
 

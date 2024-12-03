@@ -53,7 +53,7 @@ export default function FAQ({ faqs_page }) {
         <p className="text-lg">
           {faqs_page?.footer_text}
         </p>
-        <Button as={Link} href={faqs_page.contact_btn.url} className='mt-6' pill>{faqs_page.contact_btn.text}</Button>
+        <Button as={Link} target={'_blank' && faqs_page.contact_btn.isExternal} href={faqs_page.contact_btn.url} className='mt-6' pill>{faqs_page.contact_btn.text}</Button>
       </div>
 
       {/* Background Decorations */}

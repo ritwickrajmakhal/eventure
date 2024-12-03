@@ -1,0 +1,39 @@
+{
+  "kind": "singleType",
+  "collectionName": "fa_qs_pages",
+  "info": {
+    "singularName": "fa-qs-page",
+    "pluralName": "fa-qs-pages",
+    "displayName": "FAQs Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "questions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.question",
+      "required": true
+    },
+    "footer_text": {
+      "type": "string"
+    },
+    "contact_btn": {
+      "type": "component",
+      "repeatable": false,
+      "component": "components.link",
+      "required": true
+    }
+  }
+}

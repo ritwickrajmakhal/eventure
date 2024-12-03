@@ -76,6 +76,18 @@ export interface ComponentsPlan extends Schema.Component {
   };
 }
 
+export interface ComponentsQuestion extends Schema.Component {
+  collectionName: 'components_components_questions';
+  info: {
+    displayName: 'Question';
+    icon: 'question';
+  };
+  attributes: {
+    answer: Attribute.Blocks & Attribute.Required;
+    question: Attribute.String & Attribute.Required;
+  };
+}
+
 export interface ComponentsTestimonial extends Schema.Component {
   collectionName: 'components_components_testimonials';
   info: {
@@ -102,6 +114,7 @@ declare module '@strapi/types' {
       'components.link': ComponentsLink;
       'components.member': ComponentsMember;
       'components.plan': ComponentsPlan;
+      'components.question': ComponentsQuestion;
       'components.testimonial': ComponentsTestimonial;
     }
   }

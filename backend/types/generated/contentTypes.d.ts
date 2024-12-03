@@ -700,6 +700,42 @@ export interface ApiEventEvent extends Schema.CollectionType {
   };
 }
 
+export interface ApiFaQsPageFaQsPage extends Schema.SingleType {
+  collectionName: 'fa_qs_pages';
+  info: {
+    description: '';
+    displayName: 'FAQs Page';
+    pluralName: 'fa-qs-pages';
+    singularName: 'fa-qs-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    contact_btn: Attribute.Component<'components.link'> & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::fa-qs-page.fa-qs-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    description: Attribute.Text & Attribute.Required;
+    footer_text: Attribute.String;
+    heading: Attribute.String & Attribute.Required;
+    publishedAt: Attribute.DateTime;
+    questions: Attribute.Component<'components.question', true> &
+      Attribute.Required;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::fa-qs-page.fa-qs-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiFooterFooter extends Schema.SingleType {
   collectionName: 'footers';
   info: {
@@ -1638,6 +1674,7 @@ declare module '@strapi/types' {
       'api::customer-review.customer-review': ApiCustomerReviewCustomerReview;
       'api::event-template.event-template': ApiEventTemplateEventTemplate;
       'api::event.event': ApiEventEvent;
+      'api::fa-qs-page.fa-qs-page': ApiFaQsPageFaQsPage;
       'api::footer.footer': ApiFooterFooter;
       'api::home.home': ApiHomeHome;
       'api::navbar.navbar': ApiNavbarNavbar;

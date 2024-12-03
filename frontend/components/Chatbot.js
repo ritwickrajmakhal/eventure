@@ -23,7 +23,7 @@ const Chatbot = () => {
         // Ensure WebChat is loaded before using it
         if (window.WebChat) {
           // Style customization for the chatbot
-          const styleSet = window.WebChat.createStyleSet({
+          const styleOptions = {
             width: "100%",
             bubbleBackground: "blue",
             bubbleFromUserBackground: "green",
@@ -38,7 +38,7 @@ const Chatbot = () => {
             hideUploadButton: true,
             botAvatarImage: "/chatbot.png",
             botAvatarInitials: "EB",
-          });
+          };
 
           // Render the chatbot
           window.WebChat.renderWebChat(
@@ -46,7 +46,7 @@ const Chatbot = () => {
               directLine: window.WebChat.createDirectLine({
                 token: process.env.NEXT_PUBLIC_CHATBOT_SECRET_KEY,
               }),
-              styleSet,
+              styleOptions,
             },
             document.getElementById("webchat")
           );
@@ -92,7 +92,7 @@ const Chatbot = () => {
         id="chatBox"
         style={{
           height: "70vh",
-          width: "350px",
+          width: "400px",
           background: "linear-gradient(135deg, #5B86E5, #36D1DC)", // Softer gradient
           borderRadius: "20px", // Smooth border
           boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.15)", // Deeper shadow

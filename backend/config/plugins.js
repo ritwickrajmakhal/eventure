@@ -1,7 +1,6 @@
 module.exports = ({ env }) => {
   const enableUpload = env("ENABLE_UPLOAD_FROM_AZURE", "false") === "true"; // Check if upload is enabled through an environment variable
-  const enableEmail = env("ENABLE_EMAIL_FROM_AZURE", "false") === "true"; // Check if upload is enabled through an environment variable
-
+  
   return {
     "users-permissions": {
       config: {
@@ -35,19 +34,24 @@ module.exports = ({ env }) => {
         },
       },
     }),
-    ...(enableEmail && {
-      email: {
-        config: {
-          provider: "strapi-provider-email-azure",
-          providerOptions: {
-            endpoint: env("AZURE_ENDPOINT"),
+    email: {
+      config: {
+        provider: 'nodemailer',
+        providerOptions: {
+          host: env('SMTP_HOST', 'smtp.example.com'),
+          port: env('SMTP_PORT', 587),
+          auth: {
+            user: env('SMTP_USERNAME'),
+            pass: env('SMTP_PASSWORD'),
           },
-          settings: {
-            defaultFrom: env("FALLBACK_EMAIL"),
-          },
+          // ... any custom nodemailer options
+        },
+        settings: {
+          defaultFrom: env('SMTP_FROM', 'hello@example.com'),
+          defaultReplyTo: env('SMTP_REPLY_TO', 'hello@example.com')
         },
       },
-    }),
+    },
     "react-icons": true,
     'import-export-entries': {
       enabled: true,

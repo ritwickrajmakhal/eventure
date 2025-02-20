@@ -12,10 +12,11 @@
   },
   "dependencies": {
     "@amicaldo/strapi-google-maps": "^1.1.5",
-    "@strapi/plugin-cloud": "4.25.17",
-    "@strapi/plugin-i18n": "4.25.17",
-    "@strapi/plugin-users-permissions": "4.25.17",
-    "@strapi/strapi": "4.25.17",
+    "@strapi/plugin-cloud": "4.25.20",
+    "@strapi/plugin-i18n": "4.25.20",
+    "@strapi/plugin-users-permissions": "4.25.20",
+    "@strapi/provider-email-nodemailer": "^5.10.3",
+    "@strapi/strapi": "4.25.20",
     "better-sqlite3": "8.6.0",
     "pg": "^8.12.0",
     "react": "^18.0.0",
@@ -24,7 +25,6 @@
     "strapi-plugin-email-designer": "^2.2.1",
     "strapi-plugin-import-export-entries": "^1.23.1",
     "strapi-plugin-react-icons": "^0.3.1",
-    "strapi-provider-email-azure": "^1.0.3",
     "strapi-provider-upload-azure-storage": "^3.4.0",
     "styled-components": "5.3.3"
   },
@@ -36,7 +36,7 @@
   },
   "engines": {
     "node": "20.x",
-    "npm": ">=10.0.0"
+    "npm": "10.x"
   },
   "license": "MIT"
 }

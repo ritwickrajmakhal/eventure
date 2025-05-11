@@ -1,0 +1,2 @@
+C:/Home/eventure/event_scanner/android/app/.cxx/Debug/6j1d1n6a/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Home/eventure/event_scanner/android/app/.cxx/Debug/6j1d1n6a/armeabi-v7a/CMakeFiles/rebuild_cache.dir

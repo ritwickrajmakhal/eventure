@@ -97,7 +97,7 @@ const CreateEventContent = ({ router, session }) => {
       return false;
     }
 
-    if(formData.services.length === 0){
+    if (formData.services.length === 0) {
       showToast("error", "Please select at least one service");
       return false;
     }
@@ -137,13 +137,13 @@ const CreateEventContent = ({ router, session }) => {
           user: session.id,
           name: formData.name,
           description: formData.description,
-          audiences: formData.audiences.map(audience => audience.id),
+          audience: formData.audiences.flatMap(audience => audience.attributes.details),
           venue: formData.venue.id,
           schedules: formData.schedules.map(schedule => schedule.id),
           services: formData.services.map(service => service.id),
           status: "Waiting for approval",
         }
-      };
+      };     
 
       // Send event creation request
       const response = await request("/api/events", {

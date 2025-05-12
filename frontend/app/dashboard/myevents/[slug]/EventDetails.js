@@ -2,12 +2,24 @@ import { Card, Badge, Timeline, Button } from 'flowbite-react';
 import Link from 'next/link';
 import { HiCalendar } from 'react-icons/hi';
 
+// Helper function to get field value regardless of case
+const getFieldValueCaseInsensitive = (obj, fieldName) => {
+  if (!obj) return '';
+
+  // Find the actual field key that matches the desired field name (case-insensitive)
+  const actualKey = Object.keys(obj).find(
+    key => key.toLowerCase() === fieldName.toLowerCase()
+  );
+
+  // Return the value if found, otherwise return empty string
+  return actualKey ? obj[actualKey] : '';
+};
+
 const EventDetails = ({ eventData, handleSendInvitation }) => {
-  const { name, description, status, venue, schedules, services, audiences } = eventData.attributes;
+  const { name, description, status, venue, schedules, services, audience } = eventData.attributes;
   const venueDetails = venue.data.attributes;
   const scheduleDetails = schedules.data;
   const serviceDetails = services.data;
-  const audienceDetails = audiences.data[0].attributes.details;
 
   // Function stubs for buttons (you can integrate actual functionality)
   const handleCancelEvent = () => {
@@ -82,18 +94,14 @@ const EventDetails = ({ eventData, handleSendInvitation }) => {
             <thead className="bg-gray-100 dark:bg-gray-700 dark:text-white">
               <tr>
                 <th className="p-2">Name</th>
-                <th className="p-2">City</th>
-                <th className="p-2">Occupation</th>
                 <th className="p-2">Email</th>
               </tr>
             </thead>
             <tbody>
-              {audienceDetails.map((audience, index) => (
+              {audience.map((participant, index) => (
                 <tr key={index} className="border-t dark:border-gray-700">
-                  <td className="p-2">{audience.name}</td>
-                  <td className="p-2">{audience.city}</td>
-                  <td className="p-2">{audience.occupation}</td>
-                  <td className="p-2">{audience.email}</td>
+                  <td className="p-2">{getFieldValueCaseInsensitive(participant, 'name')}</td>
+                  <td className="p-2">{getFieldValueCaseInsensitive(participant, 'email')}</td>
                 </tr>
               ))}
             </tbody>
@@ -114,7 +122,8 @@ const EventDetails = ({ eventData, handleSendInvitation }) => {
         <Button
           color="success"
           onClick={handleSendInvitation}
-          className="dark:bg-green-700 dark:hover:bg-green-800">Send Invitation
+          disabled={hasSentInvitation}
+          className="dark:bg-green-700 dark:hover:bg-green-800">{hasSentInvitation ? "Invitation Sent" : "Send Invitation"}
         </Button>
       </div>
     </div>

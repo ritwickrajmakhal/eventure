@@ -429,11 +429,6 @@ export interface ApiAudienceAudience extends Schema.CollectionType {
       Attribute.Private;
     desc: Attribute.Text;
     details: Attribute.JSON;
-    events: Attribute.Relation<
-      'api::audience.audience',
-      'manyToMany',
-      'api::event.event'
-    >;
     name: Attribute.String & Attribute.Required;
     publishedAt: Attribute.DateTime;
     slug: Attribute.UID & Attribute.Required;
@@ -649,11 +644,7 @@ export interface ApiEventEvent extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    audiences: Attribute.Relation<
-      'api::event.event',
-      'manyToMany',
-      'api::audience.audience'
-    >;
+    audience: Attribute.JSON & Attribute.Required;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::event.event',

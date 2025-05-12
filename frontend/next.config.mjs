@@ -19,7 +19,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "sharedstorageritwick.blob.core.windows.net",
+        hostname: "ritwickrajmakhal.blob.core.windows.net",
         port: "",
       },
     ],

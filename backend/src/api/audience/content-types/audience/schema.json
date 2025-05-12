@@ -32,12 +32,6 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "audiences"
-    },
-    "events": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::event.event",
-      "mappedBy": "audiences"
     }
   }
 }

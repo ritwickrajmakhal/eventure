@@ -4,8 +4,6 @@ import Link from "next/link";
 import Card2 from "@/components/Card2";
 import { MdOutlinePhone, MdOutlineLocationOn, MdOutlineMail } from "react-icons/md";
 import { BiLike } from "react-icons/bi";
-import { FaFacebook, FaGithub } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 import dynamic from "next/dynamic";
 import { DynamicIcon } from "@/components/DynamicIcon";
 

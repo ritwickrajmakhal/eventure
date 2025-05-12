@@ -31,12 +31,6 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "events"
     },
-    "audiences": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::audience.audience",
-      "inversedBy": "events"
-    },
     "schedules": {
       "type": "relation",
       "relation": "oneToMany",
@@ -64,6 +58,10 @@
     },
     "timeline": {
       "type": "json"
+    },
+    "audience": {
+      "type": "json",
+      "required": true
     }
   }
 }

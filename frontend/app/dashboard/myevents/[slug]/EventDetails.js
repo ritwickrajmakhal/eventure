@@ -122,8 +122,7 @@ const EventDetails = ({ eventData, handleSendInvitation }) => {
         <Button
           color="success"
           onClick={handleSendInvitation}
-          disabled={hasSentInvitation}
-          className="dark:bg-green-700 dark:hover:bg-green-800">{hasSentInvitation ? "Invitation Sent" : "Send Invitation"}
+          className="dark:bg-green-700 dark:hover:bg-green-800">Send Invitation
         </Button>
       </div>
     </div>

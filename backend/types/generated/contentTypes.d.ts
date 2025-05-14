@@ -655,6 +655,11 @@ export interface ApiEventEvent extends Schema.CollectionType {
     description: Attribute.Text;
     name: Attribute.String & Attribute.Required;
     publishedAt: Attribute.DateTime;
+    scanners: Attribute.Relation<
+      'api::event.event',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
     schedules: Attribute.Relation<
       'api::event.event',
       'oneToMany',

@@ -1,6 +1,6 @@
+import 'package:event_scanner/screens/event_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:event_scanner/services/auth_service.dart';
-import 'package:event_scanner/screens/scan.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -26,13 +26,12 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isAuthenticating = true;
       });
-
       final result = await _authService.login(_enteredEmail, _enteredPassword);
       print(result);
       if (result['success']) {
-        // Navigate to scan screen on successful login
+        // Navigate to event selection screen on successful login
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (ctx) => const ScanScreen()),
+          MaterialPageRoute(builder: (ctx) => const EventSelectionScreen()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

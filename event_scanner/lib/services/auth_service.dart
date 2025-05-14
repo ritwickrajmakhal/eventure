@@ -19,7 +19,6 @@ class AuthService {
         },
       );
       if (response.statusCode == 200) {
-        print(response.data);
         final token = response.data['jwt'];
         final user = response.data['user'];
 

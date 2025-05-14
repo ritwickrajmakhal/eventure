@@ -1,6 +1,6 @@
 import 'package:event_scanner/screens/auth.dart';
-import 'package:event_scanner/screens/scan.dart';
 import 'package:event_scanner/screens/splash.dart';
+import 'package:event_scanner/screens/event_selection.dart';
 import 'package:event_scanner/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -33,7 +33,7 @@ class _AppState extends State<App> {
 
     setState(() {
       if (isLoggedIn) {
-        _currentScreen = const ScanScreen();
+        _currentScreen = const EventSelectionScreen();
       } else {
         _currentScreen = const AuthScreen();
       }

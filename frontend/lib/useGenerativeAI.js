@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+const model = process.env.NEXT_PUBLIC_GEMINI_MODEL;
 
 export const useGenerativeAI = () => {
   const [response, setResponse] = useState('');
@@ -14,8 +15,8 @@ export const useGenerativeAI = () => {
 
     const genAI = new GoogleGenerativeAI(apiKey);
 
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+    const generativeModel = genAI.getGenerativeModel({
+      model: model,
       systemInstruction: 'Response length: 15-25 words',
     });
 

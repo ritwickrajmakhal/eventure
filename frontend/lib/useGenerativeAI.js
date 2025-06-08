@@ -15,7 +15,7 @@ export const useGenerativeAI = () => {
 
     const genAI = new GoogleGenerativeAI(apiKey);
 
-    const model = genAI.getGenerativeModel({
+    const generativeModel = genAI.getGenerativeModel({
       model: model,
       systemInstruction: 'Response length: 15-25 words',
     });

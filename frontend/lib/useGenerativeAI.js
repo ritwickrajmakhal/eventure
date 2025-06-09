@@ -29,7 +29,7 @@ export const useGenerativeAI = () => {
     };
 
     try {
-      const chatSession = model.startChat({
+      const chatSession = generativeModel.startChat({
         generationConfig,
         history: [
           {

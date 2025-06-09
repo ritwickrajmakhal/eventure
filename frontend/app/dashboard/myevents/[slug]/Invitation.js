@@ -46,7 +46,7 @@ const Invitation = ({ eventData, handleBackInvitation }) => {
         method: "POST",
         body: formData,
       });
-      if(res.error) {
+      if (res.error) {
         showToast('error', res.error.message || 'Failed to send invitation');
       }
       else {
@@ -248,6 +248,14 @@ const Invitation = ({ eventData, handleBackInvitation }) => {
                       minute: "2-digit",
                       hour12: true,
                     });
+                    const endDate = new Date(schedule.attributes.end).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    });
 
                     return (
                       <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={schedule.id}>
@@ -255,7 +263,7 @@ const Invitation = ({ eventData, handleBackInvitation }) => {
                           {schedule.attributes.title}
                         </Table.Cell>
                         <Table.Cell>{startDate}</Table.Cell>
-                        <Table.Cell>{startDate}</Table.Cell>
+                        <Table.Cell>{endDate}</Table.Cell>
                       </Table.Row>
                     );
                   })}

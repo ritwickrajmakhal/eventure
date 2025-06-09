@@ -37,9 +37,10 @@ const EventPage = ({ params }) => {
         <EventDetails
           eventData={event}
           handleSendInvitation={() => setView("invitation")}
+          session={session}
         />
       )}
-      {view === "invitation" && <Invitation eventData={event} handleBackInvitation={()=>setView("event_details")}/>}
+      {view === "invitation" && <Invitation eventData={event} handleBackInvitation={() => setView("event_details")} />}
     </>
   );
 };

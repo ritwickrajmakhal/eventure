@@ -1,6 +1,9 @@
 import { Card, Badge, Timeline, Button } from 'flowbite-react';
-import Link from 'next/link';
+import { useState } from 'react';
 import { HiCalendar } from 'react-icons/hi';
+import request from '@/lib/request';
+import showToast from '@/lib/toast';
+import { useRouter } from 'next/navigation';
 
 // Helper function to get field value regardless of case
 const getFieldValueCaseInsensitive = (obj, fieldName) => {
@@ -15,15 +18,31 @@ const getFieldValueCaseInsensitive = (obj, fieldName) => {
   return actualKey ? obj[actualKey] : '';
 };
 
-const EventDetails = ({ eventData, handleSendInvitation }) => {
+const EventDetails = ({ eventData, handleSendInvitation, session }) => {
   const { name, description, status, venue, schedules, services, audience } = eventData.attributes;
   const venueDetails = venue.data.attributes;
   const scheduleDetails = schedules.data;
   const serviceDetails = services.data;
 
+  const [cancelling, setCancelling] = useState(false);
+  const router = useRouter();
+
   // Function stubs for buttons (you can integrate actual functionality)
-  const handleCancelEvent = () => {
-    alert("Event canceled!");
+  const handleCancelEvent = async () => {
+    setCancelling(true);
+    const res = await request(`/api/events/${eventData.id}`, {
+      method: 'PUT',
+      body: { data: { status: 'Cancelled' } },
+      headers: { Authorization: `Bearer ${session.jwt}`, },
+    });
+
+    if (res.data) {
+      showToast('success', 'Event cancelled successfully');
+      router.push('/dashboard/myevents');
+    } else {
+      showToast('error', res.error.message || 'Failed to cancel event');
+    }
+    setCancelling(false);
   };
 
   return (
@@ -113,14 +132,16 @@ const EventDetails = ({ eventData, handleSendInvitation }) => {
       <div className="flex justify-end space-x-4 mt-6">
         <Button
           color="failure"
+          disabled={cancelling || status === 'Cancelled' || status === 'Approved'}
           onClick={handleCancelEvent}
           className="dark:bg-red-700 dark:hover:bg-red-800"
         >
-          Cancel Event
+          {cancelling ? 'Cancelling...' : 'Cancel Event'}
         </Button>
         {/* <Link href={`/dashboard/myevents/${slug}/Invitation`}> */}
         <Button
           color="success"
+          disabled={status !== 'Approved'}
           onClick={handleSendInvitation}
           className="dark:bg-green-700 dark:hover:bg-green-800">Send Invitation
         </Button>

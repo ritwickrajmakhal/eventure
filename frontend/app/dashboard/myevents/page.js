@@ -42,7 +42,7 @@ const Events = () => {
           <EventTable events={filterEvents(["Ongoing", "Waiting for approval", "Approved"])} />
         </Tabs.Item>
         <Tabs.Item title="Past events">
-          <EventTable events={filterEvents(["Completed", "Rejected"])} />
+          <EventTable events={filterEvents(["Completed", "Rejected", "Cancelled"])} />
         </Tabs.Item>
       </Tabs>
     </div>

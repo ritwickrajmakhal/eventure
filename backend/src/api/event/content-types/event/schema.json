@@ -43,7 +43,8 @@
         "Completed",
         "Waiting for approval",
         "Approved",
-        "Rejected"
+        "Rejected",
+        "Cancelled"
       ],
       "required": true
     },
@@ -55,9 +56,6 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::service.service"
-    },
-    "timeline": {
-      "type": "json"
     },
     "audience": {
       "type": "json",

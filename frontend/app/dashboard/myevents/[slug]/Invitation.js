@@ -4,6 +4,7 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import { Table } from "flowbite-react";
 import request from "@/lib/request";
+import showToast from "@/lib/toast";
 
 const Invitation = ({ eventData, handleBackInvitation }) => {
   const [session, setSession] = useState(
@@ -45,10 +46,16 @@ const Invitation = ({ eventData, handleBackInvitation }) => {
         method: "POST",
         body: formData,
       });
+      if(res.error) {
+        showToast('error', res.error.message || 'Failed to send invitation');
+      }
+      else {
+        showToast('success', 'Invitation sent successfully');
+        handleBackInvitation();
+      }
       // You might want to add success handling here
     } catch (error) {
-      // Error handling
-      console.error("Error sending invitation:", error);
+      showToast('error', error.message || 'Failed to send invitation');
     } finally {
       setSending(false);
     }
@@ -58,7 +65,7 @@ const Invitation = ({ eventData, handleBackInvitation }) => {
   }
 
   // Now we safely access these variables after ensuring session exists
-  const { venue, schedules, audience } = eventData.attributes;
+  const { venue, schedules } = eventData.attributes;
   return (
     <>
       <div className="container mx-auto p-6 bg-white dark:bg-gray-800 dark:text-gray-300 rounded-lg shadow-md flex flex-row gap-6 justify-center flex-wrap">

@@ -100,22 +100,24 @@ module.exports = {
                   const endDate = new Date(schedule.attributes.end);
 
                   // Format dates (e.g., "May 12, 2025 at 6:30 PM")
-                  const formatted_start = startDate.toLocaleDateString('en-US', {
+                  const formatted_start = startDate.toLocaleDateString('en-IN', {
                     year: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     day: 'numeric',
                     hour: 'numeric',
                     minute: '2-digit',
-                    hour12: true
+                    hour12: true,
+                    timeZone: 'Asia/Kolkata',
                   });
 
-                  const formatted_end = endDate.toLocaleDateString('en-US', {
+                  const formatted_end = endDate.toLocaleDateString('en-IN', {
                     year: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     day: 'numeric',
                     hour: 'numeric',
                     minute: '2-digit',
-                    hour12: true
+                    hour12: true,
+                    timeZone: 'Asia/Kolkata',
                   });
 
                   return {

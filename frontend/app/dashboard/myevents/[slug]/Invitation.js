@@ -240,21 +240,23 @@ const Invitation = ({ eventData, handleBackInvitation }) => {
                 </Table.Head>
                 <Table.Body className="divide-y">
                   {schedules?.data.map((schedule) => {
-                    const startDate = new Date(schedule.attributes.start).toLocaleString("en-US", {
+                    const startDate = new Date(schedule.attributes.start).toLocaleString("en-IN", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
                       hour: "2-digit",
                       minute: "2-digit",
                       hour12: true,
+                      timeZone: 'Asia/Kolkata',
                     });
-                    const endDate = new Date(schedule.attributes.end).toLocaleString("en-US", {
+                    const endDate = new Date(schedule.attributes.end).toLocaleString("en-IN", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
                       hour: "2-digit",
                       minute: "2-digit",
                       hour12: true,
+                      timeZone: 'Asia/Kolkata',
                     });
 
                     return (

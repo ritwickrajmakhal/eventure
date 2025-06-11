@@ -132,7 +132,7 @@ const EventDetails = ({ eventData, handleSendInvitation, session }) => {
       <div className="flex justify-end space-x-4 mt-6">
         <Button
           color="failure"
-          disabled={cancelling || status === 'Cancelled' || status === 'Approved'}
+          disabled={cancelling || status === 'Cancelled' || status === 'Approved' || status === 'Rejected' || status === 'Completed'}
           onClick={handleCancelEvent}
           className="dark:bg-red-700 dark:hover:bg-red-800"
         >
